@@ -12,6 +12,7 @@
 #include "InstrumentTrack.h"
 #include "Instrument.h"
 #include "MidiClip.h"
+#include "NotePlayHandle.h"
 #include "ProjectExportFactsCollector.h"
 #include "RenderManager.h"
 #include "Song.h"
@@ -29,6 +30,7 @@ class BeatQuayTemplateTest : public QObject
 	QTemporaryDir m_work;
 	QMap<QString, QByteArray> m_pluginHashes;
 	bool m_engineStarted = false;
+	bool m_notePoolStarted = false;
 	static QByteArray hash(const QString& path)
 	{
 		QFile file(path);
@@ -121,12 +123,23 @@ private slots:
 		{
 			const auto sha = hash(path); QVERIFY(!sha.isEmpty()); m_pluginHashes.insert(path, sha);
 		}
+		// The real application's main() initializes this process-wide note pool
+		// before Engine::init(). Engine does not own it. Actual synth rendering
+		// acquires notes from this pool, unlike the silent lifecycle fixtures.
+		NotePlayHandleManager::init();
+		m_notePoolStarted = true;
 		Engine::init(true);
 		m_engineStarted = true;
 		DataFile current(DataFile::Type::SongProjectTemplate);
 		QCOMPARE(current.documentElement().attribute("version"), QString("31"));
 	}
-	void cleanupTestCase() { if (m_engineStarted) { Engine::destroy(); } }
+	void cleanupTestCase()
+	{
+		// Stop rendering and destroy tracks before releasing their note pool,
+		// matching the application's normal main() shutdown ordering.
+		if (m_engineStarted) { Engine::destroy(); }
+		if (m_notePoolStarted) { NotePlayHandleManager::free(); }
+	}
 	void loadRoundTripAndRender_data()
 	{
 		QTest::addColumn<QString>("name"); QTest::addColumn<int>("bars"); QTest::addColumn<int>("tempo");

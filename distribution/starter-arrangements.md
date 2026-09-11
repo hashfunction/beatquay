@@ -109,3 +109,32 @@ qualifier parsing and diff checks pass locally. Root supplied the qualifier's
 required-suite inventory gate, three starter commands and final success flag;
 those root-authored changes are included in the repair handoff commit. The
 repair requires separate root review and fresh Windows qualification.
+
+### Native note-pool initialization repair
+
+Windows run `34618563660` at source `e6391539b740a6ec8370f034b77c250bceb5920a`
+failed the actual `BeatQuayTemplateTest::loadRoundTripAndRender` with a null read
+in `NotePlayHandleManager::acquire`, called by `InstrumentTrack::play` and the
+real render thread. The other 16 suites passed. This is native RED evidence,
+not a successful starter qualification.
+
+The application's `main()` initializes the process-wide note pool before
+`Engine::init()`; `Engine::init()` does not own that lifecycle. The test omitted
+that prerequisite. It now initializes the same pool before starting Engine and
+frees it only after Engine has stopped processing and destroyed its tracks.
+The actual DLL identity, template semantics, source preservation, save/reload,
+render completion and decoded-audio assertions are unchanged. These two genuine
+synth rows are the lasting regression for the missing initialization.
+
+An independent local probe compiled the exact manager declaration and methods
+with Qt 6.11.2, Clang 21 and address/undefined-behavior sanitizers. It substituted
+only a trivial note constructor (no synth/audio claim). Without initialization
+it reproduced the null read in `acquire`; after initialization 600 acquisitions
+and releases passed, exercising cache extension and reuse. Leak detection was
+disabled because the unchanged upstream manager frees its pointer array rather
+than its preallocated note blocks; this repair does not claim allocator closure.
+Probe source, command and RED/GREEN logs are retained locally under
+`/private/tmp/beatquay-template-pool/`. The modified actual QTest source and MOC
+also pass C++20 `-Wall -Werror` syntax checking. All 22 starter Python tests and
+the deterministic generator check pass. A fresh Windows run is still required
+for full native GREEN; no product runtime or acceptance threshold changed.
