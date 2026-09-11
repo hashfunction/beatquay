@@ -27,7 +27,7 @@ $flags = @('-S','.','-B','build','-G','Ninja','--toolchain',"$env:VCPKG_ROOT/scr
 $flags | Set-Content build-evidence/configure-flags.txt
 try {
     Invoke-Checked cmake $flags
-    Invoke-Checked cmake @('--build','build','--parallel','2')
+    Invoke-Checked cmake @('--build','build','--parallel','2','--','-k','0')
     $env:PATH = "$(Get-Location)/build;$(Get-Location)/build/vcpkg_installed/x64-windows/bin;$env:PATH"
     Invoke-Checked ctest @('--test-dir','build/tests','--timeout','60','--output-on-failure','--output-junit',"$(Get-Location)/build-evidence/tests.xml")
     Invoke-Checked cmake @('--install','build','--prefix',"$(Get-Location)/stage")

@@ -80,9 +80,8 @@ void BandLimitedWave::generateWaves()
 
 // saw wave - BLSaw
 // check for file and use it if exists
-	if( saw_file.exists() )
+	if (saw_file.open(QIODevice::ReadOnly))
 	{
-		saw_file.open( QIODevice::ReadOnly );
 		QDataStream in( &saw_file );
 		in >> s_waveforms[static_cast<std::size_t>(BandLimitedWave::Waveform::BLSaw)];
 		saw_file.close();
@@ -122,9 +121,8 @@ void BandLimitedWave::generateWaves()
 
 // square wave - BLSquare
 // check for file and use it if exists
-	if( sqr_file.exists() )
+	if (sqr_file.open(QIODevice::ReadOnly))
 	{
-		sqr_file.open( QIODevice::ReadOnly );
 		QDataStream in( &sqr_file );
 		in >> s_waveforms[static_cast<std::size_t>(BandLimitedWave::Waveform::BLSquare)];
 		sqr_file.close();
@@ -163,9 +161,8 @@ void BandLimitedWave::generateWaves()
 	}
 
 // triangle wave - BLTriangle
-	if( tri_file.exists() )
+	if (tri_file.open(QIODevice::ReadOnly))
 	{
-		tri_file.open( QIODevice::ReadOnly );
 		QDataStream in( &tri_file );
 		in >> s_waveforms[static_cast<std::size_t>(BandLimitedWave::Waveform::BLTriangle)];
 		tri_file.close();
@@ -206,9 +203,8 @@ void BandLimitedWave::generateWaves()
 
 // moog saw wave - BLMoog
 // basically, just add in triangle + 270-phase saw
-	if( moog_file.exists() )
+	if (moog_file.open(QIODevice::ReadOnly))
 	{
-		moog_file.open( QIODevice::ReadOnly );
 		QDataStream in( &moog_file );
 		in >> s_waveforms[static_cast<std::size_t>(BandLimitedWave::Waveform::BLMoog)];
 		moog_file.close();
