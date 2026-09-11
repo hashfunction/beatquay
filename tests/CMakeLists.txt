@@ -11,6 +11,7 @@ set(LMMS_TESTS
 	src/core/ProjectExportCheckTest.cpp
 	src/core/ProjectVersionTest.cpp
 	src/core/RelativePathsTest.cpp
+	src/core/RenderManagerLifecycleTest.cpp
 	src/core/TimelineTest.cpp
 	src/tracks/AutomationTrackTest.cpp
 )
