@@ -1,0 +1,23 @@
+{
+  "schema_base_commit": "1c7ab3af1b4c54673177c87185d323e3b07f1607",
+  "generator": "distribution/generate_starters.py",
+  "generator_sha256": "a47d9c85e5ef272f967d4122b178d3279ac110925940afb51a8ec537582ffe70",
+  "files": [
+    {
+      "path": "data/projects/templates/BeatQuay-Drum-Grid.mpt",
+      "sha256": "dce15e9b6b1bc7f024411fe959bc351aca69cb3f61624bdeaff2c979e90ff8ec"
+    },
+    {
+      "path": "data/projects/templates/BeatQuay-Bassline-Sketch.mpt",
+      "sha256": "1d7e6fc3d25efdca89e98aa7ba071f9d42b80b3913dfa00df8821826ae8ba552"
+    },
+    {
+      "path": "data/projects/templates/BEATQUAY-PROVENANCE.md",
+      "sha256": "e9ccc6e758b07b6aac895dd1269e12e51926b76b7e031e35b92db033cf9d5e58"
+    },
+    {
+      "path": "data/projects/templates/CC0-1.0.txt",
+      "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499"
+    }
+  ]
+}

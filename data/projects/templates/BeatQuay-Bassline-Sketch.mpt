@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='utf-8'?>
+<lmms-project version="31" type="songtemplate" creator="BeatQuay source generator">
+  <!--Original note and synth parameter data for Trieflow LLC; CC0-1.0. See BEATQUAY-PROVENANCE.md.-->
+  <head bpm="108" mastervol="70" masterpitch="0" timesig_numerator="4" timesig_denominator="4" />
+  <songtemplate>
+    <trackcontainer>
+      <track type="0" name="Triangle and sub bass" muted="0" solo="0">
+        <instrumenttrack vol="32" pan="0" pitch="0" pitchrange="1" basenote="69" firstkey="0" lastkey="127" mixch="0" usemasterpitch="1">
+          <instrument name="tripleoscillator">
+            <tripleoscillator vol0="70" pan0="0" coarse0="0" finel0="0" finer0="0" phoffset0="0" stphdetun0="0" wavetype0="1" modalgo1="2" useWaveTable1="1" vol1="30" pan1="0" coarse1="-12" finel1="0" finer1="0" phoffset1="0" stphdetun1="0" wavetype1="0" modalgo2="2" useWaveTable2="1" vol2="0" pan2="0" coarse2="0" finel2="0" finer2="0" phoffset2="0" stphdetun2="0" wavetype2="0" modalgo3="2" useWaveTable3="1" />
+          </instrument>
+        </instrumenttrack>
+        <midiclip type="1" name="Bass phrase 1" pos="0" len="192" steps="16" muted="0" autoresize="0" off="0">
+          <note pos="0" key="36" len="30" vol="82" pan="0" type="0" />
+          <note pos="36" key="43" len="18" vol="66" pan="0" type="0" />
+          <note pos="72" key="36" len="30" vol="76" pan="0" type="0" />
+          <note pos="120" key="46" len="18" vol="62" pan="0" type="0" />
+          <note pos="144" key="48" len="36" vol="72" pan="0" type="0" />
+        </midiclip>
+        <midiclip type="1" name="Bass phrase 2" pos="192" len="192" steps="16" muted="0" autoresize="0" off="0">
+          <note pos="0" key="36" len="30" vol="82" pan="0" type="0" />
+          <note pos="36" key="43" len="18" vol="66" pan="0" type="0" />
+          <note pos="72" key="36" len="30" vol="76" pan="0" type="0" />
+          <note pos="120" key="46" len="18" vol="62" pan="0" type="0" />
+          <note pos="144" key="48" len="36" vol="72" pan="0" type="0" />
+        </midiclip>
+        <midiclip type="1" name="Bass phrase 3" pos="384" len="192" steps="16" muted="0" autoresize="0" off="0">
+          <note pos="0" key="32" len="30" vol="82" pan="0" type="0" />
+          <note pos="36" key="39" len="18" vol="66" pan="0" type="0" />
+          <note pos="72" key="32" len="30" vol="76" pan="0" type="0" />
+          <note pos="120" key="42" len="18" vol="62" pan="0" type="0" />
+          <note pos="144" key="44" len="36" vol="72" pan="0" type="0" />
+        </midiclip>
+        <midiclip type="1" name="Bass phrase 4" pos="576" len="192" steps="16" muted="0" autoresize="0" off="0">
+          <note pos="0" key="32" len="30" vol="82" pan="0" type="0" />
+          <note pos="36" key="39" len="18" vol="66" pan="0" type="0" />
+          <note pos="72" key="32" len="30" vol="76" pan="0" type="0" />
+          <note pos="120" key="42" len="18" vol="62" pan="0" type="0" />
+          <note pos="144" key="44" len="36" vol="72" pan="0" type="0" />
+        </midiclip>
+        <midiclip type="1" name="Bass phrase 5" pos="768" len="192" steps="16" muted="0" autoresize="0" off="0">
+          <note pos="0" key="34" len="30" vol="82" pan="0" type="0" />
+          <note pos="36" key="41" len="18" vol="66" pan="0" type="0" />
+          <note pos="72" key="34" len="30" vol="76" pan="0" type="0" />
+          <note pos="120" key="44" len="18" vol="62" pan="0" type="0" />
+          <note pos="144" key="46" len="36" vol="72" pan="0" type="0" />
+        </midiclip>
+        <midiclip type="1" name="Bass phrase 6" pos="960" len="192" steps="16" muted="0" autoresize="0" off="0">
+          <note pos="0" key="34" len="30" vol="82" pan="0" type="0" />
+          <note pos="36" key="41" len="18" vol="66" pan="0" type="0" />
+          <note pos="72" key="34" len="30" vol="76" pan="0" type="0" />
+          <note pos="120" key="44" len="18" vol="62" pan="0" type="0" />
+          <note pos="144" key="46" len="36" vol="72" pan="0" type="0" />
+        </midiclip>
+        <midiclip type="1" name="Bass phrase 7" pos="1152" len="192" steps="16" muted="0" autoresize="0" off="0">
+          <note pos="0" key="31" len="30" vol="82" pan="0" type="0" />
+          <note pos="36" key="38" len="18" vol="66" pan="0" type="0" />
+          <note pos="72" key="31" len="30" vol="76" pan="0" type="0" />
+          <note pos="120" key="41" len="18" vol="62" pan="0" type="0" />
+          <note pos="144" key="43" len="36" vol="72" pan="0" type="0" />
+        </midiclip>
+        <midiclip type="1" name="Bass phrase 8" pos="1344" len="192" steps="16" muted="0" autoresize="0" off="0">
+          <note pos="0" key="36" len="30" vol="82" pan="0" type="0" />
+          <note pos="36" key="48" len="18" vol="66" pan="0" type="0" />
+          <note pos="72" key="43" len="30" vol="76" pan="0" type="0" />
+          <note pos="120" key="39" len="18" vol="62" pan="0" type="0" />
+          <note pos="144" key="36" len="36" vol="72" pan="0" type="0" />
+        </midiclip>
+      </track>
+    </trackcontainer>
+  </songtemplate>
+</lmms-project>

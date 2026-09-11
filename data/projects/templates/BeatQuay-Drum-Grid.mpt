@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='utf-8'?>
+<lmms-project version="31" type="songtemplate" creator="BeatQuay source generator">
+  <!--Original note and synth parameter data for Trieflow LLC; CC0-1.0. See BEATQUAY-PROVENANCE.md.-->
+  <head bpm="112" mastervol="70" masterpitch="0" timesig_numerator="4" timesig_denominator="4" />
+  <songtemplate>
+    <trackcontainer>
+      <track type="0" name="Low pulse" muted="0" solo="0">
+        <instrumenttrack vol="50" pan="0" pitch="0" pitchrange="1" basenote="69" firstkey="0" lastkey="127" mixch="0" usemasterpitch="1">
+          <instrument name="kicker">
+            <kicker version="1" startfreq="150" endfreq="48" decay="210" dist="0.1" distend="0.1" gain="1" env="0.18" noise="0" click="0.12" slope="0.08" startnote="0" endnote="0" />
+          </instrument>
+        </instrumenttrack>
+        <midiclip type="1" name="Low pulse 1" pos="0" len="192" steps="16" muted="0" autoresize="0" off="0">
+          <note pos="0" key="60" len="6" vol="84" pan="0" type="0" />
+          <note pos="72" key="60" len="6" vol="62" pan="0" type="0" />
+          <note pos="96" key="60" len="6" vol="84" pan="0" type="0" />
+        </midiclip>
+        <midiclip type="1" name="Low pulse 2" pos="192" len="192" steps="16" muted="0" autoresize="0" off="0">
+          <note pos="0" key="60" len="6" vol="84" pan="0" type="0" />
+          <note pos="84" key="60" len="6" vol="62" pan="0" type="0" />
+          <note pos="144" key="60" len="6" vol="84" pan="0" type="0" />
+        </midiclip>
+        <midiclip type="1" name="Low pulse 3" pos="384" len="192" steps="16" muted="0" autoresize="0" off="0">
+          <note pos="0" key="60" len="6" vol="84" pan="0" type="0" />
+          <note pos="48" key="60" len="6" vol="84" pan="0" type="0" />
+          <note pos="96" key="60" len="6" vol="84" pan="0" type="0" />
+          <note pos="156" key="60" len="6" vol="62" pan="0" type="0" />
+        </midiclip>
+        <midiclip type="1" name="Low pulse 4" pos="576" len="192" steps="16" muted="0" autoresize="0" off="0">
+          <note pos="0" key="60" len="6" vol="84" pan="0" type="0" />
+          <note pos="72" key="60" len="6" vol="62" pan="0" type="0" />
+          <note pos="120" key="60" len="6" vol="62" pan="0" type="0" />
+          <note pos="168" key="60" len="6" vol="62" pan="0" type="0" />
+        </midiclip>
+      </track>
+      <track type="0" name="Backbeat" muted="0" solo="0">
+        <instrumenttrack vol="28" pan="0" pitch="0" pitchrange="1" basenote="69" firstkey="0" lastkey="127" mixch="0" usemasterpitch="1">
+          <instrument name="kicker">
+            <kicker version="1" startfreq="260" endfreq="110" decay="125" dist="0.1" distend="0.1" gain="1" env="0.18" noise="0.6" click="0.08" slope="0.08" startnote="0" endnote="0" />
+          </instrument>
+        </instrumenttrack>
+        <midiclip type="1" name="Backbeat 1" pos="0" len="192" steps="16" muted="0" autoresize="0" off="0">
+          <note pos="48" key="60" len="6" vol="84" pan="0" type="0" />
+          <note pos="144" key="60" len="6" vol="84" pan="0" type="0" />
+        </midiclip>
+        <midiclip type="1" name="Backbeat 2" pos="192" len="192" steps="16" muted="0" autoresize="0" off="0">
+          <note pos="48" key="60" len="6" vol="84" pan="0" type="0" />
+          <note pos="144" key="60" len="6" vol="84" pan="0" type="0" />
+        </midiclip>
+        <midiclip type="1" name="Backbeat 3" pos="384" len="192" steps="16" muted="0" autoresize="0" off="0">
+          <note pos="48" key="60" len="6" vol="84" pan="0" type="0" />
+          <note pos="144" key="60" len="6" vol="84" pan="0" type="0" />
+        </midiclip>
+        <midiclip type="1" name="Backbeat 4" pos="576" len="192" steps="16" muted="0" autoresize="0" off="0">
+          <note pos="48" key="60" len="6" vol="84" pan="0" type="0" />
+          <note pos="132" key="60" len="6" vol="62" pan="0" type="0" />
+          <note pos="156" key="60" len="6" vol="62" pan="0" type="0" />
+        </midiclip>
+      </track>
+      <track type="0" name="Short ticks" muted="0" solo="0">
+        <instrumenttrack vol="16" pan="0" pitch="0" pitchrange="1" basenote="69" firstkey="0" lastkey="127" mixch="0" usemasterpitch="1">
+          <instrument name="kicker">
+            <kicker version="1" startfreq="900" endfreq="620" decay="42" dist="0.1" distend="0.1" gain="1" env="0.18" noise="0.35" click="0.02" slope="0.08" startnote="0" endnote="0" />
+          </instrument>
+        </instrumenttrack>
+        <midiclip type="1" name="Short ticks 1" pos="0" len="192" steps="16" muted="0" autoresize="0" off="0">
+          <note pos="0" key="60" len="6" vol="84" pan="0" type="0" />
+          <note pos="24" key="60" len="6" vol="62" pan="0" type="0" />
+          <note pos="48" key="60" len="6" vol="84" pan="0" type="0" />
+          <note pos="72" key="60" len="6" vol="62" pan="0" type="0" />
+          <note pos="96" key="60" len="6" vol="84" pan="0" type="0" />
+          <note pos="120" key="60" len="6" vol="62" pan="0" type="0" />
+          <note pos="144" key="60" len="6" vol="84" pan="0" type="0" />
+          <note pos="168" key="60" len="6" vol="62" pan="0" type="0" />
+        </midiclip>
+        <midiclip type="1" name="Short ticks 2" pos="192" len="192" steps="16" muted="0" autoresize="0" off="0">
+          <note pos="0" key="60" len="6" vol="84" pan="0" type="0" />
+          <note pos="24" key="60" len="6" vol="62" pan="0" type="0" />
+          <note pos="48" key="60" len="6" vol="84" pan="0" type="0" />
+          <note pos="72" key="60" len="6" vol="62" pan="0" type="0" />
+          <note pos="96" key="60" len="6" vol="84" pan="0" type="0" />
+          <note pos="120" key="60" len="6" vol="62" pan="0" type="0" />
+          <note pos="144" key="60" len="6" vol="84" pan="0" type="0" />
+          <note pos="168" key="60" len="6" vol="62" pan="0" type="0" />
+        </midiclip>
+        <midiclip type="1" name="Short ticks 3" pos="384" len="192" steps="16" muted="0" autoresize="0" off="0">
+          <note pos="0" key="60" len="6" vol="84" pan="0" type="0" />
+          <note pos="24" key="60" len="6" vol="62" pan="0" type="0" />
+          <note pos="48" key="60" len="6" vol="84" pan="0" type="0" />
+          <note pos="72" key="60" len="6" vol="62" pan="0" type="0" />
+          <note pos="96" key="60" len="6" vol="84" pan="0" type="0" />
+          <note pos="120" key="60" len="6" vol="62" pan="0" type="0" />
+          <note pos="144" key="60" len="6" vol="84" pan="0" type="0" />
+          <note pos="168" key="60" len="6" vol="62" pan="0" type="0" />
+        </midiclip>
+        <midiclip type="1" name="Short ticks 4" pos="576" len="192" steps="16" muted="0" autoresize="0" off="0">
+          <note pos="0" key="60" len="6" vol="84" pan="0" type="0" />
+          <note pos="24" key="60" len="6" vol="62" pan="0" type="0" />
+          <note pos="48" key="60" len="6" vol="84" pan="0" type="0" />
+          <note pos="72" key="60" len="6" vol="62" pan="0" type="0" />
+          <note pos="96" key="60" len="6" vol="84" pan="0" type="0" />
+          <note pos="120" key="60" len="6" vol="62" pan="0" type="0" />
+          <note pos="144" key="60" len="6" vol="84" pan="0" type="0" />
+          <note pos="168" key="60" len="6" vol="62" pan="0" type="0" />
+        </midiclip>
+      </track>
+    </trackcontainer>
+  </songtemplate>
+</lmms-project>
