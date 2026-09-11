@@ -40,7 +40,7 @@ class QualificationTests(unittest.TestCase):
             if name.lower().endswith(('.exe','.dll')):
                 imports=['KERNEL32.dll']+(['lmms.exe'] if name in msix.ALLOWED_PLUGIN_DLLS else [])
                 pe.append(dict(path=name,**row,imports=sorted(imports,key=str.casefold)))
-        (self.evidence/'pe-imports.json').write_text(json.dumps(dict(schemaVersion=1,files=pe,unresolvedImports=[],ambiguousPackagedImports=[])))
+        (self.evidence/'pe-imports.json').write_text(json.dumps(dict(schemaVersion=1,files=pe,unresolvedImports=[],ambiguousPackagedImports=[],apiSetResolutions=[],resolutionErrors=[],systemDirectory='C:\\Windows\\System32')))
         result=dict(source_commit=self.commit,built=True,tests_passed=True,lifecycle_repeat_passed=True,installed_stage=True,native_render_smoke_passed=True,native_render_error_exit_passed=True,native_installed_starter_renders_passed=True,license_clearance=False)
         (self.evidence/'result.json').write_text(json.dumps(result))
     def refresh_inventory(self): self.inventory.write_text(json.dumps(msix.create_input_inventory(self.release,self.source,self.commit,self.evidence,self.artwork)))
@@ -67,6 +67,38 @@ class QualificationTests(unittest.TestCase):
         with self.assertRaises(ValueError): self.stage()
         self.source.joinpath('LICENSE.txt').write_bytes(b'source:LICENSE.txt'); self.release.joinpath('manual.pdf').write_bytes(b'changed')
         with self.assertRaises(ValueError): self.stage()
+    def test_api_set_receipt_requires_exact_coverage_and_host_provenance(self):
+        path=self.evidence/'pe-imports.json'
+        record=json.loads(path.read_text())
+        contract='api-ms-win-core-winrt-l1-1-0.dll'
+        next(row for row in record['files'] if row['path']=='Qt6Core.dll')['imports'].insert(0,contract)
+        host=dict(contract=contract,apiSetImplemented=True,loaderFlags=2048,
+            hostPath='C:\\Windows\\System32\\combase.dll',hostBytes=1234,hostSha256='b'*64,
+            signatureStatus='Valid',signerSubject='CN=Microsoft Windows Publisher, O=Microsoft Corporation',
+            signerIssuer='CN=Microsoft Windows Production PCA 2011',signerThumbprint='c'*40,
+            signerCommonName='Microsoft Windows Publisher',signerOrganization='Microsoft Corporation')
+        record['apiSetResolutions']=[host]
+        path.write_text(json.dumps(record)); self.refresh_inventory()
+        corruptions=[[],[host,host],[dict(host,contract='api-ms-win-other-l1-1-0.dll')]]
+        corruptions.extend([[dict(host,**{field:value})] for field,value in (
+            ('hostPath','C:\\Windows\\System32Fake\\combase.dll'),('hostPath','C:\\Windows\\System32\\nested\\combase.dll'),
+            ('hostPath','C:\\Windows\\System32\\..\\combase.dll'),('hostBytes',True),('hostSha256','invalid'),
+            ('apiSetImplemented',False),('loaderFlags',0),('signatureStatus','NotSigned'),
+            ('signerOrganization','Other'),('signerCommonName','Other'),('signerThumbprint',''))])
+        for entries in corruptions:
+            with self.subTest(entries=entries):
+                record['apiSetResolutions']=entries; path.write_text(json.dumps(record))
+                with self.assertRaisesRegex(ValueError,'API.set'): self.refresh_inventory()
+    def test_api_set_receipt_cannot_claim_an_unimported_contract(self):
+        path=self.evidence/'pe-imports.json'; record=json.loads(path.read_text())
+        record['apiSetResolutions']=[dict(contract='api-ms-win-core-winrt-l1-1-0.dll')]
+        path.write_text(json.dumps(record))
+        with self.assertRaisesRegex(ValueError,'API.set'): self.refresh_inventory()
+    def test_resolution_failure_diagnostics_cannot_be_hidden_by_empty_unresolved_list(self):
+        path=self.evidence/'pe-imports.json'; record=json.loads(path.read_text())
+        record['resolutionErrors']=[dict(file='Qt6Core.dll',importName='missing.dll',error='not found')]
+        path.write_text(json.dumps(record))
+        with self.assertRaisesRegex(ValueError,'Unresolved'): self.refresh_inventory()
     def test_output_collision_and_release_links_are_refused(self):
         (self.root/'stage').mkdir()
         with self.assertRaises(ValueError): self.stage()

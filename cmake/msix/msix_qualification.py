@@ -11,6 +11,7 @@ import json
 import os
 from pathlib import Path
 from pathlib import PurePosixPath
+from pathlib import PureWindowsPath
 import re
 import shutil
 import stat
@@ -74,6 +75,8 @@ SOURCE_FILES = (
     "data/projects/templates/BeatQuay-Bassline-Sketch.mpt",
     "data/projects/templates/BEATQUAY-PROVENANCE.md", "data/projects/templates/CC0-1.0.txt",
     "cmake/msix/PIPELINE-MIT.txt", "cmake/msix/RETICLEQUAY-MIT.txt",
+    "cmake/msix/collect-pe-imports.ps1", "cmake/msix/api-set-resolution.ps1",
+    "cmake/msix/api-set-resolver.cs",
     "data/branding/CMakeLists.txt", "data/branding/README.md", "data/branding/generate.py",
     "data/branding/beatquay.svg", "data/branding/beatquay.ico",
     "cmake/modules/BeatQuayIdentity.cmake", "cmake/modules/BeatQuayRuntime.cmake",
@@ -261,9 +264,48 @@ def _validate_pe_imports(release, path, files):
     for plugin in ALLOWED_PLUGIN_DLLS:
         if "lmms.exe" not in {name.lower() for name in by_path[plugin]["imports"]}:
             raise ValueError(f"Plugin does not bind the required internal host: {plugin}")
-    if record.get("unresolvedImports") != [] or record.get("ambiguousPackagedImports") != []:
+    if record.get("unresolvedImports") != [] or record.get("ambiguousPackagedImports") != [] or record.get("resolutionErrors") != []:
         raise ValueError("Unresolved or ambiguous PE imports remain")
+    _validate_api_set_resolutions(record, pe_paths)
     return record
+
+
+def _validate_api_set_resolutions(record, pe_paths):
+    packaged = {PurePosixPath(name).name.casefold() for name in pe_paths}
+    required = {
+        name.casefold() for row in record["files"] for name in row["imports"]
+        if re.fullmatch(r"(?:api|ext)-[a-z0-9-]+-l[0-9]+-[0-9]+-[0-9]+\.dll", name, re.I)
+        and name.casefold() not in packaged
+    }
+    entries = record.get("apiSetResolutions")
+    system_value = record.get("systemDirectory")
+    if not isinstance(system_value, str):
+        raise ValueError("Invalid API-set System32 directory")
+    system = PureWindowsPath(system_value)
+    if not isinstance(entries, list) or not system.is_absolute() or system.name.casefold() != "system32" or ".." in system.parts:
+        raise ValueError("Invalid API-set resolution evidence or System32 directory")
+    fields = {"contract", "apiSetImplemented", "loaderFlags", "hostPath", "hostBytes", "hostSha256",
+              "signatureStatus", "signerSubject", "signerIssuer", "signerThumbprint", "signerCommonName", "signerOrganization"}
+    seen = set()
+    for entry in entries:
+        if not isinstance(entry, dict) or set(entry) != fields:
+            raise ValueError("Invalid API-set host evidence")
+        contract = entry["contract"]
+        if not isinstance(contract, str) or contract not in required or contract in seen:
+            raise ValueError("Unexpected or duplicate API-set contract evidence")
+        seen.add(contract)
+        host = PureWindowsPath(entry["hostPath"]) if isinstance(entry["hostPath"], str) else PureWindowsPath()
+        if (not host.is_absolute() or host.parent != system or ".." in host.parts
+                or type(entry["hostBytes"]) is not int or entry["hostBytes"] <= 0
+                or not isinstance(entry["hostSha256"], str) or not re.fullmatch(r"[0-9a-f]{64}", entry["hostSha256"])
+                or entry["apiSetImplemented"] is not True or type(entry["loaderFlags"]) is not int or entry["loaderFlags"] != 2048
+                or entry["signatureStatus"] != "Valid" or entry["signerOrganization"] != "Microsoft Corporation"
+                or entry["signerCommonName"] not in {"Microsoft Windows Publisher", "Microsoft Corporation", "Microsoft Windows"}
+                or any(not isinstance(entry[key], str) or not entry[key] for key in ("signerSubject", "signerIssuer", "signerThumbprint"))
+                or not re.fullmatch(r"[0-9a-f]{40}", entry["signerThumbprint"])):
+            raise ValueError("Invalid API-set System32 host provenance")
+    if seen != required:
+        raise ValueError("API-set evidence must cover every nonpackaged contract import")
 
 
 def create_input_inventory(release, source_root, source_commit, evidence_root, artwork):

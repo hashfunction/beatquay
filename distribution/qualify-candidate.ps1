@@ -88,6 +88,7 @@ if (@(Get-ChildItem -LiteralPath (Join-Path $noticeRoot 'vcpkg') -Recurse -File)
     throw 'Actual Qt and vcpkg dependency notice collections must both be nonempty.'
 }
 $powerShell=(Get-Process -Id $PID).Path
+Invoke-Checked $powerShell @('-NoLogo','-NoProfile','-File','cmake/msix/test_api_set_resolution.ps1')
 Invoke-Checked $powerShell @('-NoLogo','-NoProfile','-File','cmake/msix/collect-pe-imports.ps1','-Stage','stage','-Output','build-evidence/pe-imports.json')
 Invoke-Checked python @('cmake/msix/prepare_inventory.py','--source-commit',$sourceCommit)
 Invoke-Checked $powerShell @('-NoLogo','-NoProfile','-File','cmake/msix/qualify-msix.ps1','-Python',(Get-Command python).Source)
