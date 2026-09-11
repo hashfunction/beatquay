@@ -446,7 +446,11 @@ int main( int argc, char * * argv )
 
 
 			QFile f( QString::fromLocal8Bit( argv[i] ) );
-			f.open( QIODevice::ReadOnly );
+			if (!f.open(QIODevice::ReadOnly))
+			{
+				qCritical().noquote() << "Cannot open input file:" << f.fileName() << f.errorString();
+				return EXIT_FAILURE;
+			}
 			QString d = qUncompress( f.readAll() );
 			printf( "%s\n", d.toUtf8().constData() );
 
@@ -462,7 +466,11 @@ int main( int argc, char * * argv )
 			}
 
 			QFile f( QString::fromLocal8Bit( argv[i] ) );
-			f.open( QIODevice::ReadOnly );
+			if (!f.open(QIODevice::ReadOnly))
+			{
+				qCritical().noquote() << "Cannot open input file:" << f.fileName() << f.errorString();
+				return EXIT_FAILURE;
+			}
 			QByteArray d = qCompress( f.readAll() ) ;
 			fwrite( d.constData(), sizeof(char), d.size(), stdout );
 

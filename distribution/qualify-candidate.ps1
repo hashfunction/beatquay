@@ -34,7 +34,9 @@ try {
     Get-ChildItem stage -Recurse -File | ForEach-Object {
         @{ path=[IO.Path]::GetRelativePath((Join-Path (Get-Location) 'stage'), $_.FullName); bytes=$_.Length; sha256=(Get-FileHash $_.FullName -Algorithm SHA256).Hash }
     } | ConvertTo-Json -Depth 3 | Set-Content build-evidence/stage-inventory.json
-    @{ source_commit=$env:GITHUB_SHA; candidate=$lock.candidate; built=$true; tests_passed=$true; installed_stage=$true; modernization_accepted=$false; physical_audio_verified=$false; source_license_closure=$false; store_submitted=$false } | ConvertTo-Json | Set-Content build-evidence/result.json
+    Invoke-Checked python @('-m','unittest','discover','-s','tests/scripted','-p','test_candidate_render.py')
+    Invoke-Checked python @('tests/scripted/candidate_render.py','--executable',"$(Get-Location)/stage/lmms.exe",'--stage',"$(Get-Location)/stage",'--work',"$(Get-Location)/.cache/native-render-smoke",'--evidence',"$(Get-Location)/build-evidence")
+    @{ source_commit=$env:GITHUB_SHA; candidate=$lock.candidate; built=$true; tests_passed=$true; installed_stage=$true; native_render_smoke_passed=$true; modernization_accepted=$false; physical_audio_verified=$false; source_license_closure=$false; store_submitted=$false } | ConvertTo-Json | Set-Content build-evidence/result.json
 } finally {
     Get-ChildItem .qt-archives -File -ErrorAction SilentlyContinue | ForEach-Object {
         @{ file=$_.Name; bytes=$_.Length; sha256=(Get-FileHash $_.FullName -Algorithm SHA256).Hash }

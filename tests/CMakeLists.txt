@@ -33,3 +33,8 @@ foreach(LMMS_TEST_SRC IN LISTS LMMS_TESTS)
 	target_compile_features(${LMMS_TEST_NAME} PRIVATE cxx_std_20)
 	target_compile_definitions(${LMMS_TEST_NAME} PRIVATE LMMS_TESTING)
 endforeach()
+
+find_package(Python3 COMPONENTS Interpreter REQUIRED)
+add_test(NAME CommandLineCodecTest
+	COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/scripted/cli-codec-test.py"
+		--executable "$<TARGET_FILE:lmms>")

@@ -24,6 +24,7 @@
 
 #include <QObject>
 #include <QtTest>
+#include <QTemporaryDir>
 
 #include "ConfigManager.h"
 #include "PathUtil.h"
@@ -31,17 +32,47 @@
 class RelativePathsTest : public QObject
 {
 	Q_OBJECT
+private:
+	QTemporaryDir m_factoryData;
+	QStringList m_originalSearchPaths;
+
 private slots:
+	void initTestCase()
+	{
+		QVERIFY(m_factoryData.isValid());
+		lmms::ConfigManager::inst();
+		m_originalSearchPaths = QDir::searchPaths("data");
+		QVERIFY(QDir(m_factoryData.path()).mkpath("samples/drums"));
+		QDir::setSearchPaths("data", {m_factoryData.path()});
+	}
+
+	void cleanupTestCase()
+	{
+		QDir::setSearchPaths("data", m_originalSearchPaths);
+	}
+
+	void PathUtilComparisonTests_data()
+	{
+		QTest::addColumn<QString>("oldRelPath");
+		QTest::newRow("ascii") << QStringLiteral("drums/kick01.ogg");
+		QTest::newRow("unicode") << QString::fromUtf8("drums/音符-é.ogg");
+	}
+
 	void PathUtilComparisonTests()
 	{
 		using namespace lmms;
+		QFETCH(QString, oldRelPath);
+		QFile fixture(m_factoryData.filePath("samples/" + oldRelPath));
+		QVERIFY(fixture.open(QIODevice::WriteOnly | QIODevice::NewOnly));
+		const QByteArray contents("Temporary path fixture; not audio.");
+		QCOMPARE(fixture.write(contents), contents.size());
+		fixture.close();
 
-		QFileInfo fi(ConfigManager::inst()->factorySamplesDir() + "/drums/kick01.ogg");
+		QFileInfo fi(ConfigManager::inst()->factorySamplesDir() + oldRelPath);
 		QVERIFY(fi.exists());
 
 		QString absPath = fi.absoluteFilePath();
-		QString oldRelPath = "drums/kick01.ogg";
-		QString relPath = PathUtil::basePrefix(PathUtil::Base::FactorySample) + "drums/kick01.ogg";
+		QString relPath = PathUtil::basePrefix(PathUtil::Base::FactorySample) + oldRelPath;
 		QString fuzPath = absPath;
 		fuzPath.replace(relPath, "drums/.///kick01.ogg");
 

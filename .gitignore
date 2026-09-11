@@ -19,3 +19,5 @@ compile_commands.json
 /build-evidence/
 /stage/
 /.qt-archives/
+
+/tests/scripted/__pycache__/
