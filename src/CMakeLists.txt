@@ -66,6 +66,8 @@ ADD_GEN_QRC(LMMS_RCC_OUT lmms.qrc
 	"${CMAKE_SOURCE_DIR}/doc/AUTHORS"
 	"${CMAKE_SOURCE_DIR}/LICENSE.txt"
 	"${CONTRIBUTORS}"
+	"${CMAKE_SOURCE_DIR}/data/branding/beatquay-256.png"
+	"${CMAKE_SOURCE_DIR}/data/branding/beatquay.svg"
 )
 
 # Paths relative to lmms executable

@@ -6,6 +6,8 @@ set(CMAKE_AUTOMOC ON)
 set(LMMS_TESTS
 	src/core/ArrayVectorTest.cpp
 	src/core/AudioBufferTest.cpp
+	src/core/BeatQuayConfigIdentityTest.cpp
+	src/core/BeatQuayBrandingTest.cpp
 	src/core/AudioFileOutputTest.cpp
 	src/core/ExportOutputPublicationTest.cpp
 	src/core/AutomatableModelTest.cpp
@@ -70,3 +72,10 @@ find_package(Python3 COMPONENTS Interpreter REQUIRED)
 add_test(NAME CommandLineCodecTest
 	COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/scripted/cli-codec-test.py"
 		--executable "$<TARGET_FILE:lmms>")
+
+add_test(NAME BeatQuayReleaseRuntimeTest
+    COMMAND "${Python3_EXECUTABLE}" -m unittest discover -s "${CMAKE_SOURCE_DIR}/tests/scripted" -p test_release_runtime.py -v)
+add_test(NAME BeatQuayProductResourceTest
+    COMMAND "${Python3_EXECUTABLE}" -m unittest discover -s "${CMAKE_SOURCE_DIR}/tests/scripted" -p test_product_identity.py -v)
+add_test(NAME BeatQuayBrandAssetsTest
+    COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/data/branding/generate.py" --check)

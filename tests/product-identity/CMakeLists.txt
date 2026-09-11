@@ -1,0 +1,56 @@
+# SPDX-FileCopyrightText: 2026 Trieflow LLC
+# SPDX-License-Identifier: GPL-2.0-or-later
+cmake_minimum_required(VERSION 3.24)
+project(BeatQuayIdentityChecks LANGUAGES CXX)
+find_package(Qt6 6.11.2 EXACT REQUIRED COMPONENTS Core Gui Widgets Xml Test)
+include(CTest)
+include(GenerateExportHeader)
+set(CMAKE_AUTOMOC ON)
+get_filename_component(BEATQUAY_SOURCE "${CMAKE_CURRENT_LIST_DIR}/../.." ABSOLUTE)
+include("${BEATQUAY_SOURCE}/cmake/modules/BeatQuayIdentity.cmake")
+# No audio backend is initialized by this isolated ConfigManager harness.
+configure_file("${BEATQUAY_SOURCE}/src/lmmsconfig.h.in" "${CMAKE_CURRENT_BINARY_DIR}/lmmsconfig.h")
+set(VERSION "1.3.0-alpha")
+configure_file("${BEATQUAY_SOURCE}/src/lmmsversion.h.in" "${CMAKE_CURRENT_BINARY_DIR}/lmmsversion.h")
+add_library(BeatQuayConfigCore STATIC
+    "${BEATQUAY_SOURCE}/src/core/ConfigManager.cpp"
+    "${BEATQUAY_SOURCE}/src/core/PathUtil.cpp"
+    "${BEATQUAY_SOURCE}/src/core/ProjectVersion.cpp"
+    "${BEATQUAY_SOURCE}/include/ConfigManager.h"
+    headless_dependencies.cpp)
+generate_export_header(BeatQuayConfigCore BASE_NAME lmms)
+find_path(BEATQUAY_SAMPLERATE_INCLUDE_DIR samplerate.h REQUIRED)
+target_include_directories(BeatQuayConfigCore PRIVATE "${BEATQUAY_SAMPLERATE_INCLUDE_DIR}")
+target_include_directories(BeatQuayConfigCore PUBLIC "${BEATQUAY_SOURCE}/include" "${CMAKE_CURRENT_BINARY_DIR}")
+target_link_libraries(BeatQuayConfigCore PUBLIC Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Xml)
+target_compile_features(BeatQuayConfigCore PUBLIC cxx_std_20)
+target_compile_definitions(BeatQuayConfigCore PUBLIC LMMS_STATIC_DEFINE)
+add_executable(BeatQuayConfigIdentityTest "${BEATQUAY_SOURCE}/tests/src/core/BeatQuayConfigIdentityTest.cpp")
+target_link_libraries(BeatQuayConfigIdentityTest PRIVATE BeatQuayConfigCore Qt6::Test)
+add_test(NAME BeatQuayConfigIdentityTest COMMAND BeatQuayConfigIdentityTest)
+file(READ "${BEATQUAY_SOURCE}/src/gui/MainWindow.cpp" main_window)
+string(FIND "${main_window}" "void MainWindow::resetWindowTitle()" title_start)
+string(FIND "${main_window}" "bool MainWindow::mayChangeProject(" title_end)
+math(EXPR title_length "${title_end} - ${title_start}")
+string(SUBSTRING "${main_window}" ${title_start} ${title_length} title_method)
+file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/production_title_method.inc" "${title_method}")
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${BEATQUAY_SOURCE}/src/gui/MainWindow.cpp")
+add_executable(BeatQuayTitleMethodTest title_method_test.cpp)
+target_include_directories(BeatQuayTitleMethodTest PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
+target_link_libraries(BeatQuayTitleMethodTest PRIVATE Qt6::Core Qt6::Test)
+add_test(NAME BeatQuayTitleMethodTest COMMAND BeatQuayTitleMethodTest)
+file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/brand.qrc"
+    "<RCC><qresource prefix=\"/\"><file alias=\"beatquay-256.png\">${BEATQUAY_SOURCE}/data/branding/beatquay-256.png</file></qresource></RCC>")
+qt6_add_resources(brand_resources "${CMAKE_CURRENT_BINARY_DIR}/brand.qrc")
+add_executable(BeatQuayBrandingTest "${BEATQUAY_SOURCE}/tests/src/core/BeatQuayBrandingTest.cpp" ${brand_resources})
+target_include_directories(BeatQuayBrandingTest PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
+target_link_libraries(BeatQuayBrandingTest PRIVATE Qt6::Core Qt6::Gui Qt6::Test)
+add_test(NAME BeatQuayBrandingTest COMMAND BeatQuayBrandingTest)
+
+foreach(target BeatQuayConfigCore BeatQuayConfigIdentityTest BeatQuayTitleMethodTest BeatQuayBrandingTest)
+    if(MSVC)
+        target_compile_options(${target} PRIVATE /W2 /WX /utf-8 /wd4251)
+    else()
+        target_compile_options(${target} PRIVATE -Wall -Werror)
+    endif()
+endforeach()

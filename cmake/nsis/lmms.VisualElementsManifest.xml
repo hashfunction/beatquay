@@ -1,9 +1,9 @@
 <Application xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
   <VisualElements
       ShowNameOnSquare150x150Logo='on'
-      Square150x150Logo='assets\Logo.png'
-      Square70x70Logo='assets\SmallLogo.png'
-      Square44x44Logo='assets\SmallLogo.png'
+      Square150x150Logo='data\branding\beatquay-256.png'
+      Square70x70Logo='data\branding\beatquay-256.png'
+      Square44x44Logo='data\branding\beatquay-256.png'
       ForegroundText='light'
-      BackgroundColor='#249A57'/>
+      BackgroundColor='#101b27'/>
 </Application>

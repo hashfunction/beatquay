@@ -23,6 +23,7 @@
  */
 
 
+#include "BeatQuayIdentity.h"
 #include <QCheckBox>
 #include <QComboBox>
 #include <QGroupBox>
@@ -159,7 +160,7 @@ SetupDialog::SetupDialog(ConfigTab tab_to_open) :
 	m_backgroundPicFile(QDir::toNativeSeparators(ConfigManager::inst()->backgroundPicFile()))
 {
 	setWindowIcon(embed::getIconPixmap("setup_general"));
-	setWindowTitle(tr("Settings"));
+	setWindowTitle(tr("%1 - Settings").arg(product::Name));
 	setWindowFlag(Qt::WindowContextHelpButtonHint, false);
 	setModal(true);
 
@@ -822,7 +823,7 @@ SetupDialog::SetupDialog(ConfigTab tab_to_open) :
 		pathSelectorsLayout->addSpacing(10);
 	};
 
-	addPathEntry(tr("LMMS working directory"), m_workingDir,
+	addPathEntry(tr("%1 working directory").arg(product::Name), m_workingDir,
 		SLOT(setWorkingDir(const QString&)),
 		SLOT(openWorkingDir()),
 		m_workingDirLineEdit);
@@ -1320,7 +1321,7 @@ void SetupDialog::toggleMidiAutoQuantization(bool enabled)
 void SetupDialog::openWorkingDir()
 {
 	QString new_dir = FileDialog::getExistingDirectory(this,
-		tr("Choose the LMMS working directory"), m_workingDir);
+		tr("Choose the %1 working directory").arg(product::Name), m_workingDir);
 	if (!new_dir.isEmpty())
 	{
 		m_workingDirLineEdit->setText(new_dir);

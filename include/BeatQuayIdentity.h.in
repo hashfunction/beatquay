@@ -1,0 +1,28 @@
+// SPDX-FileCopyrightText: 2026 Trieflow LLC
+// SPDX-License-Identifier: GPL-2.0-or-later
+#pragma once
+#include <QCoreApplication>
+#include <QString>
+
+namespace lmms::product
+{
+inline constexpr auto Name = "@BEATQUAY_NAME@";
+inline constexpr auto Version = "@BEATQUAY_VERSION@";
+inline constexpr auto DisplayTitle = "@BEATQUAY_NAME@ @BEATQUAY_VERSION@";
+inline constexpr auto Publisher = "@BEATQUAY_PUBLISHER@";
+inline constexpr auto Website = "@BEATQUAY_URL@";
+inline constexpr auto Privacy = "@BEATQUAY_PRIVACY_URL@";
+inline constexpr auto Support = "@BEATQUAY_SUPPORT_URL@";
+inline constexpr auto SettingsFile = "@BEATQUAY_SETTINGS_FILE@";
+inline constexpr auto Workspace = "@BEATQUAY_WORKSPACE@";
+inline constexpr auto PortableWorkspace = "@BEATQUAY_PORTABLE_WORKSPACE@";
+inline constexpr auto Icon = ":/beatquay-256.png";
+
+inline void applyApplicationIdentity()
+{
+    QCoreApplication::setApplicationName(QString::fromLatin1(Name));
+    QCoreApplication::setApplicationVersion(QString::fromLatin1(Version));
+    QCoreApplication::setOrganizationName(QString::fromLatin1(Publisher));
+    QCoreApplication::setOrganizationDomain(QStringLiteral("trieflow.com"));
+}
+}

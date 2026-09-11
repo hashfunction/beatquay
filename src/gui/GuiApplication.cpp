@@ -25,6 +25,7 @@
 #include "GuiApplication.h"
 
 #include "lmmsversion.h"
+#include "BeatQuayIdentity.h"
 
 #include "LmmsStyle.h"
 #include "LmmsPalette.h"
@@ -47,6 +48,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QMessageBox>
+#include <QPainter>
 #include <QSplashScreen>
 #include <QSocketNotifier>
 
@@ -95,9 +97,9 @@ GuiApplication::GuiApplication()
 	if ( !ConfigManager::inst()->hasWorkingDir() &&
 		QMessageBox::question( nullptr,
 				tr( "Working directory" ),
-				tr( "The LMMS working directory %1 does not "
+				tr( "The %2 working directory %1 does not "
 				"exist. Create it now? You can change the directory "
-				"later via Edit -> Settings." ).arg( ConfigManager::inst()->workingDir() ),
+				"later via Edit -> Settings." ).arg(ConfigManager::inst()->workingDir(), product::Name),
 					QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes ) == QMessageBox::Yes)
 	{
 		ConfigManager::inst()->createWorkingDir();
@@ -121,7 +123,18 @@ GuiApplication::GuiApplication()
 #endif
 
 	// Show splash screen
-	QSplashScreen splashScreen( embed::getIconPixmap( "splash" ) );
+	QPixmap splash(512, 256);
+	splash.fill(QColor("#101b27"));
+	{
+		QPainter painter(&splash);
+		painter.drawPixmap(208, 24, 96, 96, QPixmap(product::Icon));
+		painter.setPen(QColor("#edf4f4"));
+		auto font = painter.font(); font.setPointSize(26); font.setBold(true);
+		painter.setFont(font);
+		painter.drawText(QRect(0, 128, 512, 64), Qt::AlignCenter, product::Name);
+	}
+	QSplashScreen splashScreen(splash);
+	splashScreen.setWindowTitle(QString::fromLatin1(product::DisplayTitle));
 	splashScreen.setFixedSize(splashScreen.pixmap().size());
 	splashScreen.show();
 
@@ -133,7 +146,7 @@ GuiApplication::GuiApplication()
 	// & a right-aligned label for version info
 	QLabel loadingProgressLabel;
 	m_loadingProgressLabel = &loadingProgressLabel;
-	QLabel versionLabel(MainWindow::tr( "Version %1" ).arg( LMMS_VERSION ));
+	QLabel versionLabel(MainWindow::tr( "Version %1" ).arg(product::Version));
 
 	loadingProgressLabel.setAlignment(Qt::AlignLeft);
 	versionLabel.setAlignment(Qt::AlignRight);

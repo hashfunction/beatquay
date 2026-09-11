@@ -1,0 +1,19 @@
+# SPDX-FileCopyrightText: 2026 Trieflow LLC
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Product display identity; LMMS_VERSION remains the upstream schema version.
+set(BEATQUAY_NAME "BeatQuay")
+set(BEATQUAY_VERSION "1.0.0")
+string(REPLACE "." ";" BEATQUAY_VERSION_PARTS "${BEATQUAY_VERSION}")
+list(GET BEATQUAY_VERSION_PARTS 0 BEATQUAY_VERSION_MAJOR)
+list(GET BEATQUAY_VERSION_PARTS 1 BEATQUAY_VERSION_MINOR)
+list(GET BEATQUAY_VERSION_PARTS 2 BEATQUAY_VERSION_PATCH)
+set(BEATQUAY_VERSION_TUPLE "${BEATQUAY_VERSION_MAJOR},${BEATQUAY_VERSION_MINOR},${BEATQUAY_VERSION_PATCH},0")
+set(BEATQUAY_PUBLISHER "Trieflow LLC")
+set(BEATQUAY_URL "https://beatquay.trieflow.com")
+set(BEATQUAY_PRIVACY_URL "${BEATQUAY_URL}/privacy")
+set(BEATQUAY_SUPPORT_URL "${BEATQUAY_URL}/support")
+set(BEATQUAY_SETTINGS_FILE ".beatquayrc.xml")
+set(BEATQUAY_WORKSPACE "BeatQuay")
+set(BEATQUAY_PORTABLE_WORKSPACE "beatquay-workspace")
+configure_file("${CMAKE_CURRENT_LIST_DIR}/../../include/BeatQuayIdentity.h.in"
+    "${CMAKE_BINARY_DIR}/BeatQuayIdentity.h" @ONLY)

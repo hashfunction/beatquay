@@ -1,4 +1,4 @@
-name: BeatQuay Windows modernization candidate
+name: BeatQuay Windows release-stage qualification
 on:
   workflow_dispatch:
   push:
@@ -8,7 +8,7 @@ permissions:
 jobs:
   candidate-x64:
     runs-on: windows-2022
-    timeout-minutes: 120
+    timeout-minutes: 150
     env:
       VCPKG_DISABLE_METRICS: '1'
       VCPKG_BINARY_SOURCES: clear
@@ -50,7 +50,11 @@ jobs:
         with:
           name: BeatQuay-Windows-candidate-metadata
           path: |
-            build-evidence/**
+            build-evidence/**/*.json
+            build-evidence/**/*.txt
+            build-evidence/**/*.xml
+            build-evidence/**/*.log
+            build-evidence/**/*.png
             build/CMakeCache.txt
             build/CMakeFiles/CMakeConfigureLog.yaml
             build/tests/Testing/Temporary/LastTest.log

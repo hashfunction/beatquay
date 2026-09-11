@@ -57,6 +57,7 @@
 #include <csignal>  // To register the signal handler
 
 #include "MainApplication.h"
+#include "BeatQuayIdentity.h"
 #include "AudioEngine.h"
 #include "ConfigManager.h"
 #include "DataFile.h"
@@ -141,14 +142,14 @@ inline void loadTranslation( const QString & tname,
 
 void printVersion( char *executableName )
 {
-	printf("LMMS %s\n(%s %s, Qt %s, %s)\n\n"
+	printf("%s\nPublisher: %s\n%s\n(%s %s, Qt %s, %s)\n\n"
 		"Build options:\n%s\n\n"
 		"Copyright (c) %s\n\n"
 		"This program is free software; you can redistribute it and/or\n"
 		"modify it under the terms of the GNU General Public\n"
 		"License as published by the Free Software Foundation; either\n"
 		"version 2 of the License, or (at your option) any later version.\n\n"
-		"Try \"%s --help\" for more information.\n\n", LMMS_VERSION,
+		"Try \"%s --help\" for more information.\n\n", lmms::product::DisplayTitle, lmms::product::Publisher, lmms::product::Website,
 		LMMS_BUILDCONF_PLATFORM, LMMS_BUILDCONF_MACHINE, QT_VERSION_STR, LMMS_BUILDCONF_COMPILER_VERSION, LMMS_BUILD_OPTIONS,
 		LMMS_PROJECT_COPYRIGHT, executableName);
 }
@@ -158,11 +159,11 @@ void printVersion( char *executableName )
 
 void printHelp()
 {
-	printf( "LMMS %s\n"
+	printf( "%s\n"
 		"Copyright (c) %s\n\n"
 		"Usage: lmms [global options...] [<action> [action parameters...]]\n\n"
 		"Actions:\n"
-		"  <no action> [options...] [<project>]  Start LMMS in normal GUI mode\n"
+		"  <no action> [options...] [<project>]  Start the application in normal GUI mode\n"
 		"  dump <in>                             Dump XML of compressed file <in>\n"
 		"  compress <in>                         Compress file <in>\n"
 		"  render <project> [options...]         Render given project file\n"
@@ -208,7 +209,7 @@ void printHelp()
 		"          Range: 44100 (default) to 192000\n"
 		"          Possible values: 1, 2, 4, 8\n"
 		"          Default: 2\n\n",
-		LMMS_VERSION, LMMS_PROJECT_COPYRIGHT );
+		lmms::product::DisplayTitle, LMMS_PROJECT_COPYRIGHT );
 }
 
 
@@ -358,7 +359,7 @@ int main( int argc, char * * argv )
 #if !defined(LMMS_BUILD_WIN32) && !defined(LMMS_BUILD_HAIKU)
 	if ( ( getuid() == 0 || geteuid() == 0 ) && !allowRoot )
 	{
-		printf( "LMMS cannot be run as root.\nUse \"--allowroot\" to override.\n\n" );
+		printf("%s cannot be run as root.\nUse \"--allowroot\" to override.\n\n", lmms::product::Name);
 		return EXIT_FAILURE;
 	}
 #endif
@@ -371,6 +372,7 @@ int main( int argc, char * * argv )
 	QCoreApplication * app = coreOnly ?
 			new QCoreApplication( argc, argv ) :
 					new gui::MainApplication(argc, argv);
+	lmms::product::applyApplicationIdentity();
 
 	OutputSettings os(44100, 160, OutputSettings::BitDepth::Depth16Bit, OutputSettings::StereoMode::JointStereo);
 	ProjectRenderer::ExportFileFormat eff = ProjectRenderer::ExportFileFormat::Wave;
@@ -807,7 +809,7 @@ int main( int argc, char * * argv )
 		if( recoveryFilePresent )
 		{
 			QMessageBox mb;
-			mb.setWindowTitle( MainWindow::tr( "Project recovery" ) );
+			mb.setWindowTitle(MainWindow::tr("%1 - Project recovery").arg(lmms::product::Name));
 			mb.setText( QString(
 				"<html>"
 				"<p style=\"margin-left:6\">%1</p>"
@@ -824,19 +826,19 @@ int main( int argc, char * * argv )
 				"</html>" ).arg(
 				MainWindow::tr( "There is a recovery file present. "
 					"It looks like the last session did not end "
-					"properly or another instance of LMMS is "
+					"properly or another instance of %1 is "
 					"already running. Do you want to recover the "
-					"project of this session?" ),
+					"project of this session?").arg(lmms::product::Name),
 				MainWindow::tr( "Recover" ),
 				MainWindow::tr( "Recover the file. Please don't run "
-					"multiple instances of LMMS when you do this." ),
+					"multiple instances of %1 when you do this.").arg(lmms::product::Name),
 				MainWindow::tr( "Discard" ),
 				MainWindow::tr( "Launch a default session and delete "
 					"the restored files. This is not reversible." )
 							) );
 
 			mb.setIcon( QMessageBox::Warning );
-			mb.setWindowIcon( embed::getIconPixmap( "icon_small" ) );
+			mb.setWindowIcon( QPixmap(lmms::product::Icon) );
 			mb.setWindowFlags( Qt::WindowCloseButtonHint );
 
 			// setting all buttons to the same roles allows us

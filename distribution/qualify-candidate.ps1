@@ -7,6 +7,10 @@ function Invoke-Checked([string]$Program, [string[]]$Arguments) {
     & $Program @Arguments
     if ($LASTEXITCODE -ne 0) { throw "$Program exited $LASTEXITCODE" }
 }
+$sourceCommit=(git rev-parse HEAD).Trim()
+if ($LASTEXITCODE -ne 0 -or $sourceCommit -cne $env:GITHUB_SHA) { throw 'Source differs from this qualification run.' }
+$sourceStatus=@(git status --porcelain --untracked-files=all)
+if ($LASTEXITCODE -ne 0 -or $sourceStatus.Count) { throw 'Source checkout must be clean before native build and package evidence collection.' }
 $lock = Get-Content distribution/candidate-inputs.json -Raw | ConvertFrom-Json
 if ((git -C .ci-vcpkg rev-parse HEAD) -ne $lock.vcpkg.commit) { throw 'vcpkg revision mismatch.' }
 $submodules = @(git submodule status --recursive)
@@ -58,9 +62,31 @@ try {
         @{ file=$_.Name; bytes=$_.Length; sha256=(Get-FileHash $_.FullName -Algorithm SHA256).Hash }
     } | ConvertTo-Json -Depth 3 | Set-Content build-evidence/dependency-downloads.json
     if (Test-Path build/vcpkg_installed/vcpkg/status) { Copy-Item build/vcpkg_installed/vcpkg/status build-evidence/vcpkg-installed-status.txt }
-    Get-ChildItem build/vcpkg_installed/x64-windows/share -Recurse -File -Filter copyright -ErrorAction SilentlyContinue | ForEach-Object {
-        $dest=Join-Path build-evidence/notices $_.Directory.Name
-        New-Item -ItemType Directory -Force $dest | Out-Null
-        Copy-Item $_.FullName (Join-Path $dest 'copyright.txt')
-    }
 }
+
+# Packaging runs only after the native try/finally completed successfully and
+# all same-run evidence inputs exist. Package binaries remain runner-private.
+$noticeRoot=Join-Path (Get-Location) 'build-evidence/notices'
+if (Test-Path -LiteralPath $noticeRoot) { throw 'Dependency notice output already exists and will not be replaced.' }
+New-Item -ItemType Directory -Path (Join-Path $noticeRoot 'vcpkg') | Out-Null
+Get-ChildItem build/vcpkg_installed/x64-windows/share -Recurse -File -Filter copyright -ErrorAction SilentlyContinue | ForEach-Object {
+    $dest=Join-Path $noticeRoot "vcpkg/$($_.Directory.Name)"
+    New-Item -ItemType Directory -Path $dest | Out-Null
+    [IO.File]::Copy($_.FullName,(Join-Path $dest 'copyright.txt'),$false)
+}
+$qtPrefix=(qmake -query QT_INSTALL_PREFIX).Trim()
+if ($LASTEXITCODE -ne 0 -or -not $qtPrefix) { throw 'Unable to resolve the actual Qt prefix.' }
+$qtLicenses=Join-Path $qtPrefix 'LICENSES'
+if (-not (Test-Path -LiteralPath $qtLicenses -PathType Container)) { throw 'Actual Qt license directory is absent.' }
+New-Item -ItemType Directory -Path (Join-Path $noticeRoot 'qt') | Out-Null
+Get-ChildItem -LiteralPath $qtLicenses -File | ForEach-Object {
+    [IO.File]::Copy($_.FullName,(Join-Path $noticeRoot "qt/$($_.Name)"),$false)
+}
+if (@(Get-ChildItem -LiteralPath (Join-Path $noticeRoot 'vcpkg') -Recurse -File).Count -eq 0 -or
+    @(Get-ChildItem -LiteralPath (Join-Path $noticeRoot 'qt') -File).Count -eq 0) {
+    throw 'Actual Qt and vcpkg dependency notice collections must both be nonempty.'
+}
+$powerShell=(Get-Process -Id $PID).Path
+Invoke-Checked $powerShell @('-NoLogo','-NoProfile','-File','cmake/msix/collect-pe-imports.ps1','-Stage','stage','-Output','build-evidence/pe-imports.json')
+Invoke-Checked python @('cmake/msix/prepare_inventory.py','--source-commit',$sourceCommit)
+Invoke-Checked $powerShell @('-NoLogo','-NoProfile','-File','cmake/msix/qualify-msix.ps1','-Python',(Get-Command python).Source)

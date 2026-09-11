@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <!-- Original mark, Copyright 2026 Trieflow LLC, GPL-2.0-or-later. -->
+  <rect width="256" height="256" rx="52" fill="#101b27"/>
+  <circle cx="128" cy="120" r="72" fill="none" stroke="#e5a4fa" stroke-width="20"/>
+  <path d="M169 158L219 208L205 222L155 172Z" fill="#e5a4fa"/>
+  <g fill="#edf4f4">
+    <rect x="92" y="112" width="12" height="36" rx="6"/>
+    <rect x="122" y="86" width="12" height="62" rx="6"/>
+    <rect x="152" y="102" width="12" height="46" rx="6"/>
+  </g>
+</svg>

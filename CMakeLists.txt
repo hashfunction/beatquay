@@ -52,6 +52,8 @@ include(StaticDependencies)
 
 STRING(TOUPPER          "${CMAKE_PROJECT_NAME}" PROJECT_NAME_UCASE)
 
+include("${CMAKE_SOURCE_DIR}/cmake/modules/BeatQuayIdentity.cmake")
+
 SET(PROJECT_YEAR 2026)
 
 SET(PROJECT_AUTHOR      "LMMS Developers")
@@ -955,9 +957,5 @@ MESSAGE(
 "\n\n")
 
 SET(CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION "${BIN_DIR}")
-if(MSVC)
-	# We can't set this on the install time according to the configuration
-	SET(CMAKE_INSTALL_DEBUG_LIBRARIES TRUE)
-	SET(CMAKE_INSTALL_UCRT_LIBRARIES TRUE)
-endif()
-INCLUDE(InstallRequiredSystemLibraries)
+include(BeatQuayRuntime)
+beatquay_install_system_runtime()

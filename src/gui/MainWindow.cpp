@@ -74,6 +74,7 @@
 #include "VersionedSaveDialog.h"
 
 #include "lmmsversion.h"
+#include "BeatQuayIdentity.h"
 
 
 namespace lmms::gui
@@ -265,7 +266,7 @@ MainWindow::~MainWindow()
 void MainWindow::finalize()
 {
 	resetWindowTitle();
-	setWindowIcon( embed::getIconPixmap( "icon_small" ) );
+	setWindowIcon( QPixmap(product::Icon) );
 
 	auto addAction = [this](QMenu* menu, std::string_view icon, const QString& text,
 		const QKeySequence& shortcut, auto(MainWindow::* slot)()) -> QAction*
@@ -385,7 +386,7 @@ void MainWindow::finalize()
 	}
 
 	help_menu->addSeparator();
-	help_menu->addAction( embed::getIconPixmap( "icon_small" ), tr( "About" ),
+	help_menu->addAction( QPixmap(product::Icon), tr( "About" ),
 				  this, SLOT(aboutLMMS()));
 
 	// create tool-buttons
@@ -482,7 +483,7 @@ void MainWindow::finalize()
 		ConfigManager::inst()->value( "audioengine", "audiodev" ) ) )
 	{
 		QMessageBox::critical(nullptr, "Audio device setup failed",
-			tr("Failed to setup audio device for playback. Try adjusting your audio device settings (e.g. the sample rate), then restart LMMS."));
+			tr("Failed to setup audio device for playback. Try adjusting your audio device settings (e.g. the sample rate), then restart %1.").arg(product::Name));
 
 		// if so, offer the audio settings section of the setup dialog
 		SetupDialog sd( SetupDialog::ConfigTab::AudioSettings );
@@ -590,7 +591,17 @@ void MainWindow::resetWindowTitle()
 		title += " - " + tr( "Recover session. Please save your work!" );
 	}
 
-	setWindowTitle( title + " - " + tr( "LMMS %1" ).arg( LMMS_VERSION ) );
+	// An empty, unmodified editor has a stable, unlocalized product title.
+	// Keep project, modification and recovery details for working sessions.
+	if (Engine::getSong()->projectFileName().isEmpty() &&
+		!Engine::getSong()->isModified() && getSession() != SessionState::Recover)
+	{
+		setWindowTitle(QString::fromLatin1(product::DisplayTitle));
+	}
+	else
+	{
+		setWindowTitle(title + " - " + product::DisplayTitle);
+	}
 }
 
 
@@ -747,7 +758,7 @@ void MainWindow::openProject()
 {
 	if( mayChangeProject(false) )
 	{
-		FileDialog ofd( this, tr( "Open Project" ), "", tr( "LMMS (*.mmp *.mmpz)" ) );
+		FileDialog ofd( this, tr( "Open Project" ), "", tr("%1 projects (*.mmp *.mmpz)").arg(product::Name) );
 
 		ofd.setDirectory( ConfigManager::inst()->userProjectsDir() );
 		ofd.setFileMode( FileDialog::ExistingFiles );
@@ -791,8 +802,8 @@ bool MainWindow::saveProjectAs()
 {
 	auto optionsWidget = new SaveOptionsWidget(Engine::getSong()->getSaveOptions());
 	VersionedSaveDialog sfd( this, optionsWidget, tr( "Save Project" ), "",
-			tr( "LMMS Project" ) + " (*.mmpz *.mmp);;" +
-				tr( "LMMS Project Template" ) + " (*.mpt)" );
+			tr("%1 Project").arg(product::Name) + " (*.mmpz *.mmp);;" +
+				tr("%1 Project Template").arg(product::Name) + " (*.mpt)" );
 	QString f = Engine::getSong()->projectFileName();
 	if( f != "" )
 	{
@@ -904,13 +915,8 @@ void MainWindow::aboutLMMS()
 
 void MainWindow::help()
 {
-	QMessageBox::information( this, tr( "Help not available" ),
-				  tr( "Currently there's no help "
-						  "available in LMMS.\n"
-						  "Please visit "
-						  "http://lmms.sf.net/wiki "
-						  "for documentation on LMMS." ),
-				  QMessageBox::Ok );
+	QMessageBox::information(this, tr("Help"),
+		tr("Visit %1 for %2 documentation and support.").arg(product::Support, product::Name));
 }
 
 
@@ -1386,7 +1392,7 @@ void MainWindow::showTool( QAction * _idx )
 void MainWindow::browseHelp()
 {
 	// file:// alternative for offline help
-	QString url = "https://lmms.io/documentation/";
+	QString url = QString::fromLatin1(product::Support);
 	QDesktopServices::openUrl( url );
 	// TODO: Handle error
 }

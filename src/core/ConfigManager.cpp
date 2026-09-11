@@ -23,6 +23,7 @@
  */
 
 #include "ConfigManager.h"
+#include "BeatQuayIdentity.h"
 
 #include <QApplication>
 #include <QDir>
@@ -701,17 +702,14 @@ void ConfigManager::saveConfigFile()
 void ConfigManager::initPortableWorkingDir()
 {
 	QString applicationPath = qApp->applicationDirPath();
-	m_workingDir = applicationPath + "/lmms-workspace/";
-	m_lmmsRcFile = applicationPath + "/.lmmsrc.xml";
+	m_workingDir = applicationPath + "/" + product::PortableWorkspace + "/";
+	m_lmmsRcFile = applicationPath + "/" + product::SettingsFile;
 }
 
 void ConfigManager::initInstalledWorkingDir()
 {
-	m_workingDir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/lmms/";
-	m_lmmsRcFile = QDir::home().absolutePath() +"/.lmmsrc.xml";
-	// Detect < 1.2.0 working directory as a courtesy
-	if ( QFileInfo( QDir::home().absolutePath() + "/lmms/projects/" ).exists() )
-		m_workingDir = QDir::home().absolutePath() + "/lmms/";
+	m_workingDir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/" + product::Workspace + "/";
+	m_lmmsRcFile = QDir::home().absolutePath() + "/" + product::SettingsFile;
 }
 
 void ConfigManager::initDevelopmentWorkingDir()
@@ -741,7 +739,7 @@ void ConfigManager::initDevelopmentWorkingDir()
 			}
 			if (line.startsWith("lmms_BINARY_DIR:")) {
 				m_lmmsRcFile = line.section('=', -1).trimmed() +  QDir::separator() +
-							   ".lmmsrc.xml";
+							   product::SettingsFile;
 				done++;
 			}
 			if (done == 2)

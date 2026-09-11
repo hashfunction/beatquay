@@ -24,6 +24,7 @@
 
 
 #include "lmmsversion.h"
+#include "BeatQuayIdentity.h"
 #include "AboutDialog.h"
 #include "embed.h"
 #include "versioninfo.h"
@@ -37,12 +38,19 @@ AboutDialog::AboutDialog(QWidget* parent) :
 	Ui::AboutDialog()
 {
 	setupUi( this );
+	setWindowTitle(tr("About %1").arg(product::Name));
+	label->setText(QString::fromLatin1(product::DisplayTitle));
+	label_2->setText(tr("Music creation by %1. Based on LMMS, with the original authors credited below.")
+		.arg(product::Publisher));
+	label_4->setText(QString(R"(<a href="%1">%1</a> · <a href="%2">Privacy</a> · <a href="%3">Support</a><br>Upstream: <a href="https://lmms.io">LMMS</a>)")
+		.arg(product::Website, product::Privacy, product::Support));
+	label_4->setOpenExternalLinks(true);
 
 
-	iconLabel->setPixmap( embed::getIconPixmap( "icon", 64, 64 ) );
+	iconLabel->setPixmap( QPixmap(product::Icon).scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation) );
 
 	versionLabel->setText( versionLabel->text().
-					arg( LMMS_VERSION ).
+					arg(product::Version).
 					arg( LMMS_BUILDCONF_PLATFORM ).
 					arg( LMMS_BUILDCONF_MACHINE ).
 					arg( QT_VERSION_STR ).
@@ -52,7 +60,7 @@ AboutDialog::AboutDialog(QWidget* parent) :
 					Qt::TextSelectableByMouse );
 
 	copyrightLabel->setText( copyrightLabel->text().
-					arg( LMMS_PROJECT_COPYRIGHT ) );
+					arg(QString::fromLatin1(LMMS_PROJECT_COPYRIGHT) + "; 2026 " + product::Publisher) );
 
 	authorLabel->setPlainText( embed::getText( "AUTHORS" ) );
 
