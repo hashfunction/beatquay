@@ -308,7 +308,7 @@ def create_input_inventory(release, source_root, source_commit, evidence_root, a
         runtime=dict(RUNTIME),
         peImports=file_record(evidence_root / "pe-imports.json"),
         buildProvenance=dict(
-            qt="Exact download records and copied Qt license materials are bound as evidence",
+            qt="Exact Qt binary downloads and source-pinned module notice manifests/files are bound as evidence",
             vcpkg="Pinned vcpkg input, installed status, downloads and copied copyright files are bound",
             imports="Every staged PE is recorded; all three instrument DLLs import lmms.exe",
             inventoryIsLicenseClearance=False,

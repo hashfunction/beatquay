@@ -78,16 +78,13 @@ Get-ChildItem build/vcpkg_installed/x64-windows/share -Recurse -File -Filter cop
     New-Item -ItemType Directory -Path $dest | Out-Null
     [IO.File]::Copy($_.FullName,(Join-Path $dest 'copyright.txt'),$false)
 }
-$qtPrefix=(qmake -query QT_INSTALL_PREFIX).Trim()
-if ($LASTEXITCODE -ne 0 -or -not $qtPrefix) { throw 'Unable to resolve the actual Qt prefix.' }
-$qtLicenses=Join-Path $qtPrefix 'LICENSES'
-if (-not (Test-Path -LiteralPath $qtLicenses -PathType Container)) { throw 'Actual Qt license directory is absent.' }
-New-Item -ItemType Directory -Path (Join-Path $noticeRoot 'qt') | Out-Null
-Get-ChildItem -LiteralPath $qtLicenses -File | ForEach-Object {
-    [IO.File]::Copy($_.FullName,(Join-Path $noticeRoot "qt/$($_.Name)"),$false)
+$qtNoticeArguments=@('distribution/collect_qt_notices.py','--version',[string]$lock.qt.version,'--output',(Join-Path $noticeRoot 'qt'))
+foreach ($archive in $lock.qt.archives) {
+    $qtNoticeArguments += @('--module',[string]$archive)
 }
+Invoke-Checked python $qtNoticeArguments
 if (@(Get-ChildItem -LiteralPath (Join-Path $noticeRoot 'vcpkg') -Recurse -File).Count -eq 0 -or
-    @(Get-ChildItem -LiteralPath (Join-Path $noticeRoot 'qt') -File).Count -eq 0) {
+    @(Get-ChildItem -LiteralPath (Join-Path $noticeRoot 'qt') -Recurse -File).Count -eq 0) {
     throw 'Actual Qt and vcpkg dependency notice collections must both be nonempty.'
 }
 $powerShell=(Get-Process -Id $PID).Path

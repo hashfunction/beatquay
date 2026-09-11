@@ -10,6 +10,13 @@ clean pinned native build, tests, install, and render checks succeed, it:
    verifies the MSIX before `cmake/msix/qualify-msix-install.ps1` exercises the
    package broker and fresh first-run UI.
 
+Qt binary SDK archives do not contain a reliable prefix-level `LICENSES`
+directory. `distribution/collect_qt_notices.py` therefore validates and copies
+the source-pinned Qt 6.11.2 notice bundle for the exact `qtbase`, `qtsvg`, and
+build-only `qttools` modules selected in `candidate-inputs.json`. Its manifest
+binds Qt's authoritative tag objects, commits, Git blobs, byte sizes and SHA-256
+digests. It explicitly leaves complete corresponding-source closure false.
+
 The package uses the CI-only identity `Trieflow.BeatQuay.Qualification` and the
 internal `lmms.exe` host name required by the installed instrument modules. It
 contains the complete native stage, the exact three approved instrument DLLs,
