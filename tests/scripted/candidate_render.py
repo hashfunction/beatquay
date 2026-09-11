@@ -38,6 +38,26 @@ def inspect_wave(path):
             "bytes": path.stat().st_size, "sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
 
 
+def inspect_render_error(result, source, original_sha256, destination, sentinel):
+    if result.returncode != 1:
+        raise ValueError("Render error must exit with EXIT_FAILURE (1), not success, a crash or a timeout")
+    diagnostic = result.stderr.decode("utf-8", errors="replace").replace("\\", "/")
+    if "Render failed or cancelled:" not in diagnostic:
+        raise ValueError("Render error did not reach the typed terminal result handler")
+    expected_path_prefix = str(destination).replace("\\", "/") + ": "
+    if not any(line.startswith(expected_path_prefix) for line in diagnostic.splitlines()):
+        raise ValueError("Render error did not identify the requested destination")
+    if hashlib.sha256(source.read_bytes()).hexdigest() != original_sha256:
+        raise ValueError("Render error changed the original project")
+    keep = destination / "keep.txt"
+    if (not destination.is_dir() or not keep.is_file() or keep.read_bytes() != sentinel
+            or sorted(item.name for item in destination.iterdir()) != ["keep.txt"]):
+        raise ValueError("Render error changed the blocked destination")
+    return {"exit_code": result.returncode, "typed_terminal_result_observed": True,
+            "input_sha256": original_sha256, "original_unchanged": True,
+            "blocked_destination_unchanged": True}
+
+
 def fixture_bytes():
     # Original test notes: one bar, four equal-length notes, one native oscillator.
     project = ET.Element("lmms-project", version="1.0", creator="LMMS", creatorversion="1.2.2", type="song")
@@ -78,7 +98,20 @@ def run(executable, stage, work, evidence):
         if hashlib.sha256(source.read_bytes()).hexdigest() != source_hash:
             raise ValueError("Rendering changed the original " + extension + " project")
         records.append(dict(inspect_wave(output), input_format=extension, input_sha256=source_hash, original_unchanged=True))
-    return {"native_render_smoke_passed": True, "fixture": "Original one-bar qualification notes; not a shipped starter", "renders": records,
+    # A directory at the exact output filename fails regardless of runner write
+    # privileges. Require the typed terminal path, not the old constructor exit.
+    source = work / "音符 é.mmp"
+    blocked = work / "blocked 音符 é.wav"
+    blocked.mkdir()
+    sentinel = b"Original directory contents; render must preserve these bytes."
+    (blocked / "keep.txt").write_bytes(sentinel)
+    error_result = subprocess.run([str(executable), "render", str(source), "-f", "wav", "-s", "44100", "-o", str(blocked), "-c", str(config_path)],
+                                  cwd=stage, env=environment, capture_output=True, timeout=60)
+    (evidence / "render-output-error.log").write_bytes(error_result.stdout + b"\n" + error_result.stderr)
+    error_record = inspect_render_error(error_result, source, hashlib.sha256(original).hexdigest(), blocked, sentinel)
+    return {"native_render_smoke_passed": True, "native_render_error_exit_passed": True,
+            "fixture": "Original one-bar qualification notes; not a shipped starter", "renders": records,
+            "render_error": error_record,
             "project_round_trip_verified": False, "physical_audio_verified": False,
             "installed_package_verified": False, "license_clearance": False}
 

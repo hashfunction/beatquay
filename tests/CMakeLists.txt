@@ -14,6 +14,7 @@ set(LMMS_TESTS
 	src/core/RelativePathsTest.cpp
 	src/core/RenderManagerLifecycleTest.cpp
 	src/core/TimelineTest.cpp
+	src/core/TrackFilenameFilterTest.cpp
 	src/tracks/AutomationTrackTest.cpp
 )
 

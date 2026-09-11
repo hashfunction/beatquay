@@ -30,13 +30,14 @@ try {
     Invoke-Checked cmake @('--build','build','--parallel','2','--','-k','0')
     $env:PATH = "$(Get-Location)/build;$(Get-Location)/build/vcpkg_installed/x64-windows/bin;$env:PATH"
     Invoke-Checked ctest @('--test-dir','build/tests','--timeout','60','--output-on-failure','--output-junit',"$(Get-Location)/build-evidence/tests.xml")
+    Invoke-Checked ctest @('--test-dir','build/tests','-R','^RenderManagerLifecycleTest$','--no-tests=error','--repeat','until-fail:10','--timeout','60','--output-on-failure','--output-log',"$(Get-Location)/build-evidence/lifecycle-repeat.log",'--output-junit',"$(Get-Location)/build-evidence/lifecycle-repeat.xml")
     Invoke-Checked cmake @('--install','build','--prefix',"$(Get-Location)/stage")
     Get-ChildItem stage -Recurse -File | ForEach-Object {
         @{ path=[IO.Path]::GetRelativePath((Join-Path (Get-Location) 'stage'), $_.FullName); bytes=$_.Length; sha256=(Get-FileHash $_.FullName -Algorithm SHA256).Hash }
     } | ConvertTo-Json -Depth 3 | Set-Content build-evidence/stage-inventory.json
     Invoke-Checked python @('-m','unittest','discover','-s','tests/scripted','-p','test_candidate_render.py')
     Invoke-Checked python @('tests/scripted/candidate_render.py','--executable',"$(Get-Location)/stage/lmms.exe",'--stage',"$(Get-Location)/stage",'--work',"$(Get-Location)/.cache/native-render-smoke",'--evidence',"$(Get-Location)/build-evidence")
-    @{ source_commit=$env:GITHUB_SHA; candidate=$lock.candidate; built=$true; tests_passed=$true; installed_stage=$true; native_render_smoke_passed=$true; modernization_accepted=$false; physical_audio_verified=$false; source_license_closure=$false; store_submitted=$false } | ConvertTo-Json | Set-Content build-evidence/result.json
+    @{ source_commit=$env:GITHUB_SHA; candidate=$lock.candidate; built=$true; tests_passed=$true; lifecycle_repeat_passed=$true; lifecycle_repeat_count=10; installed_stage=$true; native_render_smoke_passed=$true; native_render_error_exit_passed=$true; modernization_accepted=$false; physical_audio_verified=$false; source_license_closure=$false; store_submitted=$false } | ConvertTo-Json | Set-Content build-evidence/result.json
 } finally {
     $qtReports = @(Get-ChildItem build/tests -File -Filter '*.qt-test.*' -ErrorAction SilentlyContinue)
     if ($qtReports.Count) {

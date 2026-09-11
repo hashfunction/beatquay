@@ -133,3 +133,119 @@ the actual CLI exits nonzero on output-open failure and exits after successful
 finalization. Full GUI/dialog cancellation, physical devices/MIDI, project
 round-trip compatibility, clean installation and source/license gates remain
 open. No Windows success, Store readiness or full Task 4 completion is claimed.
+
+## Windows diagnostic and qualification follow-up
+
+Exact downloaded logs and metadata from runs `34596612563` attempt 2 (test-only
+`a1725036`, public snapshot `5ad6aa2f6ad6df27a6cd31fee160e20ffee4606d`) and
+`34597834544` (repair `833d9413`, public snapshot
+`54593e9531273fbe5c30a9642cf40d248e622f67`) establish that both full application
+builds completed. The test-only run passed 10/11 suites; the repair passed 11/12.
+Only `RenderManagerLifecycleTest` failed in each run. This supersedes the earlier
+Qt extraction failure and the earlier lack of a native compile result.
+
+Neither downloaded `LastTest.log` nor CTest JUnit report contains the Qt assertion
+results. The test-only lifecycle output is empty; the repair records only the two
+intentional inaccessible-destination stderr messages. Those messages alone do
+not identify a failing assertion. No renderer change is justified by guessing
+which case failed. Logs are retained in the app's adjacent `Release/artifacts/`
+as `windows-34596612563-attempt2-failed.log` and
+`windows-34597834544-failed.log`; full metadata is under the matching
+`run-<id>-diagnosis/BeatQuay-Windows-candidate-metadata` directories.
+
+Diagnostic commit `df6c02e9f90d5d0e2391bdc4039124864a066ec0` makes every native
+QtTest write explicit JUnit XML and text reports, and preserves them under
+`build-evidence/qt-tests` even when CTest fails. The exact logger arguments were
+run on local Qt 6.11.2 and produced all nine file-output test records. The
+coordinator's Windows diagnostic run `34600483516` uses exact public snapshot
+`8ce5a808a5023dbed7e0385f4482fe7d8af42630`. Its assertion results are pending at
+this qualification-coverage checkpoint; the lifecycle suite is not yet GREEN.
+
+The qualifier now requires ten successive executions of the actual native
+`RenderManagerLifecycleTest` through `ctest --repeat until-fail:10`, with
+`--no-tests=error`, a retained repeat log and JUnit report. The same CTest command
+shape was exercised locally against `AudioFileOutputTest` ten times to verify
+the options; that is not a Windows lifecycle pass. Only after the real Windows
+command returns success may `result.json` report ten passed lifecycle repetitions.
+
+The staged native smoke now also renders the authored MMP fixture to an existing
+directory at the exact Unicode `.wav` destination. The test requires exit code
+**1**, the actual typed terminal-handler diagnostic and exact output-path line,
+unchanged source bytes, and unchanged directory contents. It rejects exit 0,
+crash codes, the old constructor-only exit, an unrelated/prefix-matching output
+path and changed files. A 60-second timeout detects a lost pre-event-loop exit or
+an unexpected interactive error. The actual invocation and stderr/stdout go to
+`render-output-error.log`; `render-smoke.json` records the observed status and
+preservation hashes. Generated projects/audio remain private. This specifically
+checks output-open failure; it does not claim an induced native disk-full or
+encoder-finalization failure.
+
+Local TDD for the new failure inspector: eight missing-function errors before
+implementation; two subsequent failing regressions for unexpected directory
+contents and path-prefix confusion; final **13 Python tests pass**, including
+the three existing real-WAV inspection tests. Evidence is in
+`build-evidence/render-error-*.log`. The qualifier passes a real PowerShell 7.6.6
+AST parse on macOS; no Windows operations were run locally.
+
+The independent review's Task 4 gates remain explicit: pathname-based cancellation
+can delete a substituted regular file, and the legacy GUI still accepts the
+untyped `finished` signal for failures. Ownership-safe staging/publication and
+replacement-survival regressions, explicit overwrite consent, source/resource
+preservation and typed GUI error handling must be implemented in Task 4. Passing
+this bounded lifecycle qualification cannot waive those gates.
+
+## Case-level diagnosis and bounded repair
+
+Windows diagnostic run `34600483516` completed the full build and retained the
+individual results: **18 lifecycle results passed, one failed, zero skipped**.
+The report is adjacent at
+`Release/artifacts/run-34600483516-diagnosis/BeatQuay-Windows-candidate-metadata/build-evidence/qt-tests/RenderManagerLifecycleTest.qt-test.txt`;
+the exact failed-run log is `Release/artifacts/windows-34600483516-failed.log`.
+Actual device restoration/finalization, cancellation, invalid format/startup,
+empty batch, owner destruction, owner deletion from completion and each available
+WAV/FLAC/Ogg/MP3 decoder check passed on Windows. This supplies native evidence
+for those cases at the diagnostic commit, not for subsequent source changes.
+
+The only failure was a **test expectation defect** in
+`partialBatchFailureRetainsSuccessAndRestoresMutes`. The existing renderer pops
+the back of the two-track queue and numbers that output `2_same.wav`; it then
+attempts `1_same.wav`. The fixture blocked `1_same.wav` with a directory but
+incorrectly expected the first result to be Failed. Windows correctly reported
+the first result as Succeeded and the batch as Failed. The repair preserves the
+renderer order and verifies every result's exact numbered path, status, encoder
+finalization and error. It now tests both failure-after-success and
+success-after-failure, confirms the valid output decodes, and confirms the
+blocked directory, mutes and device survive. This strengthens the batch test;
+no assertion is skipped and no renderer behavior is changed to satisfy it.
+
+The same native report exposed a separate inherited **source defect**: every
+track export warned that `FILENAME_FILTER` was an invalid QRegularExpression,
+so removal of forbidden filename characters did nothing. The shared constant
+in `Track.h` now uses valid PCRE2 `\x{...}` character-range escapes, preserving
+its intended ASCII control/punctuation set and Unicode text. Its two existing
+consumers (track export and instrument preset filename suggestion) are unchanged.
+This is not a general Windows filename/ownership/publication safety policy.
+
+`TrackFilenameFilterTest` includes the actual production `Track.h`, without a
+copied pattern or fake track implementation. With exact local Qt 6.11.2 and
+warnings as errors, the old constant produced **44 failures / 88 passes**;
+the fixed constant passes **132 results**, zero failures/skips. The cases check
+pattern validity, all 128 ASCII characters, composed/decomposed Unicode, an emoji,
+mixed forbidden characters and empty text. Logs are
+`build-evidence/track-filename-filter-{red,green}.txt`. A native lifecycle case
+now also renders a track name containing forbidden characters plus Unicode and
+requires the exact filtered output path and a decodable WAV.
+
+The existing standalone project-export-check CMake directory now runs both
+`ProjectExportCheckTest` and `TrackFilenameFilterTest`; Qt Gui is required for the
+real Track header's QColor type, but no window or GUI application is created.
+The production pure checker still links only Qt Core. Both focused suites pass
+locally (33 and 132 Qt results). The file-output suite still passes 9 results,
+and the staged smoke/error inspector still passes 13 Python tests.
+
+The next root snapshot must run the combined changes, including coverage commit
+`940124e30243a5848c6f646456c2e1f4cdfb5fae`: full native build, **13 CTest suites**
+(new target `TrackFilenameFilterTest`), ten repeated lifecycle runs, both authored
+non-silent Unicode MMP/MMPZ renders and the actual typed CLI output-open failure
+exit. These combined Windows GREEN results are pending. The Task 4 ownership-safe
+cleanup/publication and legacy GUI failure-handling gates above remain open.

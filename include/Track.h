@@ -59,7 +59,8 @@ class TrackContainerView;
 const int MINIMAL_TRACK_HEIGHT = 32;
 const int DEFAULT_TRACK_HEIGHT = 32;
 
-char const *const FILENAME_FILTER = "[\\0000-\x1f\"*/:<>?\\\\|\x7f]";
+// PCRE2 hex escapes keep NUL/control characters out of the C++ string itself.
+char const *const FILENAME_FILTER = R"([\x{0000}-\x{001f}"*/:<>?\\|\x{007f}])";
 
 
 //! Base-class for all tracks

@@ -168,15 +168,25 @@ private slots:
 		QCOMPARE(completed.size(), 1);
 	}
 
+	void partialBatchFailureRetainsSuccessAndRestoresMutes_data()
+	{
+		QTest::addColumn<int>("blockedNumber");
+		QTest::newRow("failure-after-success") << 1;
+		QTest::newRow("success-after-failure") << 2;
+	}
+
 	void partialBatchFailureRetainsSuccessAndRestoresMutes()
 	{
+		QFETCH(int, blockedNumber);
 		QTemporaryDir directory;
 		QVERIFY(directory.isValid());
 		auto* first = new SampleTrack(Engine::getSong());
 		auto* second = new SampleTrack(Engine::getSong());
 		first->setName("same");
 		second->setName("same");
-		QVERIFY(QDir(directory.path()).mkdir("1_same.wav"));
+		const auto blockedName = QString::number(blockedNumber) + "_same.wav";
+		const auto successfulName = QString::number(3 - blockedNumber) + "_same.wav";
+		QVERIFY(QDir(directory.path()).mkdir(blockedName));
 		auto* originalDevice = Engine::audioEngine()->audioDev();
 		RenderManager manager(settings(), ProjectRenderer::ExportFileFormat::Wave, directory.path());
 		QSignalSpy completed(&manager, &RenderManager::completed);
@@ -184,13 +194,45 @@ private slots:
 		QTRY_COMPARE_WITH_TIMEOUT(completed.size(), 1, 30000);
 		QCOMPARE(manager.result().status, RenderStatus::Failed);
 		QCOMPARE(manager.result().outputs.size(), 2);
-		QCOMPARE(manager.result().outputs[0].status, RenderStatus::Failed);
-		QCOMPARE(manager.result().outputs[1].status, RenderStatus::Succeeded);
-		QVERIFY(QFileInfo(directory.filePath("1_same.wav")).isDir());
-		QVERIFY(readableFinalizedWave(directory.filePath("2_same.wav")));
+		// Existing batch order is descending: the back of the two-track queue
+		// is rendered as 2_same.wav, followed by 1_same.wav. Match every result
+		// to its actual path, covering failure in either position.
+		for (qsizetype index = 0; index < manager.result().outputs.size(); ++index)
+		{
+			const auto number = 2 - index;
+			const auto& output = manager.result().outputs[index];
+			const bool failed = number == blockedNumber;
+			QCOMPARE(output.path, directory.filePath(QString::number(number) + "_same.wav"));
+			QCOMPARE(output.status, failed ? RenderStatus::Failed : RenderStatus::Succeeded);
+			QCOMPARE(output.encoderFinalized, !failed);
+			QCOMPARE(output.error.isEmpty(), !failed);
+		}
+		QVERIFY(QFileInfo(directory.filePath(blockedName)).isDir());
+		QVERIFY(readableFinalizedWave(directory.filePath(successfulName)));
 		QVERIFY(!first->isMuted());
 		QVERIFY(!second->isMuted());
 		QVERIFY(Engine::audioEngine()->audioDev() == originalDevice);
+	}
+
+	void multitrackFiltersForbiddenCharactersAndKeepsUnicode()
+	{
+		QTemporaryDir directory;
+		QVERIFY(directory.isValid());
+		auto* track = new SampleTrack(Engine::getSong());
+		const auto originalName = QString::fromUtf8("音符:/\\*?\"<>|") + QChar(1);
+		track->setName(originalName);
+		RenderManager manager(settings(), ProjectRenderer::ExportFileFormat::Wave, directory.path());
+		QSignalSpy completed(&manager, &RenderManager::completed);
+		manager.renderTracks();
+		QTRY_COMPARE_WITH_TIMEOUT(completed.size(), 1, 30000);
+		QCOMPARE(manager.result().status, RenderStatus::Succeeded);
+		QCOMPARE(manager.result().outputs.size(), 1);
+		const auto expected = directory.filePath(QString::fromUtf8("1_音符.wav"));
+		QCOMPARE(manager.result().outputs.front().path, expected);
+		QVERIFY(readableFinalizedWave(expected));
+		QCOMPARE(QDir(directory.path()).entryList(QDir::Files).size(), 1);
+		QCOMPARE(track->name(), originalName);
+		QVERIFY(!track->isMuted());
 	}
 
 	void invalidBatchFormatFailsWithoutCreatingOutputs()
