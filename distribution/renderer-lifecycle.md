@@ -249,3 +249,7 @@ The next root snapshot must run the combined changes, including coverage commit
 non-silent Unicode MMP/MMPZ renders and the actual typed CLI output-open failure
 exit. These combined Windows GREEN results are pending. The Task 4 ownership-safe
 cleanup/publication and legacy GUI failure-handling gates above remain open.
+
+## Qt moc regression repair
+
+Windows run34603322617 at dcb60270 failed linking Track metaobject/signals across native targets; its log explicitly reports `Track.h: No relevant classes found`. Actual Qt6.11.2 moc on the unchanged header reproduced zero-byte output locally. Replacing only the raw-string notation with an equivalent ordinary escaped C++ literal restores generated Track::staticMetaObject, metaObject and signals. The PCRE2 pattern bytes and filename semantics are unchanged. Existing ProjectExportCheckTest33 and TrackFilenameFilterTest132 results pass, and the independent exhaustive1,112,064 Unicode scalar check still removes exactly42 intended ASCII values. Full Windows13suite/10repeat/CLI qualification remains required.

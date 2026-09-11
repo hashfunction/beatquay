@@ -59,8 +59,8 @@ class TrackContainerView;
 const int MINIMAL_TRACK_HEIGHT = 32;
 const int DEFAULT_TRACK_HEIGHT = 32;
 
-// PCRE2 hex escapes keep NUL/control characters out of the C++ string itself.
-char const *const FILENAME_FILTER = R"([\x{0000}-\x{001f}"*/:<>?\\|\x{007f}])";
+// PCRE2 escapes avoid literal control bytes; a regular C++ string also lets moc parse the following class.
+char const *const FILENAME_FILTER = "[\\x{0000}-\\x{001f}\"*/:<>?\\\\|\\x{007f}]";
 
 
 //! Base-class for all tracks
