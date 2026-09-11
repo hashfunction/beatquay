@@ -36,6 +36,7 @@
 #include <QMessageBox>
 #include <QPushButton>
 #include <QTextStream>
+#include <QStringList>
 
 #ifdef LMMS_BUILD_WIN32
 #include <windows.h>
@@ -285,7 +286,8 @@ int main( int argc, char * * argv )
 		}
 		else if (arg == "--geometry" || arg == "-geometry")
 		{
-			if (arg == "--geometry") { argv[i]++; } // Delete the first "-" so Qt recognize the option
+			// Qt accepts either spelling. Keep argv intact so its Windows
+			// Unicode argument recovery can match the native command line.
 			// option -geometry is filtered by Qt later,
 			// so we need to check its presence now to
 			// determine, if the application should run in
@@ -372,26 +374,29 @@ int main( int argc, char * * argv )
 	OutputSettings os(44100, 160, OutputSettings::BitDepth::Depth16Bit, OutputSettings::StereoMode::JointStereo);
 	ProjectRenderer::ExportFileFormat eff = ProjectRenderer::ExportFileFormat::Wave;
 
-	// second of two command-line parsing stages
-	for( int i = 1; i < argc; ++i )
+	// second of two command-line parsing stages, after Qt consumes its options
+	// On Windows Qt recovers Unicode from the native command line; narrow argv
+	// has already lost characters outside the active code page.
+	const QStringList arguments = QCoreApplication::arguments();
+	for (qsizetype i = 1; i < arguments.size(); ++i)
 	{
-		QString arg = argv[i];
+		const QString& arg = arguments[i];
 
 		if (arg == "upgrade" || arg == "--upgrade" || arg  == "-u")
 		{
 			++i;
 
-			if( i == argc )
+			if( i == arguments.size() )
 			{
 				return noInputFileError();
 			}
 
 
-			DataFile dataFile( QString::fromLocal8Bit( argv[i] ) );
+			DataFile dataFile( arguments[i] );
 
-			if( argc > i+1 ) // output file specified
+			if( arguments.size() > i+1 ) // output file specified
 			{
-				dataFile.writeFile( QString::fromLocal8Bit( argv[i+1] ) );
+				dataFile.writeFile( arguments[i+1] );
 			}
 			else // no output file specified; use stdout
 			{
@@ -406,17 +411,17 @@ int main( int argc, char * * argv )
 		{
 			++i;
 
-			if (i == argc)
+			if (i == arguments.size())
 			{
 				return noInputFileError();
 			}
 
-			DataFile dataFile(QString::fromLocal8Bit(argv[i]));
+			DataFile dataFile(arguments[i]);
 
-			if (argc > i+1) // Project bundle file name given
+			if (arguments.size() > i+1) // Project bundle file name given
 			{
 				printf("Making bundle\n");
-				dataFile.writeFile(QString::fromLocal8Bit(argv[i+1]), true);
+				dataFile.writeFile(arguments[i+1], true);
 				return EXIT_SUCCESS;
 			}
 			else
@@ -439,13 +444,13 @@ int main( int argc, char * * argv )
 		{
 			++i;
 
-			if( i == argc )
+			if( i == arguments.size() )
 			{
 				return noInputFileError();
 			}
 
 
-			QFile f( QString::fromLocal8Bit( argv[i] ) );
+			QFile f( arguments[i] );
 			if (!f.open(QIODevice::ReadOnly))
 			{
 				qCritical().noquote() << "Cannot open input file:" << f.fileName() << f.errorString();
@@ -460,12 +465,12 @@ int main( int argc, char * * argv )
 		{
 			++i;
 
-			if( i == argc )
+			if( i == arguments.size() )
 			{
 				return noInputFileError();
 			}
 
-			QFile f( QString::fromLocal8Bit( argv[i] ) );
+			QFile f( arguments[i] );
 			if (!f.open(QIODevice::ReadOnly))
 			{
 				qCritical().noquote() << "Cannot open input file:" << f.fileName() << f.errorString();
@@ -481,13 +486,13 @@ int main( int argc, char * * argv )
 		{
 			++i;
 
-			if( i == argc )
+			if( i == arguments.size() )
 			{
 				return noInputFileError();
 			}
 
 
-			fileToLoad = QString::fromLocal8Bit( argv[i] );
+			fileToLoad = arguments[i];
 			renderOut = fileToLoad;
 		}
 		else if( arg == "--loop" || arg == "-l" )
@@ -498,25 +503,25 @@ int main( int argc, char * * argv )
 		{
 			++i;
 
-			if( i == argc )
+			if( i == arguments.size() )
 			{
 				return usageError( "No output file specified" );
 			}
 
 
-			renderOut = QString::fromLocal8Bit( argv[i] );
+			renderOut = arguments[i];
 		}
 		else if( arg == "--format" || arg == "-f" )
 		{
 			++i;
 
-			if( i == argc )
+			if( i == arguments.size() )
 			{
 				return usageError( "No output format specified" );
 			}
 
 
-			const QString ext = QString( argv[i] );
+			const QString ext = QString( arguments[i] );
 
 			if( ext == "wav" )
 			{
@@ -540,40 +545,40 @@ int main( int argc, char * * argv )
 			}
 			else
 			{
-				return usageError( QString( "Invalid output format %1" ).arg( argv[i] ) );
+				return usageError( QString( "Invalid output format %1" ).arg( arguments[i] ) );
 			}
 		}
 		else if( arg == "--samplerate" || arg == "-s" )
 		{
 			++i;
 
-			if( i == argc )
+			if( i == arguments.size() )
 			{
 				return usageError( "No samplerate specified" );
 			}
 
 
-			sample_rate_t sr = QString( argv[i] ).toUInt();
+			sample_rate_t sr = QString( arguments[i] ).toUInt();
 			if( sr >= 44100 && sr <= 192000 )
 			{
 				os.setSampleRate(sr);
 			}
 			else
 			{
-				return usageError( QString( "Invalid samplerate %1" ).arg( argv[i] ) );
+				return usageError( QString( "Invalid samplerate %1" ).arg( arguments[i] ) );
 			}
 		}
 		else if( arg == "--bitrate" || arg == "-b" )
 		{
 			++i;
 
-			if( i == argc )
+			if( i == arguments.size() )
 			{
 				return usageError( "No bitrate specified" );
 			}
 
 
-			int br = QString( argv[i] ).toUInt();
+			int br = QString( arguments[i] ).toUInt();
 
 			if( br >= 64 && br <= 384 )
 			{
@@ -581,19 +586,19 @@ int main( int argc, char * * argv )
 			}
 			else
 			{
-				return usageError( QString( "Invalid bitrate %1" ).arg( argv[i] ) );
+				return usageError( QString( "Invalid bitrate %1" ).arg( arguments[i] ) );
 			}
 		}
 		else if( arg == "--mode" || arg == "-m" )
 		{
 			++i;
 
-			if( i == argc )
+			if( i == arguments.size() )
 			{
 				return usageError( "No stereo mode specified" );
 			}
 
-			QString const mode( argv[i] );
+			QString const mode( arguments[i] );
 
 			if( mode == "s" )
 			{
@@ -609,7 +614,7 @@ int main( int argc, char * * argv )
 			}
 			else
 			{
-				return usageError( QString( "Invalid stereo mode %1" ).arg( argv[i] ) );
+				return usageError( QString( "Invalid stereo mode %1" ).arg( arguments[i] ) );
 			}
 		}
 		else if( arg =="--float" || arg == "-a" )
@@ -620,15 +625,15 @@ int main( int argc, char * * argv )
 		{
 			++i;
 
-			if( i == argc )
+			if( i == arguments.size() )
 			{
 				return usageError( "No file specified for importing" );
 			}
 
-			fileToImport = QString::fromLocal8Bit( argv[i] );
+			fileToImport = arguments[i];
 
 			// exit after import? (only for debugging)
-			if( QString( argv[i + 1] ) == "-e" )
+			if (i + 1 < arguments.size() && arguments[i + 1] == "-e")
 			{
 				exitAfterImport = true;
 				++i;
@@ -638,32 +643,32 @@ int main( int argc, char * * argv )
 		{
 			++i;
 
-			if( i == argc )
+			if( i == arguments.size() )
 			{
 				return usageError( "No profile specified" );
 			}
 
 
-			profilerOutputFile = QString::fromLocal8Bit( argv[i] );
+			profilerOutputFile = arguments[i];
 		}
 		else if( arg == "--config" || arg == "-c" )
 		{
 			++i;
 
-			if( i == argc )
+			if( i == arguments.size() )
 			{
 				return usageError( "No configuration file specified" );
 			}
 
-			configFile = QString::fromLocal8Bit( argv[i] );
+			configFile = arguments[i];
 		}
 		else
 		{
-			if( argv[i][0] == '-' )
+			if (arg.startsWith('-'))
 			{
-				return usageError( QString( "Invalid option %1" ).arg( argv[i] ) );
+				return usageError( QString( "Invalid option %1" ).arg( arguments[i] ) );
 			}
-			fileToLoad = QString::fromLocal8Bit( argv[i] );
+			fileToLoad = arguments[i];
 		}
 	}
 

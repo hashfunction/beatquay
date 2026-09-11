@@ -8,38 +8,75 @@ ancestor of the candidate; no history rewrite is required for eventual adoption.
 
 ## Actual Windows evidence
 
-Run [34587223881](https://github.com/hashfunction/beatquay/actions/runs/34587223881)
-built source tree `6b9731c9f0fcd2b7278ceb15ff3064ac86094cac` (local source
-`573a2f0cd2866e370ce9be7eb250b983deede250`, public snapshot
-`78d1bedf5ec54853a419d80d2a8ad4f3d536fbfd`). Exact tree equivalence was verified.
-Its toolchain was Qt **6.11.2**, MSVC **19.44.35228 x64**, CMake **3.31.6**,
-Ninja **1.13.2**, Windows SDK **10.0.26100.0**, and Python **3.12.10**.
-The locked vcpkg commit is `9e593bb18ea69cc5095e012465dcd675a822ed0d`.
-All 20 recursive submodule commits/tree hashes matched `candidate-inputs.json`.
-The current Qt pin replaces the plan's older Qt 6.8 assumption.
+Run [34589415265](https://github.com/hashfunction/beatquay/actions/runs/34589415265)
+used candidate `76184f7e5725cd65aa366af7f81f374a406b9627` and completed all
+323 build steps, including the actual application and minimal instruments, with
+Qt **6.11.2** and MSVC **19.44.35228 x64**. All eight existing native CTest suites
+passed, including the authored `RelativePathsTest` fixtures. The ninth suite,
+`CommandLineCodecTest`, passed its two missing-file cases but failed its Unicode
+round-trip during input open: `音符-é.mmp` became `??-�.mmp`. CTest correctly
+returned failure. Installation and staged rendering did not run. The diagnostic
+log is retained at `apps/beatquay/Release/artifacts/windows-34589415265-failed.log`.
+This supersedes the application compile failure in run `34587223881`, repaired
+by the checked codec opens in `9677685a`.
 
-The run compiled the core objects and linked all eight existing Qt test
-executables. It failed compiling the application at `main.cpp:449` and `:465`:
-C2220/C4834, ignored `QFile::open` results under `/WX`. CTest, staging and runtime
-smoke did not run. Earlier core open-error fixes are not suppressed warnings.
-The complete diagnostics are retained locally at
-`apps/beatquay/Release/artifacts/windows-34587223881-failed.log` and
-`Release/artifacts/run-34587223881-agent/` (relative to the app).
+The locked vcpkg commit remains `9e593bb18ea69cc5095e012465dcd675a822ed0d` and
+the 20 recursive submodule commits/tree hashes remain pinned in
+`candidate-inputs.json`. The current Qt pin replaces the plan's Qt 6.8 assumption.
 
-Commit `9677685a` checks both CLI codec opens, reports the affected input and
-returns failure before producing output. A real local Qt 6.11.2 compiler probe
-failed first for the discarded nodiscard result. The exact CLI source blocks,
-compiled in an isolated QtCore harness, then failed two missing-file assertions
-and passed all three regression cases after repair, including a Unicode
-compress/dump round-trip with original bytes preserved. This harness is not the
-full Windows executable. `CommandLineCodecTest` now runs those same cases against
-the actual built application in CTest with an offscreen Qt platform.
+## Unicode command-line repair
 
-`RelativePathsTest` depended on a removed factory audio asset. A QtCore path
-probe confirmed that its real `data:/samples/drums/kick01.ogg` lookup fails in the
-candidate. The test now owns temporary, explicitly non-audio ASCII/Unicode path
-fixtures and restores its prior Qt search paths. Production path conversion is
-unchanged, and the full native QtTest remains to be run.
+The failing Windows test is the RED evidence. After application construction,
+`main.cpp` was rebuilding every value from narrow `argv`, whose encoding had
+already lost the requested filename. The parser now reads one immutable
+`QCoreApplication::arguments()` list after Qt processes its options, and uses
+that list consistently for values and bounds. This covers upgrade/bundle inputs
+and outputs, codecs, render input/output, import, profile, config and positional
+project paths. The optional import `-e` lookahead is bounded because a QStringList
+has no terminating null element.
+
+Qt's exact [6.11.2 core implementation](https://github.com/qt/qtbase/blob/v6.11.2/src/corelib/kernel/qcoreapplication.cpp)
+recovers native Windows arguments with `CommandLineToArgvW` and filters options
+consumed by the derived application. Supplying modified arguments can disable
+that recovery. The redundant `--geometry` pointer rewrite is therefore removed.
+Qt's [6.11.2 GUI parser](https://github.com/qt/qtbase/blob/v6.11.2/src/gui/kernel/qguiapplication.cpp)
+already handles both dash spellings. The early fullscreen detection is retained;
+the legacy `geometry` alias remains XCB-specific, while Qt's `qwindowgeometry`
+is platform-independent. This repair does not broaden that existing alias.
+
+The original Unicode assertion remains strict. The actual application CTest now
+contains eight cases, adding paths with Unicode/spaces/apostrophes, Qt-consumed
+platform/geometry/style options before and after the file, omitted/empty codec
+arguments and an import path as the final argument. The compressed bytes are
+also decoded independently with Python zlib after checking the four-byte length.
+Every round-trip checks that both original files retain their bytes.
+
+Local validation uses Qt **6.11.2 EXACT** in an ignored, offscreen harness compiled
+from the production codec/import/file-check blocks. All eight cases pass with
+`-Wall -Wextra -Werror` and `QT_FORCE_ASSERTS`; no window is created. Removing the
+import bounds guard from the generated harness makes its final-argument test fail
+with Qt assertions enabled; restoring the guard passes. The normal release-Qt
+probe did not diagnose that out-of-bounds mutation, so its absence of a crash is
+not used as evidence. The original Windows Unicode defect does not reproduce on
+this UTF-8 macOS host. These are local block-level checks, **not a complete app
+build or a Windows GREEN result**. The next root-owned native run must provide
+that result.
+
+Local commands (from this candidate checkout):
+
+```sh
+python3 .cache/qt-cli-arguments/extract.py
+cmake -S .cache/qt-cli-arguments -B .cache/qt-cli-arguments/build -G Ninja -DCMAKE_PREFIX_PATH=/opt/homebrew
+cmake --build .cache/qt-cli-arguments/build
+python3 tests/scripted/cli-codec-test.py --executable .cache/qt-cli-arguments/build/CliArgumentsProbe
+python3 tests/scripted/test_candidate_render.py
+```
+
+The last command's three WAV-inspector cases also pass. Evidence is retained in
+`build-evidence/cli-arguments-*.log` and `cli-import-mutation-*.log`. For Windows,
+use the unchanged `distribution/qualify-candidate.ps1`; its CTest registration
+runs the same eight CLI cases against `$<TARGET_FILE:lmms>`. No workflow or
+compiler-flag change is required for this repair.
 
 ## Staged render smoke preparation
 
@@ -47,8 +84,8 @@ After CTest and installation to a fresh stage, `qualify-candidate.ps1` records
 its complete file inventory and runs `tests/scripted/candidate_render.py`.
 The script generates one original bar of four notes using the native
 TripleOscillator and the v1.2.2 XML schema. It renders both XML and Qt-compressed
-forms from Unicode filenames, with explicit fresh WAV destinations and a private
-configuration. No sample, preset or demo content is used. These are qualification
+forms from filenames containing Unicode and spaces, with explicit fresh WAV
+destinations and a private configuration using Unicode/spaces as well. No sample, preset or demo content is used. These are qualification
 fixtures, not the approved product starter arrangements.
 
 Each rendered output must be stereo 44100 Hz PCM16, have complete frames and a

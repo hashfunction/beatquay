@@ -57,7 +57,7 @@ def run(executable, stage, work, evidence):
     evidence.mkdir(parents=True, exist_ok=True)
     config = ET.Element("lmms")
     ET.SubElement(config, "paths", workingdir=str(work / "user"))
-    config_path = work / "qualification-config.xml"
+    config_path = work / "qualification 音符 é-config.xml"
     config_path.write_bytes(ET.tostring(config, encoding="utf-8"))
     environment = dict(os.environ, LMMS_DATA_DIR=str(stage / "data"), QT_PLUGIN_PATH=str(stage))
     if os.name == "nt":
@@ -66,8 +66,8 @@ def run(executable, stage, work, evidence):
     original = fixture_bytes()
     records = []
     for extension, contents in (("mmp", original), ("mmpz", struct.pack(">I", len(original)) + zlib.compress(original))):
-        source = work / ("音符-é." + extension)
-        output = work / ("render-" + extension + ".wav")
+        source = work / ("音符 é." + extension)
+        output = work / ("render 音符 é-" + extension + ".wav")
         source.write_bytes(contents)
         source_hash = hashlib.sha256(contents).hexdigest()
         result = subprocess.run([str(executable), "render", str(source), "-f", "wav", "-s", "44100", "-o", str(output), "-c", str(config_path)],
