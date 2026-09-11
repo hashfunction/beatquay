@@ -137,16 +137,17 @@ LmmsStyle::LmmsStyle() :
 	QProxyStyle()
 {
 	QFile file( "resources:style.css" );
-	file.open( QIODevice::ReadOnly );
-	qApp->setStyleSheet( file.readAll() );
+	if (file.open(QIODevice::ReadOnly))
+	{
+		qApp->setStyleSheet(file.readAll());
+	}
 
 	m_styleReloader.addPath(QFileInfo{file}.absoluteFilePath());
 	connect(&m_styleReloader, &QFileSystemWatcher::fileChanged, this,
 		[this](const QString& path)
 		{
-			if (auto file = QFile{path}; file.exists())
+			if (auto file = QFile{path}; file.open(QIODevice::ReadOnly))
 			{
-				file.open(QIODevice::ReadOnly);
 				qApp->setStyleSheet(file.readAll());
 				TextFloat::displayMessage(
 					tr("Theme updated"),

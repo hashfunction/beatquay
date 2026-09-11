@@ -724,8 +724,7 @@ void ConfigManager::initDevelopmentWorkingDir()
 		appPath.cdUp();
 	}
 	QFile cmakeCache(appPath.absoluteFilePath("CMakeCache.txt"));
-	if (cmakeCache.exists()) {
-		cmakeCache.open(QFile::ReadOnly);
+	if (cmakeCache.open(QFile::ReadOnly)) {
 		QTextStream stream(&cmakeCache);
 
 		// Find the lines containing something like lmms_SOURCE_DIR:static=<dir>

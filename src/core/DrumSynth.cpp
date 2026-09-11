@@ -198,8 +198,7 @@ std::size_t DrumSynth::GetPrivateProfileString(const char* sec,
 	// Use QFile to handle unicode file name on Windows
 	// Previously we used ifstream directly
 	QFile f(file);
-	f.open(QIODevice::ReadOnly);
-	QByteArray dat = f.readAll().constData();
+	const QByteArray dat = f.open(QIODevice::ReadOnly) ? f.readAll() : QByteArray{};
 	is.str(string(dat.constData(), dat.size()));
 
 	// If buffer[0] isn't overwritten after reading file, default value
