@@ -26,6 +26,7 @@
 #include <QRegularExpression>
 
 #include "RenderManager.h"
+#include "AudioEngine.h"
 
 #include "PatternStore.h"
 #include "Song.h"

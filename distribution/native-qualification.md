@@ -1,12 +1,29 @@
 # BeatQuay candidate native qualification
 
-Status on 2026-09-11: **candidate only; not accepted for product features**.
+Status on 2026-09-11: **candidate qualified for isolated feature development;
+full modernization and release acceptance remain pending**.
 The original `apps/beatquay/source` remains clean at v1.2.2
 `94363be152f526edba4e884264d891f1361cf54b`. This isolated candidate began at
 `518a7e8ef525a276ba9702df87c613ea0ff25c47`. The original commit is already an
 ancestor of the candidate; no history rewrite is required for eventual adoption.
 
 ## Actual Windows evidence
+
+Run [34591912855](https://github.com/hashfunction/beatquay/actions/runs/34591912855)
+at source `b298ce3ddb8877ca12be05af8d2bc1b1a9ef2ff2` / public snapshot
+`0d11f3e50122171e3d6a9101372adf93651ec6c6` built the actual application, passed
+all nine native CTest suites, installed the candidate stage, and passed both
+authored MMP/MMPZ renders through Unicode paths. Both outputs were identical
+non-silent stereo PCM16 WAVs: 44100 Hz, 176384 frames, 705624 bytes, peak 7864,
+SHA256 `5be09d25f4c6b85e0ed6e5842e6bda6a3584347384678ce8e4ff8d313bda0482`.
+Both inputs retained their original bytes. The coordinator-downloaded
+`Release/artifacts/run-34591912855/BeatQuay-Windows-candidate-metadata/build-evidence/`
+contains `result.json` and `render-smoke.json`; `modernization_accepted`,
+`source_license_closure` and `physical_audio_verified` remain false. This result
+permits the isolated development checkpoint in the approved plan; it does not
+qualify subsequent feature commits until they run on Windows too.
+
+Earlier RED evidence:
 
 Run [34589415265](https://github.com/hashfunction/beatquay/actions/runs/34589415265)
 used candidate `76184f7e5725cd65aa366af7f81f374a406b9627` and completed all
@@ -58,9 +75,9 @@ import bounds guard from the generated harness makes its final-argument test fai
 with Qt assertions enabled; restoring the guard passes. The normal release-Qt
 probe did not diagnose that out-of-bounds mutation, so its absence of a crash is
 not used as evidence. The original Windows Unicode defect does not reproduce on
-this UTF-8 macOS host. These are local block-level checks, **not a complete app
-build or a Windows GREEN result**. The next root-owned native run must provide
-that result.
+this UTF-8 macOS host. These local block-level checks are **not a complete app
+build or a Windows GREEN result**. The separate Windows GREEN result is now
+recorded above from run `34591912855`.
 
 Local commands (from this candidate checkout):
 
@@ -101,8 +118,8 @@ directory. Only logs, hashes and measured metadata go to the publicly uploaded
 `build-evidence` directory. The fixture notes and XML generator were authored for
 this test by Trieflow LLC on 2026-09-11; test code is GPL-2.0-or-later. No third-party
 music is embedded. The three local WAV-inspector tests fail before implementation
-and pass afterward (audible PCM, nonempty silence, empty file). The actual staged
-native render has **not run** at this handoff.
+and pass afterward (audible PCM, nonempty silence, empty file). Both actual staged
+native renders subsequently passed in run `34591912855`, as recorded above.
 
 Local ignored evidence is in this candidate's `build-evidence/`:
 `qt-open-probe-red.log`, `qt-open-probe-green-build.log`, `cli-probe-red.log`,
@@ -113,9 +130,9 @@ it does not execute Windows build/install operations.
 
 ## Acceptance and advancing the original checkout
 
-The next Windows run must build the actual app, pass every CTest, inspect the
-installed stage and pass both actual native renders. A successful native baseline
-run will still leave representative v1.2.2 project save/reopen semantics,
+Every subsequent Windows feature qualification must build the actual app, pass
+every CTest, inspect the installed stage and pass both actual native renders.
+The successful native baseline run still leaves representative v1.2.2 project save/reopen semantics,
 automation/mixer compatibility, project-format backward compatibility, UI/DPI,
 physical audio/MIDI, cancellation, device reconnect and long-render gates open.
 The smoke does not claim those behaviors, MSIX installation, WACK or license

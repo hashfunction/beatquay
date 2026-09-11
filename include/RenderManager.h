@@ -27,6 +27,7 @@
 #define LMMS_RENDER_MANAGER_H
 
 #include <memory>
+#include <vector>
 
 #include "ProjectRenderer.h"
 #include "OutputSettings.h"
@@ -35,6 +36,7 @@
 namespace lmms
 {
 
+class Track;
 
 class RenderManager : public QObject
 {

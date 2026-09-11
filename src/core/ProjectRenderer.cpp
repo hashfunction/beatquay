@@ -24,8 +24,12 @@
 
 
 #include <QFile>
+#include <type_traits>
 
 #include "ProjectRenderer.h"
+#include "AudioEngine.h"
+#include "AudioFileDevice.h"
+#include "OutputSettings.h"
 #include "Song.h"
 #include "PerfLog.h"
 
@@ -38,6 +42,8 @@
 namespace lmms
 {
 
+// Keep the lightweight public declaration identical to the encoder factory type.
+static_assert(std::is_same_v<decltype(ProjectRenderer::FileEncodeDevice::m_getDevInst), AudioFileDeviceInstantiaton>);
 
 const std::array<ProjectRenderer::FileEncodeDevice, 5> ProjectRenderer::fileEncodeDevices
 {

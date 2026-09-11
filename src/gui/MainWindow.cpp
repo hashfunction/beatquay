@@ -36,6 +36,7 @@
 #include <QSplitter>
 
 #include "AboutDialog.h"
+#include "AudioEngine.h"
 #include "AutomationEditor.h"
 #include "ControllerRackView.h"
 #include "DeprecationHelper.h"

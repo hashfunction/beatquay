@@ -25,15 +25,19 @@
 #ifndef LMMS_PROJECT_RENDERER_H
 #define LMMS_PROJECT_RENDERER_H
 
-#include "AudioFileDevice.h"
-#include "AudioEngine.h"
-#include "OutputSettings.h"
+#include <QThread>
+#include <array>
+
+#include "LmmsTypes.h"
 
 #include "lmms_export.h"
 
 namespace lmms
 {
 
+class AudioFileDevice;
+class AudioEngine;
+class OutputSettings;
 
 class LMMS_EXPORT ProjectRenderer : public QThread
 {
@@ -56,7 +60,7 @@ public:
 		ExportFileFormat m_fileFormat;
 		const char * m_description;
 		const char * m_extension;
-		AudioFileDeviceInstantiaton m_getDevInst;
+		AudioFileDevice* (*m_getDevInst)(const QString&, const OutputSettings&, ch_cnt_t, AudioEngine*, bool&);
 	} ;
 
 	ProjectRenderer(const OutputSettings& _os, ExportFileFormat _file_format, const QString& _out_file);

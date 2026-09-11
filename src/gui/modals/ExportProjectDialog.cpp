@@ -37,6 +37,7 @@
 #include <QVBoxLayout>
 
 #include "Engine.h"
+#include "AudioEngine.h"
 #include "ProjectRenderer.h"
 #include "Song.h"
 

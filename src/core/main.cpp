@@ -57,6 +57,7 @@
 #include <csignal>  // To register the signal handler
 
 #include "MainApplication.h"
+#include "AudioEngine.h"
 #include "ConfigManager.h"
 #include "DataFile.h"
 #include "NotePlayHandle.h"
