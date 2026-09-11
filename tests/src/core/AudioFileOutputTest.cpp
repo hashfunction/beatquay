@@ -33,6 +33,21 @@ private slots:
 		QCOMPARE(read.readAll(), QByteArray("headerfooter"));
 	}
 
+	void exclusiveOpenRefusesAnExistingFileWithoutTruncation()
+	{
+		QTemporaryDir directory;
+		const auto path = directory.filePath("source.wav");
+		QFile keep(path);
+		QVERIFY(keep.open(QIODevice::WriteOnly | QIODevice::NewOnly));
+		QCOMPARE(keep.write("source"), 6);
+		keep.close();
+		AudioFileOutput output(path);
+		QVERIFY2(!output.open(true), "A GUI staging file must be created exclusively");
+		QVERIFY(!output.removePartial());
+		QVERIFY(keep.open(QIODevice::ReadOnly));
+		QCOMPARE(keep.readAll(), QByteArray("source"));
+	}
+
 	void encoderFailureStillClosesAndRemainsFailed()
 	{
 		QTemporaryDir directory;
@@ -98,6 +113,36 @@ private slots:
 		QVERIFY(!output.removePartial());
 		QVERIFY(keep.open(QIODevice::ReadOnly));
 		QCOMPARE(keep.readAll(), QByteArray("keep"));
+	}
+
+	void cancelledReplacementIsPreserved_data()
+	{
+		QTest::addColumn<QByteArray>("replacement");
+		QTest::newRow("different-content") << QByteArray("other");
+		QTest::newRow("identical-content-new-identity") << QByteArray("owned");
+	}
+
+	void cancelledReplacementIsPreserved()
+	{
+		QFETCH(QByteArray, replacement);
+		QTemporaryDir directory;
+		const auto path = directory.filePath("partial.wav");
+		const auto retained = directory.filePath("retained.wav");
+		AudioFileOutput output(path);
+		QVERIFY(output.open());
+		QCOMPARE(output.write("owned", 5), 5);
+		QVERIFY(output.finalize([] { return true; }));
+		QVERIFY(QFile::rename(path, retained));
+		QFile foreign(path);
+		QVERIFY(foreign.open(QIODevice::WriteOnly | QIODevice::NewOnly));
+		QCOMPARE(foreign.write(replacement), replacement.size());
+		foreign.close();
+		QVERIFY2(!output.removePartial(), "Cancellation must not remove a substituted regular file");
+		QVERIFY(foreign.open(QIODevice::ReadOnly));
+		QCOMPARE(foreign.readAll(), replacement);
+		QFile original(retained);
+		QVERIFY(original.open(QIODevice::ReadOnly));
+		QCOMPARE(original.readAll(), QByteArray("owned"));
 	}
 
 	void failedRemovalReportsFailureWithoutDeletingADirectory()

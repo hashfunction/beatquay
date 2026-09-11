@@ -55,6 +55,8 @@ public:
 	bool finalizeOutput();
 	bool hasWriteFailure() const { return m_outputFile.hasWriteFailure(); }
 	bool removePartialOutput() { return m_outputFile.removePartial(); }
+	std::optional<ExportFileIdentity> outputIdentity() const { return m_outputFile.identity(); }
+	QString cleanupRecoveryPath() const { return m_outputFile.cleanupRecoveryPath(); }
 
 protected:
 	int writeData( const void* data, int len );

@@ -3,6 +3,7 @@
 #ifndef LMMS_AUDIO_FILE_OUTPUT_H
 #define LMMS_AUDIO_FILE_OUTPUT_H
 #include <QFile>
+#include "ExportFileIdentity.h"
 #include <functional>
 #include "lmms_export.h"
 
@@ -14,7 +15,7 @@ class LMMS_EXPORT AudioFileOutput
 {
 public:
 	explicit AudioFileOutput(const QString& path) : m_file(path) {}
-	bool open();
+	bool open(bool requireNew = false);
 	bool isOpen() const { return m_file.isOpen(); }
 	QString fileName() const { return m_file.fileName(); }
 	int handle() const { return m_file.handle(); }
@@ -23,8 +24,12 @@ public:
 	bool hasWriteFailure() const { return m_writeFailed; }
 	bool finalize(const std::function<bool()>& finishEncoder);
 	bool removePartial();
+	std::optional<ExportFileIdentity> identity() const { return m_identity; }
+	QString cleanupRecoveryPath() const { return m_cleanupRecoveryPath; }
 private:
 	QFile m_file;
+	std::optional<ExportFileIdentity> m_identity;
+	QString m_cleanupRecoveryPath;
 	bool m_opened = false;
 	bool m_writeFailed = false;
 	bool m_finalized = false;

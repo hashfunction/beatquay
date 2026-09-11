@@ -76,6 +76,8 @@ public:
 	//! @brief Copies resources to @p resourcesDir and changes the
 	//! DataFile to use local paths to them
 	bool copyResources(const QString& resourcesDir);
+	//! Resolved references from the same minimal-build resource map as bundling.
+	QStringList resourceReferences() const;
 
 	//! @brief Checks whether the XML tree of a @ref DataFile has (potentially unsafe) local paths
 	//!

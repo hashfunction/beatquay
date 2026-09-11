@@ -81,6 +81,7 @@ SET(LMMS_SRCS
 	gui/modals/ControllerConnectionDialog.cpp
 	gui/modals/EffectSelectDialog.cpp
 	gui/modals/ExportProjectDialog.cpp
+	gui/modals/ProjectExportCheckDialog.cpp
 	gui/modals/FileDialog.cpp
 	gui/modals/RenameDialog.cpp
 	gui/modals/SetupDialog.cpp

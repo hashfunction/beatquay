@@ -31,6 +31,7 @@
 
 #include "ProjectRenderer.h"
 #include "OutputSettings.h"
+#include "ExportOutputPublication.h"
 
 
 namespace lmms
@@ -42,7 +43,8 @@ class RenderManager : public QObject
 {
 	Q_OBJECT
 public:
-	RenderManager(const OutputSettings& outputSettings, ProjectRenderer::ExportFileFormat fmt, QString outputPath);
+	RenderManager(const OutputSettings& outputSettings, ProjectRenderer::ExportFileFormat fmt, QString outputPath,
+		QList<ExportDestinationSnapshot> authorizedOutputs = {}, QStringList protectedPaths = {});
 
 	~RenderManager() override;
 
@@ -55,6 +57,7 @@ public:
 	void abortProcessing();
 	bool isComplete() const { return m_complete; }
 	const RenderResult& result() const { return m_result; }
+	static QStringList outputPaths(ProjectRenderer::ExportFileFormat format, const QString& path, bool tracks);
 
 signals:
 	void progressChanged( int );
@@ -68,7 +71,7 @@ private slots:
 	void updateConsoleProgress();
 
 private:
-	QString pathForTrack( const Track *track, int num );
+	static QString pathForTrack(const Track* track, int num, ProjectRenderer::ExportFileFormat format, const QString& directory);
 	void restoreMutedState();
 
 	bool render(const QString& outputPath);
@@ -79,6 +82,9 @@ private:
 	const OutputSettings m_outputSettings;
 	ProjectRenderer::ExportFileFormat m_format;
 	QString m_outputPath;
+	QList<ExportDestinationSnapshot> m_authorizedOutputs;
+	QStringList m_protectedPaths;
+	std::unique_ptr<ExportOutputPublication> m_activePublication;
 
 	std::unique_ptr<ProjectRenderer> m_activeRenderer;
 

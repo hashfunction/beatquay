@@ -48,6 +48,75 @@ private slots:
 		Engine::getSong()->setLoopRenderCount(1);
 	}
 
+	void exclusiveRendererPreservesAnExistingStagingFile()
+	{
+		QTemporaryDir directory;
+		const auto path = directory.filePath("source.wav");
+		QFile original(path);
+		QVERIFY(original.open(QIODevice::WriteOnly | QIODevice::NewOnly));
+		QCOMPARE(original.write("original"), 8);
+		original.close();
+		auto exclusive = settings();
+		exclusive.setRequireNewFile(true);
+		ProjectRenderer renderer(exclusive, ProjectRenderer::ExportFileFormat::Wave, path);
+		QVERIFY(!renderer.isReady());
+		QCOMPARE(renderer.finalize().status, RenderStatus::Failed);
+		QVERIFY(original.open(QIODevice::ReadOnly));
+		QCOMPARE(original.readAll(), QByteArray("original"));
+	}
+
+	void authorizedGuiPublicationPreservesExistingOutputUntilCompletion()
+	{
+		QTemporaryDir directory;
+		new SampleTrack(Engine::getSong());
+		const auto path = directory.filePath("existing.wav");
+		QFile original(path);
+		QVERIFY(original.open(QIODevice::WriteOnly | QIODevice::NewOnly));
+		QCOMPARE(original.write("original"), 8);
+		original.close();
+		QString error;
+		const auto snapshot = ExportDestinationSnapshot::capture(path, error);
+		QVERIFY(snapshot);
+		RenderManager manager(settings(), ProjectRenderer::ExportFileFormat::Wave, path, {*snapshot});
+		QSignalSpy completed(&manager, &RenderManager::completed);
+		manager.renderProject();
+		QVERIFY(original.open(QIODevice::ReadOnly));
+		QCOMPARE(original.readAll(), QByteArray("original"));
+		original.close();
+		QTRY_COMPARE_WITH_TIMEOUT(completed.size(), 1, 30000);
+		QCOMPARE(manager.result().status, RenderStatus::Succeeded);
+		QVERIFY(readableFinalizedWave(path));
+		const auto output = manager.result().outputs.front();
+		QCOMPARE(output.path, path);
+		QVERIFY(output.bytes > 0);
+		QFile retained(output.previousOutputPath);
+		QVERIFY(retained.open(QIODevice::ReadOnly));
+		QCOMPARE(retained.readAll(), QByteArray("original"));
+	}
+
+	void authorizedGuiCancellationPreservesExistingOutput()
+	{
+		QTemporaryDir directory;
+		new SampleTrack(Engine::getSong());
+		const auto path = directory.filePath("existing.wav");
+		QFile original(path);
+		QVERIFY(original.open(QIODevice::WriteOnly | QIODevice::NewOnly));
+		QCOMPARE(original.write("original"), 8);
+		original.close();
+		QString error;
+		const auto snapshot = ExportDestinationSnapshot::capture(path, error);
+		QVERIFY(snapshot);
+		RenderManager manager(settings(), ProjectRenderer::ExportFileFormat::Wave, path, {*snapshot});
+		QSignalSpy completed(&manager, &RenderManager::completed);
+		manager.renderProject();
+		manager.abortProcessing();
+		QCOMPARE(completed.size(), 1);
+		QCOMPARE(manager.result().status, RenderStatus::Cancelled);
+		QVERIFY(original.open(QIODevice::ReadOnly));
+		QCOMPARE(original.readAll(), QByteArray("original"));
+		QCOMPARE(QDir(directory.path()).entryList({".beatquay-render-*"}, QDir::Dirs | QDir::Hidden | QDir::NoDotAndDotDot).size(), 0);
+	}
+
 	void completionFinalizesAndRestoresBeforeNotification()
 	{
 		QTemporaryDir directory;

@@ -104,6 +104,7 @@ ProjectRenderer::ProjectRenderer(
 		m_fileDev = audioEncoderFactory(
 					outputFilename, outputSettings, DEFAULT_CHANNELS,
 					Engine::audioEngine(), successful );
+		if (m_fileDev) { m_outputIdentity = m_fileDev->outputIdentity(); }
 		if( !successful )
 		{
 			delete m_fileDev;
@@ -134,6 +135,7 @@ RenderOutputResult ProjectRenderer::finalize()
 	{
 		m_result.status = RenderStatus::Cancelled;
 		m_result.partialOutputRemoved = m_fileDev->removePartialOutput();
+		m_result.cleanupRecoveryPath = m_fileDev->cleanupRecoveryPath();
 		if (!m_result.partialOutputRemoved)
 		{
 			m_result.error = tr("Rendering was cancelled, but the partial output could not be removed.");

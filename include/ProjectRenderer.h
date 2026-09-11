@@ -31,6 +31,7 @@
 
 #include "LmmsTypes.h"
 #include "RenderResult.h"
+#include "ExportFileIdentity.h"
 
 #include "lmms_export.h"
 
@@ -71,6 +72,7 @@ public:
 	// Owner-thread operation: joins the worker, finalizes/closes the encoder once,
 	// then applies the existing partial-output removal contract on cancellation.
 	RenderOutputResult finalize();
+	std::optional<ExportFileIdentity> outputIdentity() const { return m_outputIdentity; }
 
 	bool isReady() const
 	{
@@ -107,6 +109,7 @@ private:
 	bool m_completedNormally = false;
 	bool m_finalized = false;
 	RenderOutputResult m_result;
+	std::optional<ExportFileIdentity> m_outputIdentity;
 
 } ;
 

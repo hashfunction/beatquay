@@ -23,7 +23,10 @@
  */
 
 #include "ExportProjectDialog.h"
+#include "ProjectExportFactsCollector.h"
+#include "ProjectExportCheckDialog.h"
 
+#include <algorithm>
 #include <QCheckBox>
 #include <QComboBox>
 #include <QDir>
@@ -187,7 +190,7 @@ ExportProjectDialog::ExportProjectDialog(const QString& path, Mode mode, QWidget
 	connect(m_fileFormatComboBox, qOverload<int>(&QComboBox::currentIndexChanged), this,
 		&ExportProjectDialog::onFileFormatChanged);
 
-	const auto pathExtension = QFileInfo{path}.completeSuffix().prepend(".");
+	const auto pathExtension = QFileInfo{path}.suffix().prepend(".");
 	const auto pathFormat = ProjectRenderer::getFileFormatFromExtension(pathExtension);
 
 	m_fileFormatComboBox->setCurrentIndex(std::max(0, m_fileFormatComboBox->findData(static_cast<int>(pathFormat))));
@@ -201,8 +204,15 @@ ExportProjectDialog::ExportProjectDialog(const QString& path, Mode mode, QWidget
 	connect(m_cancelButton, &QPushButton::clicked, this, &ExportProjectDialog::reject);
 }
 
+ExportProjectDialog::~ExportProjectDialog()
+{
+	m_renderManager.reset();
+	restoreExportSettings();
+}
+
 void ExportProjectDialog::onFileFormatChanged(int index)
 {
+	index = m_fileFormatComboBox->itemData(index).toInt();
 	if (m_mode == Mode::ExportProject)
 	{
 		const auto fileInfo = QFileInfo{m_path};
@@ -254,39 +264,94 @@ void ExportProjectDialog::onStartButtonClicked()
 	outputSettings.setCompressionLevel(compressionLevel);
 
 	const auto format = static_cast<ProjectRenderer::ExportFileFormat>(m_fileFormatComboBox->currentData().toInt());
-	m_renderManager = std::make_unique<RenderManager>(outputSettings, format, m_path);
-	m_startButton->setEnabled(false);
-
-	Engine::getSong()->setExportLoop(m_exportAsLoopBox->isChecked());
-	Engine::getSong()->setRenderBetweenMarkers(m_exportBetweenLoopMarkersBox->isChecked());
-	Engine::getSong()->setLoopRenderCount(m_loopRepeatBox->value());
-
-	connect(m_renderManager.get(), &RenderManager::progressChanged, m_progressBar, &QProgressBar::setValue);
-	connect(m_renderManager.get(), &RenderManager::progressChanged, this, &ExportProjectDialog::updateTitleBar);
-	connect(m_renderManager.get(), &RenderManager::finished, this, &QDialog::accept);
-
-	switch (m_mode)
+	if (m_renderManager) { return; }
+	setRendering(true);
+	const auto paths = RenderManager::outputPaths(format, m_path, m_mode == Mode::ExportTracks);
+	const auto collected = ProjectExportFactsCollector::collect(format, paths,
+		m_exportBetweenLoopMarkersBox->isChecked(), m_exportAsLoopBox->isChecked(), m_loopRepeatBox->value());
+	m_exportSession = std::make_unique<ProjectExportSession>(collected.outputs, collected.protectedPaths);
+	if (!ProjectExportCheckDialog::confirm(m_exportSession->issues(), this))
 	{
-	case Mode::ExportProject:
-		m_renderManager->renderProject();
-		break;
-	case Mode::ExportTracks:
-		m_renderManager->renderTracks();
-		break;
+		m_exportSession->start(ProjectExportSession::Decision::Cancel, [](const auto&, const auto&) {});
+		setRendering(false);
+		return;
+	}
+	const bool started = m_exportSession->start(ProjectExportSession::Decision::Continue, [&](const auto& destinations, const auto& protectedPaths)
+	{
+		auto* song = Engine::getSong();
+		m_previousExportLoop = song->exportLoop();
+		m_previousBetweenMarkers = song->renderBetweenMarkers();
+		m_previousLoopCount = song->getLoopRenderCount();
+		m_exportSettingsSaved = true;
+		song->setExportLoop(m_exportAsLoopBox->isChecked());
+		song->setRenderBetweenMarkers(m_exportBetweenLoopMarkersBox->isChecked());
+		song->setLoopRenderCount(m_loopRepeatBox->value());
+		m_renderManager = std::make_unique<RenderManager>(outputSettings, format, m_path, destinations, protectedPaths);
+		connect(m_renderManager.get(), &RenderManager::progressChanged, m_progressBar, &QProgressBar::setValue);
+		connect(m_renderManager.get(), &RenderManager::progressChanged, this, &ExportProjectDialog::updateTitleBar);
+		connect(m_renderManager.get(), &RenderManager::completed, this, &ExportProjectDialog::onRenderCompleted);
+		if (m_mode == Mode::ExportTracks) { m_renderManager->renderTracks(); }
+		else { m_renderManager->renderProject(); }
+	});
+	if (!started)
+	{
+		ProjectExportCheckDialog::confirm(m_exportSession->issues(), this);
+		setRendering(false);
 	}
 }
 
 void ExportProjectDialog::accept()
 {
-	m_renderManager.reset(nullptr);
+	if (m_renderManager && !m_renderManager->isComplete()) { return; }
+	restoreExportSettings();
+	m_renderManager.reset();
 	QDialog::accept();
 }
 
 void ExportProjectDialog::reject()
 {
-	if (m_renderManager) { m_renderManager->abortProcessing(); }
-	m_renderManager.reset(nullptr);
+	if (m_renderManager && !m_renderManager->isComplete())
+	{
+		m_renderManager->abortProcessing(); // Typed completion handles cleanup/error disclosure.
+		return;
+	}
+	restoreExportSettings();
+	m_renderManager.reset();
 	QDialog::reject();
+}
+
+void ExportProjectDialog::restoreExportSettings()
+{
+	if (!m_exportSettingsSaved) { return; }
+	auto* song = Engine::getSong();
+	song->setExportLoop(m_previousExportLoop);
+	song->setRenderBetweenMarkers(m_previousBetweenMarkers);
+	song->setLoopRenderCount(m_previousLoopCount);
+	m_exportSettingsSaved = false;
+}
+
+void ExportProjectDialog::setRendering(bool rendering)
+{
+	m_startButton->setEnabled(!rendering);
+	m_fileFormatSettingsGroupBox->setEnabled(!rendering);
+	m_exportAsLoopBox->setEnabled(!rendering);
+	m_exportBetweenLoopMarkersBox->setEnabled(!rendering);
+	m_loopRepeatBox->setEnabled(!rendering);
+	if (!rendering) { setWindowTitle(tr("Export project")); }
+}
+
+void ExportProjectDialog::onRenderCompleted(RenderResult result)
+{
+	const auto issues = m_exportSession->postflight(result);
+	restoreExportSettings();
+	m_renderManager.reset();
+	setRendering(false);
+	const bool cancellationResidue = std::any_of(result.outputs.begin(), result.outputs.end(), [](const auto& output)
+	{ return output.status == RenderStatus::Succeeded || !output.error.isEmpty() || !output.retainedPartialPath.isEmpty() || !output.cleanupRecoveryPath.isEmpty(); });
+	if (result.status != RenderStatus::Cancelled || cancellationResidue)
+	{ ProjectExportCheckDialog::showResult(result, issues, this); }
+	if (result.status == RenderStatus::Succeeded) { QDialog::accept(); }
+	else if (result.status == RenderStatus::Cancelled) { QDialog::reject(); }
 }
 
 void ExportProjectDialog::updateTitleBar(int prog)

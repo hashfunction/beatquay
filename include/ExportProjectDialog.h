@@ -29,6 +29,7 @@
 #include <QDialog>
 
 #include "RenderManager.h"
+#include "ProjectExportSession.h"
 
 class QString;
 class QLabel;
@@ -51,6 +52,7 @@ public:
 	};
 
 	ExportProjectDialog(const QString& path, Mode mode, QWidget* parent = nullptr);
+	~ExportProjectDialog() override;
 
 private:
 	void accept() override;
@@ -58,6 +60,9 @@ private:
 	void onFileFormatChanged(int index);
 	void onStartButtonClicked();
 	void updateTitleBar(int prog);
+	void onRenderCompleted(RenderResult result);
+	void setRendering(bool rendering);
+	void restoreExportSettings();
 
 	QLabel* m_fileFormatLabel = nullptr;
 	QComboBox* m_fileFormatComboBox = nullptr;
@@ -91,6 +96,11 @@ private:
 	QString m_path;
 	Mode m_mode;
 	std::unique_ptr<RenderManager> m_renderManager;
+	std::unique_ptr<ProjectExportSession> m_exportSession;
+	bool m_exportSettingsSaved = false;
+	bool m_previousExportLoop = false;
+	bool m_previousBetweenMarkers = false;
+	int m_previousLoopCount = 1;
 };
 
 } // namespace lmms::gui

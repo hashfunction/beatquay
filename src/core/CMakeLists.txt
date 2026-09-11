@@ -62,7 +62,11 @@ set(LMMS_SRCS
 	core/PluginFactory.cpp
 	core/PresetPreviewPlayHandle.cpp
 	core/ProjectJournal.cpp
+	core/ExportFileIdentity.cpp
+	core/ExportOutputPublication.cpp
 	core/ProjectExportCheck.cpp
+	core/ProjectExportSession.cpp
+	core/ProjectExportFactsCollector.cpp
 	core/ProjectRenderer.cpp
 	core/ProjectVersion.cpp
 	core/RemotePlugin.cpp

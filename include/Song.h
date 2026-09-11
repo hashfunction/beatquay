@@ -167,6 +167,8 @@ public:
 		return m_exporting;
 	}
 
+	bool exportLoop() const { return m_exportLoop; }
+	bool renderBetweenMarkers() const { return m_renderBetweenMarkers; }
 	inline void setExportLoop( bool exportLoop )
 	{
 		m_exportLoop = exportLoop;

@@ -1502,38 +1502,27 @@ void MainWindow::exportProject(bool multiExport)
 	QString suffix = "wav";
 	efd.setDefaultSuffix( suffix );
 	efd.setAcceptMode( FileDialog::AcceptSave );
+	// Replacement consent belongs to the exact final format/path snapshot in the export check dialog.
+	efd.setOption(FileDialog::DontConfirmOverwrite, true);
 
 	if( efd.exec() == QDialog::Accepted && !efd.selectedFiles().isEmpty() &&
 					 !efd.selectedFiles()[0].isEmpty() )
 	{
 
 		QString exportFileName = efd.selectedFiles()[0];
-		if ( !multiExport )
+		if (!multiExport)
 		{
-			int stx = efd.selectedNameFilter().indexOf( "(*." );
-			int etx = efd.selectedNameFilter().indexOf( ")" );
-
-			if ( stx > 0 && etx > stx )
+			for (const auto& encoder : ProjectRenderer::fileEncodeDevices)
 			{
-				// Get first extension from selected dropdown.
-				// i.e. ".wav" from "WAV-File (*.wav), Dummy-File (*.dum)"
-				suffix = efd.selectedNameFilter().mid( stx + 2, etx - stx - 2 ).split( " " )[0].trimmed();
-
-				Qt::CaseSensitivity cs = Qt::CaseSensitive;
-#if defined(LMMS_BUILD_APPLE) || defined(LMMS_BUILD_WIN32)
-				cs = Qt::CaseInsensitive;
-#endif
-				exportFileName.remove( "." + suffix, cs );
-				if ( efd.selectedFiles()[0].endsWith( suffix ) )
+				if (encoder.isAvailable() && efd.selectedNameFilter() == tr(encoder.m_description))
 				{
-					if( VersionedSaveDialog::fileExistsQuery( exportFileName + suffix,
-							tr( "Save project" ) ) )
-					{
-						exportFileName += suffix;
-					}
+					const QFileInfo selected(exportFileName);
+					exportFileName = selected.dir().filePath(selected.completeBaseName() + encoder.m_extension);
+					break;
 				}
 			}
 		}
+
 
 		ExportProjectDialog epd(exportFileName,
 			multiExport ? ExportProjectDialog::Mode::ExportTracks : ExportProjectDialog::Mode::ExportProject,

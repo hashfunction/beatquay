@@ -443,6 +443,29 @@ bool DataFile::writeFile(const QString& filename, bool withResources)
 
 
 
+QStringList DataFile::resourceReferences() const
+{
+	QStringList result;
+	for (const auto& [tag, attributes] : ELEMENTS_WITH_RESOURCES)
+	{
+		const auto nodes = elementsByTagName(tag);
+		for (int i = 0; i < nodes.size(); ++i)
+		{
+			const auto element = nodes.at(i).toElement();
+			for (const auto& attribute : attributes)
+			{
+				const auto reference = element.attribute(attribute);
+				if (reference.isEmpty()) { continue; } // Recorded/embedded samples have no external path.
+				bool error = false;
+				const auto absolute = PathUtil::toAbsolute(reference, &error);
+				result.append(error ? reference : absolute);
+			}
+		}
+	}
+	result.removeDuplicates();
+	return result;
+}
+
 bool DataFile::copyResources(const QString& resourcesDir)
 {
 	// List of filenames used so we can append a counter to any

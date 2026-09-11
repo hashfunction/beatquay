@@ -23,6 +23,7 @@
  */
 
 #include <QDir>
+#include <QFileInfo>
 #include <QRegularExpression>
 #include <QPointer>
 #include <algorithm>
@@ -36,12 +37,33 @@
 
 namespace lmms
 {
+namespace
+{
+std::vector<Track*> unmutedRenderTracks()
+{
+	std::vector<Track*> result;
+	const auto add = [&](const auto& tracks)
+	{
+		for (auto* track : tracks)
+		{
+			if (!track->isMuted() && (track->type() == Track::Type::Instrument || track->type() == Track::Type::Sample))
+			{ result.push_back(track); }
+		}
+	};
+	add(Engine::getSong()->tracks());
+	add(Engine::patternStore()->tracks());
+	return result;
+}
+} // namespace
 
 RenderManager::RenderManager(
-	const OutputSettings& outputSettings, ProjectRenderer::ExportFileFormat fmt, QString outputPath)
+	const OutputSettings& outputSettings, ProjectRenderer::ExportFileFormat fmt, QString outputPath,
+	QList<ExportDestinationSnapshot> authorizedOutputs, QStringList protectedPaths)
 	: m_outputSettings(outputSettings)
 	, m_format(fmt)
 	, m_outputPath(outputPath)
+	, m_authorizedOutputs(std::move(authorizedOutputs))
+	, m_protectedPaths(std::move(protectedPaths))
 {
 	Engine::audioEngine()->storeAudioDevice();
 }
@@ -73,8 +95,32 @@ void RenderManager::abortProcessing()
 void RenderManager::finalizeActiveRenderer()
 {
 	if (!m_activeRenderer) { return; }
-	m_result.outputs.append(m_activeRenderer->finalize());
+	auto output = m_activeRenderer->finalize();
 	m_activeRenderer.reset();
+	if (m_activePublication)
+	{
+		if (output.status == RenderStatus::Succeeded && output.encoderFinalized)
+		{
+			const auto publication = m_activePublication->publish();
+			output.path = publication.path;
+			output.bytes = publication.bytes;
+			output.previousOutputPath = publication.previousOutputPath;
+			output.retainedPartialPath = publication.retainedPartialPath;
+			if (!publication.published) { output.status = RenderStatus::Failed; output.error = publication.error; }
+		}
+		else
+		{
+			QString retained;
+			if (!m_activePublication->discard(retained))
+			{
+				output.retainedPartialPath = retained;
+				output.error += tr(" A partial render or unknown staging entry was preserved; review its reported path.");
+			}
+			output.path = m_activePublication->destinationPath();
+		}
+		m_activePublication.reset();
+	}
+	m_result.outputs.append(output);
 }
 
 void RenderManager::restoreAudioDevice()
@@ -120,7 +166,7 @@ void RenderManager::renderNextTrack()
 		// for multi-render, prefix each output file with a different number
 		int trackNum = m_tracksToRender.size() + 1;
 
-		if (render(pathForTrack(renderTrack, trackNum))) { return; }
+		if (render(pathForTrack(renderTrack, trackNum, m_format, m_outputPath))) { return; }
 		// A failed startup is a failed output, not a successful empty completion.
 		// Preserve the existing batch behavior of attempting the remaining tracks.
 		finalizeActiveRenderer();
@@ -137,33 +183,7 @@ void RenderManager::renderTracks()
 {
 	if (m_started || m_complete) { return; }
 	m_started = true;
-	const TrackContainer::TrackList& tl = Engine::getSong()->tracks();
-
-	// find all currently unnmuted tracks -- we want to render these.
-	for (const auto& tk : tl)
-	{
-		Track::Type type = tk->type();
-
-		// Don't render automation tracks
-		if ( tk->isMuted() == false &&
-				( type == Track::Type::Instrument || type == Track::Type::Sample ) )
-		{
-			m_unmuted.push_back(tk);
-		}
-	}
-
-	const TrackContainer::TrackList& t2 = Engine::patternStore()->tracks();
-	for (const auto& tk : t2)
-	{
-		Track::Type type = tk->type();
-
-		// Don't render automation tracks
-		if ( tk->isMuted() == false &&
-				( type == Track::Type::Instrument || type == Track::Type::Sample ) )
-		{
-			m_unmuted.push_back(tk);
-		}
-	}
+	m_unmuted = unmutedRenderTracks();
 
 	// copy the list of unmuted tracks into our rendering queue.
 	// we need to remember which tracks were unmuted to restore state at the end.
@@ -186,7 +206,32 @@ void RenderManager::renderProject()
 
 bool RenderManager::render(const QString& outputPath)
 {
-	m_activeRenderer = std::make_unique<ProjectRenderer>(m_outputSettings, m_format, outputPath);
+	auto renderPath = outputPath;
+	if (!m_authorizedOutputs.isEmpty())
+	{
+		const auto destination = std::find_if(m_authorizedOutputs.begin(), m_authorizedOutputs.end(), [&](const auto& target)
+		{ return target.path == QDir::cleanPath(QFileInfo(outputPath).absoluteFilePath()); });
+		QString error;
+		if (destination == m_authorizedOutputs.end()) { error = tr("This output was not included in the confirmed export."); }
+		else
+		{
+			m_activePublication = std::make_unique<ExportOutputPublication>(*destination, m_protectedPaths);
+			if (m_activePublication->prepare(error)) { renderPath = m_activePublication->stagingPath(); }
+		}
+		if (!error.isEmpty())
+		{
+			RenderOutputResult output;
+			output.path = outputPath; output.error = error;
+			m_result.outputs.append(output);
+			m_activePublication.reset();
+			return false;
+		}
+	}
+	auto rendererSettings = m_outputSettings;
+	if (m_activePublication) { rendererSettings.setRequireNewFile(true); }
+	m_activeRenderer = std::make_unique<ProjectRenderer>(rendererSettings, m_format, renderPath);
+	if (m_activePublication && m_activeRenderer->outputIdentity())
+	{ m_activePublication->claimOutput(*m_activeRenderer->outputIdentity()); }
 
 	if( m_activeRenderer->isReady() )
 	{
@@ -221,13 +266,23 @@ void RenderManager::restoreMutedState()
 }
 
 // Determine the output path for a track when rendering tracks individually
-QString RenderManager::pathForTrack(const Track *track, int num)
+QString RenderManager::pathForTrack(const Track *track, int num, ProjectRenderer::ExportFileFormat format, const QString& directory)
 {
-	QString extension = ProjectRenderer::getFileExtensionFromFormat( m_format );
+	QString extension = ProjectRenderer::getFileExtensionFromFormat(format);
 	QString name = track->name();
 	name = name.remove(QRegularExpression(FILENAME_FILTER));
 	name = QString( "%1_%2%3" ).arg( num ).arg( name ).arg( extension );
-	return QDir(m_outputPath).filePath(name);
+	return QDir(directory).filePath(name);
+}
+
+QStringList RenderManager::outputPaths(ProjectRenderer::ExportFileFormat format, const QString& path, bool tracks)
+{
+	if (!tracks) { return {QFileInfo(path).absoluteFilePath()}; }
+	QStringList paths;
+	const auto selected = unmutedRenderTracks();
+	for (std::size_t i = 0; i < selected.size(); ++i)
+	{ paths.append(QFileInfo(pathForTrack(selected[i], static_cast<int>(i + 1), format, path)).absoluteFilePath()); }
+	return paths;
 }
 
 void RenderManager::updateConsoleProgress()

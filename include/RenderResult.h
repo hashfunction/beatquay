@@ -16,7 +16,11 @@ struct RenderOutputResult
 	RenderStatus status = RenderStatus::Failed;
 	bool encoderFinalized = false;
 	bool partialOutputRemoved = false;
+	QString cleanupRecoveryPath;
 	QString error;
+	qint64 bytes = 0;
+	QString previousOutputPath;
+	QString retainedPartialPath;
 };
 
 struct RenderResult

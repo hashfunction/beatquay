@@ -4,10 +4,11 @@
 
 namespace lmms
 {
-bool AudioFileOutput::open()
+bool AudioFileOutput::open(bool requireNew)
 {
 	if (m_opened || m_finalized) { return false; }
-	m_opened = m_file.open(QIODevice::WriteOnly | QIODevice::Truncate);
+	m_opened = m_file.open(QIODevice::WriteOnly | (requireNew ? QIODevice::NewOnly : QIODevice::Truncate));
+	if (m_opened) { m_identity = exportFileIdentity(m_file.handle()); }
 	return m_opened;
 }
 
@@ -33,7 +34,7 @@ bool AudioFileOutput::finalize(const std::function<bool()>& finishEncoder)
 
 bool AudioFileOutput::removePartial()
 {
-	if (!m_opened || !m_finalized) { return false; }
-	return m_file.remove();
+	if (!m_opened || !m_finalized || !m_identity) { return false; }
+	return removeOwnedExportFile(m_file.fileName(), *m_identity, &m_cleanupRecoveryPath);
 }
 } // namespace lmms

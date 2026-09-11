@@ -7,9 +7,12 @@ set(LMMS_TESTS
 	src/core/ArrayVectorTest.cpp
 	src/core/AudioBufferTest.cpp
 	src/core/AudioFileOutputTest.cpp
+	src/core/ExportOutputPublicationTest.cpp
 	src/core/AutomatableModelTest.cpp
 	src/core/MathTest.cpp
 	src/core/ProjectExportCheckTest.cpp
+	src/core/ProjectExportFactsCollectorTest.cpp
+	src/gui/ExportProjectCheckIntegrationTest.cpp
 	src/core/ProjectVersionTest.cpp
 	src/core/RelativePathsTest.cpp
 	src/core/RenderManagerLifecycleTest.cpp

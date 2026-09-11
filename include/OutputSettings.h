@@ -66,6 +66,9 @@ public:
 	{
 	}
 
+	bool requireNewFile() const { return m_requireNewFile; }
+	void setRequireNewFile(bool requireNew) { m_requireNewFile = requireNew; }
+
 	sample_rate_t getSampleRate() const { return m_sampleRate; }
 	void setSampleRate(sample_rate_t sampleRate) { m_sampleRate = sampleRate; }
 
@@ -91,6 +94,7 @@ private:
 	BitDepth m_bitDepth;
 	StereoMode m_stereoMode;
 	double m_compressionLevel;
+	bool m_requireNewFile = false;
 };
 
 

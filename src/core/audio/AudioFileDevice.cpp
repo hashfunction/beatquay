@@ -23,11 +23,9 @@
  *
  */
 
-#include <QMessageBox>
 
 #include "AudioFileDevice.h"
 #include "ExportProjectDialog.h"
-#include "GuiApplication.h"
 
 namespace lmms
 {
@@ -44,7 +42,7 @@ AudioFileDevice::AudioFileDevice( OutputSettings const & outputSettings,
 
 	setSampleRate( outputSettings.getSampleRate() );
 
-	if (!m_outputFile.open())
+	if (!m_outputFile.open(outputSettings.requireNewFile()))
 	{
 		QString title, message;
 		title = ExportProjectDialog::tr( "Could not open file" );
@@ -56,16 +54,9 @@ AudioFileDevice::AudioFileDevice( OutputSettings const & outputSettings,
 						"file and try again!"
 								).arg( _file );
 
-		if (gui::getGUI() != nullptr)
-		{
-			QMessageBox::critical( nullptr, title, message,
-						QMessageBox::Ok,
-						QMessageBox::NoButton );
-		}
-		else
-		{
-			fprintf( stderr, "%s\n", message.toUtf8().constData() );
-		}
+		// The export dialog consumes the typed terminal error. A nested modal here
+		// would run events before renderer/file ownership is established.
+		fprintf(stderr, "%s\n", message.toUtf8().constData());
 	}
 }
 
