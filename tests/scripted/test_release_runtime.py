@@ -9,13 +9,26 @@ from pathlib import Path
 import subprocess
 import tempfile
 import unittest
+from unittest.mock import patch
 
 SOURCE = Path(__file__).resolve().parents[2]
 
 
 class ReleaseRuntimeTest(unittest.TestCase):
     def test_actual_cmake_install_selects_debug_only_for_debug(self):
-        source_text = (SOURCE / "CMakeLists.txt").read_text()
+        original_open = Path.open
+
+        def windows_locale_open(
+            path, mode="r", buffering=-1, encoding=None, errors=None, newline=None
+        ):
+            # Preserve the failing native Windows default on every test host.
+            # This is a real source-file read; explicit encodings remain honored.
+            if "b" not in mode and encoding in (None, "locale"):
+                encoding = "cp1252"
+            return original_open(path, mode, buffering, encoding, errors, newline)
+
+        with patch.object(Path, "open", windows_locale_open):
+            source_text = (SOURCE / "CMakeLists.txt").read_text(encoding="utf-8")
         # Exercise precisely the section invoked by the application build.
         section = source_text[
             source_text.index("SET(CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION") :
@@ -36,7 +49,8 @@ endif()
 if(NOT CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP)
  install(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS} DESTINATION bin)
 endif()
-"""
+""",
+                encoding="utf-8",
             )
             (root / "CMakeLists.txt").write_text(
                 """cmake_minimum_required(VERSION 3.24)
@@ -46,7 +60,8 @@ set(BIN_DIR bin)
 list(PREPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}")
 """
                 + f'list(APPEND CMAKE_MODULE_PATH "{SOURCE.as_posix()}/cmake/modules")\n'
-                + section
+                + section,
+                encoding="utf-8",
             )
             for generator in ("Ninja", "Ninja Multi-Config"):
                 for config in ("Debug", "Release", "RelWithDebInfo", "MinSizeRel"):

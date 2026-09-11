@@ -251,6 +251,7 @@ public:
 	void deleteValue(const QString & cls, const QString & attribute);
 
 	void loadConfigFile(const QString & configFile = "");
+	const QString& configFilePath() const { return m_lmmsRcFile; }
 	void saveConfigFile();
 
 
