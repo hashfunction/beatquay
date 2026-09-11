@@ -747,8 +747,24 @@ int main( int argc, char * * argv )
 
 		// create renderer
 		auto r = new RenderManager(os, eff, renderOut);
-		QCoreApplication::instance()->connect( r,
-				SIGNAL(finished()), SLOT(quit()));
+		r->setParent(app);
+		QObject::connect(r, &RenderManager::completed, app, [app](const RenderResult& result)
+		{
+			if (result.status != RenderStatus::Succeeded)
+			{
+				fprintf(stderr, "Render failed or cancelled: %s\n", result.error.toUtf8().constData());
+				for (const auto& output : result.outputs)
+				{
+					if (output.status != RenderStatus::Succeeded)
+					{
+						fprintf(stderr, "%s: %s\n", output.path.toUtf8().constData(), output.error.toUtf8().constData());
+					}
+				}
+			}
+			// Startup can fail before app->exec(); queue exit so it is not lost.
+			const int exitCode = result.status == RenderStatus::Succeeded ? EXIT_SUCCESS : EXIT_FAILURE;
+			QTimer::singleShot(0, app, [exitCode] { QCoreApplication::exit(exitCode); });
+		});
 
 		// timer for progress-updates
 		auto t = new QTimer(r);

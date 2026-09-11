@@ -44,7 +44,7 @@ AudioFileDevice::AudioFileDevice( OutputSettings const & outputSettings,
 
 	setSampleRate( outputSettings.getSampleRate() );
 
-	if( m_outputFile.open( QFile::WriteOnly | QFile::Truncate ) == false )
+	if (!m_outputFile.open())
 	{
 		QString title, message;
 		title = ExportProjectDialog::tr( "Could not open file" );
@@ -65,7 +65,6 @@ AudioFileDevice::AudioFileDevice( OutputSettings const & outputSettings,
 		else
 		{
 			fprintf( stderr, "%s\n", message.toUtf8().constData() );
-			exit( EXIT_FAILURE );
 		}
 	}
 }
@@ -75,20 +74,19 @@ AudioFileDevice::AudioFileDevice( OutputSettings const & outputSettings,
 
 AudioFileDevice::~AudioFileDevice()
 {
-	m_outputFile.close();
+	// Each derived destructor finalizes its encoder before member destruction.
 }
 
+bool AudioFileDevice::finalizeOutput()
+{
+	return m_outputFile.finalize([this] { return finishEncoding(); });
+}
 
 
 
 int AudioFileDevice::writeData( const void* data, int len )
 {
-	if( m_outputFile.isOpen() )
-	{
-		return m_outputFile.write( (const char *) data, len );
-	}
-
-	return -1;
+	return static_cast<int>(m_outputFile.write(static_cast<const char*>(data), len));
 }
 
 } // namespace lmms

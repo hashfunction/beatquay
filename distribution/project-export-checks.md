@@ -119,6 +119,11 @@ contract, and retain the user's overwrite choice. Resource traversal must cover
 the actual minimal instruments/sample tracks rather than guess from XML names.
 No Task 4 UI behavior was changed in this Task 3 commit.
 
+The subsequent bounded renderer prerequisite is documented in
+`renderer-lifecycle.md`. It implements typed terminal results and explicit
+finalization for native verification; the preflight/check-dialog adapters and
+their user-facing error/warning flow remain outstanding.
+
 Still open: Task 4, authored starters, owned branding/MSIX, representative project
 round trips, GUI/DPI/cancellation, physical audio/MIDI/device reconnect, long
 renders, clean installation/WACK and complete license/corresponding-source

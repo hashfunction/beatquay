@@ -88,6 +88,13 @@ ProjectRenderer::ProjectRenderer(
 	, m_progress(0)
 	, m_abort(false)
 {
+	m_result.path = outputFilename;
+	const auto index = static_cast<int>(exportFileFormat);
+	if (index < 0 || index >= static_cast<int>(ExportFileFormat::Count))
+	{
+		m_result.error = tr("The requested encoder format is invalid.");
+		return;
+	}
 	AudioFileDeviceInstantiaton audioEncoderFactory = fileEncodeDevices[static_cast<std::size_t>(exportFileFormat)].m_getDevInst;
 
 	if (audioEncoderFactory)
@@ -103,8 +110,45 @@ ProjectRenderer::ProjectRenderer(
 			m_fileDev = nullptr;
 		}
 	}
+	if (!m_fileDev) { m_result.error = tr("The audio encoder could not open or initialize the output."); }
 }
 
+ProjectRenderer::~ProjectRenderer()
+{
+	if (isRunning()) { abortProcessing(); }
+	finalize();
+	// Before installation, this object owns the encoder. After installation,
+	// AudioEngine owns it and deletes it when switching/restoring devices.
+	if (!m_deviceInstalled) { delete m_fileDev; }
+}
+
+RenderOutputResult ProjectRenderer::finalize()
+{
+	if (m_finalized) { return m_result; }
+	Q_ASSERT(QThread::currentThread() != this);
+	wait();
+	m_finalized = true;
+	if (!m_fileDev) { return m_result; }
+	m_result.encoderFinalized = m_fileDev->finalizeOutput();
+	if (m_abort.load())
+	{
+		m_result.status = RenderStatus::Cancelled;
+		m_result.partialOutputRemoved = m_fileDev->removePartialOutput();
+		if (!m_result.partialOutputRemoved)
+		{
+			m_result.error = tr("Rendering was cancelled, but the partial output could not be removed.");
+		}
+	}
+	else if (m_started && m_completedNormally && m_result.encoderFinalized)
+	{
+		m_result.status = RenderStatus::Succeeded;
+	}
+	else
+	{
+		m_result.error = tr("Rendering did not complete or the encoder could not finalize the output.");
+	}
+	return m_result;
+}
 
 
 
@@ -132,7 +176,9 @@ ProjectRenderer::ExportFileFormat ProjectRenderer::getFileFormatFromExtension(
 QString ProjectRenderer::getFileExtensionFromFormat(
 		ExportFileFormat fmt )
 {
-	return fileEncodeDevices[static_cast<std::size_t>(fmt)].m_extension;
+	const auto index = static_cast<int>(fmt);
+	if (index < 0 || index >= static_cast<int>(ExportFileFormat::Count)) { return {}; }
+	return fileEncodeDevices[static_cast<std::size_t>(index)].m_extension;
 }
 
 
@@ -141,11 +187,12 @@ QString ProjectRenderer::getFileExtensionFromFormat(
 void ProjectRenderer::startProcessing()
 {
 
-	if( isReady() )
+	if (isReady() && !m_started && !m_finalized)
 	{
 		// Have to do audio engine stuff with GUI-thread affinity in order to
 		// make slots connected to sampleRateChanged()-signals being called immediately.
 		Engine::audioEngine()->setAudioDevice(m_fileDev, false);
+		m_deviceInstalled = m_started = true;
 
 		start(
 #ifndef LMMS_BUILD_WIN32
@@ -171,7 +218,7 @@ void ProjectRenderer::run()
 	Engine::audioEngine()->startProcessing();
 
 	// Continually track and emit progress percentage to listeners.
-	while (!Engine::getSong()->isExportDone() && !m_abort)
+	while (!Engine::getSong()->isExportDone() && !m_abort.load() && !m_fileDev->hasWriteFailure())
 	{
 		const auto buffer = Engine::audioEngine()->renderNextPeriod();
 		m_fileDev->writeBuffer(buffer.data(), buffer.size());
@@ -183,6 +230,7 @@ void ProjectRenderer::run()
 			emit progressChanged( m_progress );
 		}
 	}
+	m_completedNormally = Engine::getSong()->isExportDone() && !m_abort.load() && !m_fileDev->hasWriteFailure();
 
 	// Notify the audio engine of the end of processing.
 	Engine::audioEngine()->stopProcessing();
@@ -191,12 +239,7 @@ void ProjectRenderer::run()
 
 	perfLog.end();
 
-	// If the user aborted export-process, the file has to be deleted.
-	const QString f = m_fileDev->outputFile();
-	if( m_abort )
-	{
-		QFile( f ).remove();
-	}
+	// Finalization and cancellation cleanup happen after join on the owner thread.
 }
 
 
@@ -225,7 +268,7 @@ void ProjectRenderer::updateConsoleProgress()
 
 	const auto activity = "|/-\\";
 	std::fill(buf.begin(), buf.end(), 0);
-	std::snprintf(buf.data(), buf.size(), "\r|%s|    %3d%%   %c  ", prog.data(), m_progress,
+	std::snprintf(buf.data(), buf.size(), "\r|%s|    %3d%%   %c  ", prog.data(), m_progress.load(),
 							activity[rot] );
 	rot = ( rot+1 ) % 4;
 

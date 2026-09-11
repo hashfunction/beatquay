@@ -58,6 +58,13 @@ public:
 
 private:
 	void writeBuffer(const SampleFrame* _ab, const f_cnt_t _frames) override;
+	bool finishEncoding() override;
+	bool m_infoInitialized = false;
+	bool m_analysisInitialized = false;
+	bool m_commentInitialized = false;
+	bool m_streamInitialized = false;
+	bool m_blockInitialized = false;
+	bool m_encoderReady = false;
 	vorbis_info m_vi;
 	vorbis_dsp_state m_vds;
 	vorbis_comment m_vc;

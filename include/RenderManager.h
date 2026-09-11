@@ -53,9 +53,14 @@ public:
 	void renderTracks();
 
 	void abortProcessing();
+	bool isComplete() const { return m_complete; }
+	const RenderResult& result() const { return m_result; }
 
 signals:
 	void progressChanged( int );
+	// Emitted once after all worker/encoder/device/mute cleanup. Includes failed
+	// startup and cancellation; finished alone remains a compatibility signal.
+	void completed(const lmms::RenderResult& result);
 	void finished();
 
 private slots:
@@ -66,7 +71,10 @@ private:
 	QString pathForTrack( const Track *track, int num );
 	void restoreMutedState();
 
-	void render( QString outputPath );
+	bool render(const QString& outputPath);
+	void finalizeActiveRenderer();
+	void complete(RenderStatus status);
+	void restoreAudioDevice();
 
 	const OutputSettings m_outputSettings;
 	ProjectRenderer::ExportFileFormat m_format;
@@ -76,6 +84,10 @@ private:
 
 	std::vector<Track*> m_tracksToRender;
 	std::vector<Track*> m_unmuted;
+	bool m_started = false;
+	bool m_complete = false;
+	bool m_deviceStored = true;
+	RenderResult m_result;
 } ;
 
 

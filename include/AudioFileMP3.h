@@ -64,9 +64,11 @@ private:
 	void flushRemainingBuffers();
 	bool initEncoder();
 	void tearDownEncoder();
+	bool finishEncoding() override;
 
 private:
-	lame_t m_lame;
+	lame_t m_lame = nullptr;
+	bool m_encoderReady = false;
 };
 
 } // namespace lmms

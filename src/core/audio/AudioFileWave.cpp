@@ -46,7 +46,7 @@ AudioFileWave::AudioFileWave( OutputSettings const & outputSettings,
 
 AudioFileWave::~AudioFileWave()
 {
-	finishEncoding();
+	finalizeOutput();
 }
 
 
@@ -107,7 +107,7 @@ void AudioFileWave::writeBuffer(const SampleFrame* _ab, const f_cnt_t _frames)
 				buf[frame * channels() + chnl] = _ab[frame][chnl];
 			}
 		}
-		sf_writef_float( m_sf, buf, _frames );
+		if (sf_writef_float(m_sf, buf, _frames) != static_cast<sf_count_t>(_frames)) { recordWriteFailure(); }
 		delete[] buf;
 	}
 	else
@@ -115,7 +115,7 @@ void AudioFileWave::writeBuffer(const SampleFrame* _ab, const f_cnt_t _frames)
 		auto buf = new int_sample_t[_frames * channels()];
 		convertToS16(_ab, _frames, buf, !isLittleEndian());
 
-		sf_writef_short( m_sf, buf, _frames );
+		if (sf_writef_short(m_sf, buf, _frames) != static_cast<sf_count_t>(_frames)) { recordWriteFailure(); }
 		delete[] buf;
 	}
 }
@@ -123,12 +123,15 @@ void AudioFileWave::writeBuffer(const SampleFrame* _ab, const f_cnt_t _frames)
 
 
 
-void AudioFileWave::finishEncoding()
+bool AudioFileWave::finishEncoding()
 {
 	if( m_sf )
 	{
-		sf_close( m_sf );
+		const bool success = sf_close(m_sf) == 0;
+		m_sf = nullptr;
+		return success;
 	}
+	return false;
 }
 
 } // namespace lmms

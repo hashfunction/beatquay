@@ -59,7 +59,7 @@ private:
 	void writeBuffer(const SampleFrame* _ab, const f_cnt_t _frames) override;
 
 	bool startEncoding();
-	void finishEncoding();
+	bool finishEncoding() override;
 
 private:
 	SF_INFO m_si;

@@ -42,7 +42,10 @@ AudioFileOgg::AudioFileOgg(OutputSettings const& outputSettings, const ch_cnt_t 
 	const QString& file, AudioEngine* audioEngine)
 	: AudioFileDevice(outputSettings, channels, file, audioEngine)
 {
+	successful = false;
+	if (!outputFileOpened()) { return; }
 	vorbis_info_init(&m_vi);
+	m_infoInitialized = true;
 
 	const auto bitrate = outputSettings.bitrate();
 	static constexpr auto maxBitrate = 320;
@@ -53,19 +56,23 @@ AudioFileOgg::AudioFileOgg(OutputSettings const& outputSettings, const ch_cnt_t 
 		return;
 	}
 
-	vorbis_analysis_init(&m_vds, &m_vi);
+	if (vorbis_analysis_init(&m_vds, &m_vi) != 0) { return; }
+	m_analysisInitialized = true;
 	vorbis_comment_init(&m_vc);
+	m_commentInitialized = true;
 	vorbis_comment_add_tag(&m_vc, "Cool", "This song has been made using LMMS");
 
 	auto headerPackets = std::array<ogg_packet, 3>{};
-	vorbis_analysis_headerout(&m_vds, &m_vc, &headerPackets[0], &headerPackets[1], &headerPackets[2]);
+	if (vorbis_analysis_headerout(&m_vds, &m_vc, &headerPackets[0], &headerPackets[1], &headerPackets[2]) != 0) { return; }
 
 	srand(time(nullptr));
-	ogg_stream_init(&m_oss, rand());
+	if (ogg_stream_init(&m_oss, rand()) != 0) { return; }
+	m_streamInitialized = true;
 
-	ogg_stream_packetin(&m_oss, &headerPackets[0]);
-	ogg_stream_packetin(&m_oss, &headerPackets[1]);
-	ogg_stream_packetin(&m_oss, &headerPackets[2]);
+	for (auto& packet : headerPackets)
+	{
+		if (ogg_stream_packetin(&m_oss, &packet) != 0) { return; }
+	}
 
 	while (ogg_stream_flush(&m_oss, &m_page))
 	{
@@ -73,31 +80,41 @@ AudioFileOgg::AudioFileOgg(OutputSettings const& outputSettings, const ch_cnt_t 
 		writeData(m_page.body, m_page.body_len);
 	}
 
-	vorbis_block_init(&m_vds, &m_vb);
-	successful = true;
+	if (vorbis_block_init(&m_vds, &m_vb) != 0) { return; }
+	m_blockInitialized = m_encoderReady = true;
+	successful = !hasWriteFailure();
 }
 
 AudioFileOgg::~AudioFileOgg()
 {
-	// writing 0 frames is how we flush any remaining data to the file
-	writeBuffer(nullptr, 0);
+	finalizeOutput();
+}
 
-	ogg_stream_clear(&m_oss);
-	vorbis_block_clear(&m_vb);
-	vorbis_dsp_clear(&m_vds);
-	vorbis_comment_clear(&m_vc);
-	vorbis_info_clear(&m_vi);
+bool AudioFileOgg::finishEncoding()
+{
+	const bool initialized = m_encoderReady;
+	// writing 0 frames is how we flush any remaining data to the file
+	if (m_encoderReady) { writeBuffer(nullptr, 0); }
+	if (m_streamInitialized) { ogg_stream_clear(&m_oss); }
+	if (m_blockInitialized) { vorbis_block_clear(&m_vb); }
+	if (m_analysisInitialized) { vorbis_dsp_clear(&m_vds); }
+	if (m_commentInitialized) { vorbis_comment_clear(&m_vc); }
+	if (m_infoInitialized) { vorbis_info_clear(&m_vi); }
+	m_streamInitialized = m_blockInitialized = m_analysisInitialized = false;
+	m_commentInitialized = m_infoInitialized = m_encoderReady = false;
+	return initialized && !hasWriteFailure();
 }
 
 void AudioFileOgg::writeBuffer(const SampleFrame* _ab, const f_cnt_t _frames)
 {
 	if (_frames == 0)
 	{
-		vorbis_analysis_wrote(&m_vds, 0);
+		if (vorbis_analysis_wrote(&m_vds, 0) != 0) { recordWriteFailure(); return; }
 	}
 	else
 	{
 		const auto vab = vorbis_analysis_buffer(&m_vds, _frames);
+		if (!vab) { recordWriteFailure(); return; }
 		for (auto c = 0; c < channels(); ++c)
 		{
 			if (c < DEFAULT_CHANNELS)
@@ -113,17 +130,20 @@ void AudioFileOgg::writeBuffer(const SampleFrame* _ab, const f_cnt_t _frames)
 			}
 		}
 
-		vorbis_analysis_wrote(&m_vds, _frames);
+		if (vorbis_analysis_wrote(&m_vds, _frames) != 0) { recordWriteFailure(); return; }
 	}
 
 	while (vorbis_analysis_blockout(&m_vds, &m_vb) == 1)
 	{
-		vorbis_analysis(&m_vb, nullptr);
-		vorbis_bitrate_addblock(&m_vb);
+		if (vorbis_analysis(&m_vb, nullptr) != 0 || vorbis_bitrate_addblock(&m_vb) != 0)
+		{
+			recordWriteFailure();
+			return;
+		}
 
 		while (vorbis_bitrate_flushpacket(&m_vds, &m_packet))
 		{
-			ogg_stream_packetin(&m_oss, &m_packet);
+			if (ogg_stream_packetin(&m_oss, &m_packet) != 0) { recordWriteFailure(); return; }
 
 			do
 			{
@@ -138,5 +158,3 @@ void AudioFileOgg::writeBuffer(const SampleFrame* _ab, const f_cnt_t _frames)
 } // namespace lmms
 
 #endif // LMMS_HAVE_OGGVORBIS
-
-

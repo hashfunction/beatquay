@@ -24,6 +24,8 @@
 
 #include <QDir>
 #include <QRegularExpression>
+#include <QPointer>
+#include <algorithm>
 
 #include "RenderManager.h"
 #include "AudioEngine.h"
@@ -46,31 +48,64 @@ RenderManager::RenderManager(
 
 RenderManager::~RenderManager()
 {
-	Engine::audioEngine()->restoreAudioDevice();  // Also deletes audio dev.
+	if (m_activeRenderer)
+	{
+		disconnect(m_activeRenderer.get(), nullptr, this, nullptr);
+		m_activeRenderer->abortProcessing();
+		finalizeActiveRenderer();
+	}
+	restoreMutedState();
+	restoreAudioDevice();
 }
 
 void RenderManager::abortProcessing()
 {
-	if ( m_activeRenderer ) {
-		disconnect( m_activeRenderer.get(), SIGNAL(finished()),
-				this, SLOT(renderNextTrack()));
+	if (m_complete) { return; }
+	if (m_activeRenderer)
+	{
+		disconnect(m_activeRenderer.get(), nullptr, this, nullptr);
 		m_activeRenderer->abortProcessing();
+		finalizeActiveRenderer();
 	}
+	complete(RenderStatus::Cancelled);
+}
+
+void RenderManager::finalizeActiveRenderer()
+{
+	if (!m_activeRenderer) { return; }
+	m_result.outputs.append(m_activeRenderer->finalize());
+	m_activeRenderer.reset();
+}
+
+void RenderManager::restoreAudioDevice()
+{
+	if (!m_deviceStored) { return; }
+	Engine::audioEngine()->restoreAudioDevice();
+	m_deviceStored = false;
+}
+
+void RenderManager::complete(RenderStatus status)
+{
+	if (m_complete) { return; }
+	m_complete = true;
+	m_result.status = status;
+	m_tracksToRender.clear();
 	restoreMutedState();
+	restoreAudioDevice();
+	// Listeners may delete the manager, including the existing dialog accept().
+	// Publish an independent value after cleanup and never access a deleted owner.
+	const auto result = m_result;
+	QPointer<RenderManager> guard(this);
+	emit completed(result);
+	if (guard && status != RenderStatus::Cancelled) { emit finished(); }
 }
 
 // Called to render each new track when rendering tracks individually.
 void RenderManager::renderNextTrack()
 {
-	m_activeRenderer.reset();
-
-	if (m_tracksToRender.empty())
-	{
-		// nothing left to render
-		restoreMutedState();
-		emit finished();
-	}
-	else
+	if (m_complete) { return; } // A queued finish may outlive a cancellation.
+	finalizeActiveRenderer();
+	while (!m_tracksToRender.empty())
 	{
 		// pop the next track from our rendering queue
 		Track* renderTrack = m_tracksToRender.back();
@@ -85,13 +120,23 @@ void RenderManager::renderNextTrack()
 		// for multi-render, prefix each output file with a different number
 		int trackNum = m_tracksToRender.size() + 1;
 
-		render( pathForTrack(renderTrack, trackNum) );
+		if (render(pathForTrack(renderTrack, trackNum))) { return; }
+		// A failed startup is a failed output, not a successful empty completion.
+		// Preserve the existing batch behavior of attempting the remaining tracks.
+		finalizeActiveRenderer();
 	}
+	const bool success = !m_result.outputs.isEmpty()
+		&& std::all_of(m_result.outputs.begin(), m_result.outputs.end(), [](const auto& output)
+		{ return output.status == RenderStatus::Succeeded; });
+	if (m_result.outputs.isEmpty()) { m_result.error = tr("No unmuted renderable tracks were found."); }
+	complete(success ? RenderStatus::Succeeded : RenderStatus::Failed);
 }
 
 // Render the song into individual tracks
 void RenderManager::renderTracks()
 {
+	if (m_started || m_complete) { return; }
+	m_started = true;
 	const TrackContainer::TrackList& tl = Engine::getSong()->tracks();
 
 	// find all currently unnmuted tracks -- we want to render these.
@@ -130,10 +175,16 @@ void RenderManager::renderTracks()
 // Render the song into a single track
 void RenderManager::renderProject()
 {
-	render( m_outputPath );
+	if (m_started || m_complete) { return; }
+	m_started = true;
+	if (!render(m_outputPath))
+	{
+		finalizeActiveRenderer();
+		complete(RenderStatus::Failed);
+	}
 }
 
-void RenderManager::render(QString outputPath)
+bool RenderManager::render(const QString& outputPath)
 {
 	m_activeRenderer = std::make_unique<ProjectRenderer>(m_outputSettings, m_format, outputPath);
 
@@ -149,11 +200,12 @@ void RenderManager::render(QString outputPath)
 				this, SLOT(renderNextTrack()));
 
 		m_activeRenderer->startProcessing();
+		return true;
 	}
 	else
 	{
 		qDebug( "Renderer failed to acquire a file device!" );
-		renderNextTrack();
+		return false;
 	}
 }
 

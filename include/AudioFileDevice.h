@@ -29,6 +29,7 @@
 #include <QFile>
 
 #include "AudioDevice.h"
+#include "AudioFileOutput.h"
 #include "OutputSettings.h"
 
 namespace lmms
@@ -51,9 +52,14 @@ public:
 
 	//! Write `size` sample frames from `buf` into the output file.
 	virtual void writeBuffer(const SampleFrame* buf, const f_cnt_t frames) = 0;
+	bool finalizeOutput();
+	bool hasWriteFailure() const { return m_outputFile.hasWriteFailure(); }
+	bool removePartialOutput() { return m_outputFile.removePartial(); }
 
 protected:
 	int writeData( const void* data, int len );
+	void recordWriteFailure() { m_outputFile.recordWriteFailure(); }
+	virtual bool finishEncoding() = 0;
 
 	inline bool outputFileOpened() const
 	{
@@ -69,7 +75,7 @@ private:
 	void startProcessingImpl() override {}
 	void stopProcessingImpl() override {}
 
-	QFile m_outputFile;
+	AudioFileOutput m_outputFile;
 	OutputSettings m_outputSettings;
 } ;
 

@@ -27,8 +27,10 @@
 
 #include <QThread>
 #include <array>
+#include <atomic>
 
 #include "LmmsTypes.h"
+#include "RenderResult.h"
 
 #include "lmms_export.h"
 
@@ -64,7 +66,11 @@ public:
 	} ;
 
 	ProjectRenderer(const OutputSettings& _os, ExportFileFormat _file_format, const QString& _out_file);
-	~ProjectRenderer() override = default;
+	~ProjectRenderer() override;
+
+	// Owner-thread operation: joins the worker, finalizes/closes the encoder once,
+	// then applies the existing partial-output removal contract on cancellation.
+	RenderOutputResult finalize();
 
 	bool isReady() const
 	{
@@ -94,8 +100,13 @@ private:
 
 	AudioFileDevice * m_fileDev;
 
-	volatile int m_progress;
-	volatile bool m_abort;
+	std::atomic<int> m_progress;
+	std::atomic<bool> m_abort;
+	bool m_started = false;
+	bool m_deviceInstalled = false;
+	bool m_completedNormally = false;
+	bool m_finalized = false;
+	RenderOutputResult m_result;
 
 } ;
 
