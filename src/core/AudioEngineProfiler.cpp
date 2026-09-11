@@ -25,6 +25,7 @@
 #include "AudioEngineProfiler.h"
 
 #include <cstdint>
+#include <QDebug>
 
 namespace lmms
 {
@@ -71,7 +72,10 @@ void AudioEngineProfiler::setOutputFile( const QString& outputFile )
 {
 	m_outputFile.close();
 	m_outputFile.setFileName( outputFile );
-	m_outputFile.open( QFile::WriteOnly | QFile::Truncate );
+	if (!m_outputFile.open(QFile::WriteOnly | QFile::Truncate))
+	{
+		qWarning() << "Cannot open audio profiling output:" << m_outputFile.errorString();
+	}
 }
 
 } // namespace lmms
