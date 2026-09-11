@@ -1,0 +1,156 @@
+{
+  "candidate": "518a7e8ef525a276ba9702df87c613ea0ff25c47",
+  "approved_ancestry": "94363be152f526edba4e884264d891f1361cf54b",
+  "status": "qualification_candidate_not_accepted_for_features",
+  "vcpkg": {
+    "repository": "https://github.com/microsoft/vcpkg",
+    "commit": "9e593bb18ea69cc5095e012465dcd675a822ed0d",
+    "tag": "2026.07.29",
+    "source": "https://github.com/microsoft/vcpkg/releases/tag/2026.07.29"
+  },
+  "qt": {
+    "version": "6.11.2",
+    "arch": "win64_msvc2022_64",
+    "archives": [
+      "qtbase",
+      "qtsvg",
+      "qttools"
+    ],
+    "corresponding_source_closure_complete": false
+  },
+  "submodules": [
+    {
+      "path": "doc/wiki",
+      "commit": "538199fb0b8928b4d3ea7218745ef1845b73dee3",
+      "tree": "9ea8df263c8ec4fb8b185603b87eadfb047161ca",
+      "remote": "https://github.com/lmms/lmms.wiki.git"
+    },
+    {
+      "path": "plugins/CarlaBase/carla",
+      "commit": "66afe24a08790732cc17d81d4b846a1e0cfa0118",
+      "tree": "962198360429a5603dbe9708e9ed3d1e5792845e",
+      "remote": "https://github.com/falktx/carla"
+    },
+    {
+      "path": "plugins/CarlaBase/carla/source/native-plugins/external",
+      "commit": "3c0026dad5d940abd52b9a8d73fcf271357a12fe",
+      "tree": "1240ecf2244fef02b49504cb5852c5cfe833b069",
+      "remote": "https://github.com/falkTX/Carla-Plugins"
+    },
+    {
+      "path": "plugins/FreeBoy/game-music-emu",
+      "commit": "21a064ea66a5cdf71910e207c4756095c266814f",
+      "tree": "40eb79f2103d8bcc3d0d1acfdd52f5a47d1eeecd",
+      "remote": "https://github.com/libgme/game-music-emu.git"
+    },
+    {
+      "path": "plugins/LadspaEffect/calf/veal",
+      "commit": "789d0faf9faed430f48dfb93cf74e04afe88e39f",
+      "tree": "2763d43e7e9fda88f163ed0c11a58fc334cfdf9e",
+      "remote": "https://github.com/lmms/veal"
+    },
+    {
+      "path": "plugins/LadspaEffect/cmt/cmt",
+      "commit": "24599fb45b99fff6302136f13adb3817e5833e7d",
+      "tree": "d4339c5e97a5765c19201ccda95f8fe4aa388c3f",
+      "remote": "https://github.com/lmms/cmt"
+    },
+    {
+      "path": "plugins/LadspaEffect/swh/ladspa",
+      "commit": "0f54d2430febb4d5f02d13132dd91d7345e080b5",
+      "tree": "293af46ada7e85855b21fa25b427c6525bc436b1",
+      "remote": "https://github.com/swh/ladspa"
+    },
+    {
+      "path": "plugins/LadspaEffect/tap/tap-plugins",
+      "commit": "85640223047d49a305e90ba1b92303eb066ba474",
+      "tree": "d78be4a6865667ee408180089aa568762f8632b0",
+      "remote": "https://github.com/lmms/tap-plugins"
+    },
+    {
+      "path": "plugins/MidiImport/portsmf",
+      "commit": "8856236f97bf3086e76b726f82e91a4b9e086ac1",
+      "tree": "efba224d730074ff2060cbc408ac48b75c863cfd",
+      "remote": "https://github.com/portsmf/portsmf"
+    },
+    {
+      "path": "plugins/OpulenZ/adplug",
+      "commit": "3ed6617ec00022dfab574c27710d9071a6032c87",
+      "tree": "028997fef85c53da6f652d77909e4c5576d687f0",
+      "remote": "https://github.com/adplug/adplug.git"
+    },
+    {
+      "path": "plugins/Sid/resid/resid",
+      "commit": "ef72462f5fa0682d099413512b764ae479e77f9b",
+      "tree": "6317f591906b3fb6520b4a9a3a2f8af1c1f390ea",
+      "remote": "https://github.com/libsidplayfp/resid"
+    },
+    {
+      "path": "plugins/Xpressive/exprtk",
+      "commit": "a4b17d543f072d2e3ba564e4bc5c3a0d2b05c338",
+      "tree": "5b978814ad51eae36bc348d35b9d1fcaf34bed64",
+      "remote": "https://github.com/ArashPartow/exprtk"
+    },
+    {
+      "path": "plugins/ZynAddSubFx/zynaddsubfx",
+      "commit": "66a42efcc72d4d75a70412795f1510c4297ab826",
+      "tree": "ace0a472484901ab6d6496018ec8d326fe49964a",
+      "remote": "https://github.com/lmms/zynaddsubfx.git"
+    },
+    {
+      "path": "plugins/ZynAddSubFx/zynaddsubfx/instruments",
+      "commit": "c5c912131b31df5fdf372d2f06a25aaf2375837f",
+      "tree": "594b3d2e365a8ca1ed523944f878a10b4c43fb14",
+      "remote": "https://github.com/zynaddsubfx/instruments"
+    },
+    {
+      "path": "src/3rdparty/hiir/hiir",
+      "commit": "4a9a1e67fa6f8ce7688e1c0c8a2b017cecd206a3",
+      "tree": "1bae8c7af24bcd8f3ab0faaeea7158c4f530e57f",
+      "remote": "https://github.com/LostRobotMusic/hiir"
+    },
+    {
+      "path": "src/3rdparty/jack2",
+      "commit": "ac334fabfb56989e9115ee6e2a77c1f6162d14fb",
+      "tree": "0b4c5b53e84a3e9a7c1789af7050710ed8bcb32d",
+      "remote": "https://github.com/jackaudio/jack2"
+    },
+    {
+      "path": "src/3rdparty/qt5-x11embed",
+      "commit": "499d737c8e8d6882c55ef6d26981d313b296e5ca",
+      "tree": "3b1e27bc4e077cd801549d897cde18058420b442",
+      "remote": "https://github.com/Lukas-W/qt5-x11embed.git"
+    },
+    {
+      "path": "src/3rdparty/qt5-x11embed/3rdparty/ECM",
+      "commit": "1f820dc98d0a520c175433bcbb0098327d82aac6",
+      "tree": "86898581c4d9c379681e29123660b6a93e50b61a",
+      "remote": "https://github.com/KDE/extra-cmake-modules.git"
+    },
+    {
+      "path": "src/3rdparty/ringbuffer",
+      "commit": "1c46ef34a28d4637b43fb6d5ebb31d38c05f4bd8",
+      "tree": "c8d37acc62f35c3b0aa1ce7ecbf7299a1def7c47",
+      "remote": "https://github.com/JohannesLorenz/ringbuffer.git"
+    },
+    {
+      "path": "src/3rdparty/weakjack/weakjack",
+      "commit": "fd11655be3b2efd6082968ecfe53f9cfe88bda2b",
+      "tree": "2b03cd24f98c3e4c209532526f689d9d0b7022ab",
+      "remote": "https://github.com/x42/weakjack.git"
+    }
+  ],
+  "excluded_content_directories": [
+    "data/backgrounds",
+    "data/presets",
+    "data/projects",
+    "data/samples",
+    "data/wavetables"
+  ],
+  "plugins": [
+    "AudioFileProcessor",
+    "Kicker",
+    "TripleOscillator"
+  ],
+  "scope_note": "Minimal native instrument baseline to qualify the compiler, Qt, project model and rendering path. No commercial-content or full plug-in compatibility clearance is claimed."
+}

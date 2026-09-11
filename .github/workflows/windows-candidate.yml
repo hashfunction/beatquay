@@ -1,0 +1,50 @@
+name: BeatQuay Windows modernization candidate
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/beatquay-baseline]
+permissions:
+  contents: read
+jobs:
+  candidate-x64:
+    runs-on: windows-2022
+    timeout-minutes: 120
+    env:
+      VCPKG_DISABLE_METRICS: '1'
+      VCPKG_BINARY_SOURCES: clear
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          submodules: recursive
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: microsoft/vcpkg
+          ref: 9e593bb18ea69cc5095e012465dcd675a822ed0d
+          path: .ci-vcpkg
+      - name: Install exact Qt runtime version
+        uses: jurplel/install-qt-action@d325aaf2a8baeeda41ad0b5d39f84a6af9bcf005
+        with:
+          version: '6.11.2'
+          arch: win64_msvc2022_64
+          archives: qtbase qtsvg qttools
+          cache: false
+      - uses: ilammy/msvc-dev-cmd@cec98b9d092141f74527d0afa6feb2af698cfe89
+        with:
+          arch: x64
+      - name: Verify immutable inputs and bootstrap vcpkg
+        shell: pwsh
+        run: ./distribution/qualify-candidate.ps1
+      - name: Preserve metadata only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: BeatQuay-Windows-candidate-metadata
+          path: |
+            build-evidence/**
+            build/CMakeCache.txt
+            build/CMakeFiles/CMakeConfigureLog.yaml
+            build/tests/Testing/Temporary/LastTest.log
+            build/tests/Testing/Temporary/LastTestsFailed.log
+            build/vcpkg-manifest-install.log
+          retention-days: 14
+          if-no-files-found: error

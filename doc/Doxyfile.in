@@ -1,0 +1,84 @@
+PROJECT_NAME           = @CMAKE_PROJECT_NAME@
+PROJECT_NUMBER         = @VERSION@
+PROJECT_BRIEF          = "Cross-platform music production software"
+
+# TODO 5166: Update these paths
+PROJECT_LOGO           = @CMAKE_SOURCE_DIR@/../cmake/linux/icons/scalable/apps/lmms.svg
+PROJECT_ICON           = @CMAKE_SOURCE_DIR@/../cmake/linux/icons/scalable/apps/lmms.svg
+
+OUTPUT_DIRECTORY       = doc/
+STRIP_FROM_PATH        = ../
+TIMESTAMP              = YES
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+CASE_SENSE_NAMES       = NO
+SORT_MEMBERS_CTORS_1ST = YES
+QUIET                  = YES
+INPUT                  = @CMAKE_SOURCE_DIR@/../README.md \
+                         @CMAKE_SOURCE_DIR@/../src \
+                         @CMAKE_SOURCE_DIR@/../include \
+                         @CMAKE_SOURCE_DIR@/../plugins
+FILE_PATTERNS          = *.c \
+                         *.cc \
+                         *.cxx \
+                         *.cxxm \
+                         *.cpp \
+                         *.cppm \
+                         *.ccm \
+                         *.h \
+                         *.hh \
+                         *.hxx \
+                         *.hpp
+RECURSIVE              = YES
+EXCLUDE                = @CMAKE_SOURCE_DIR@/../src/3rdparty \
+                         @CMAKE_SOURCE_DIR@/../plugins/CarlaBase/carla \
+                         @CMAKE_SOURCE_DIR@/../plugins/FreeBoy/game-music-emu \
+                         @CMAKE_SOURCE_DIR@/../plugins/LadspaEffect/calf/veal \
+                         @CMAKE_SOURCE_DIR@/../plugins/LadspaEffect/caps \
+                         @CMAKE_SOURCE_DIR@/../plugins/LadspaEffect/cmt/cmt \
+                         @CMAKE_SOURCE_DIR@/../plugins/LadspaEffect/swh/ladspa \
+                         @CMAKE_SOURCE_DIR@/../plugins/LadspaEffect/tap/tap-plugins \
+                         @CMAKE_SOURCE_DIR@/../plugins/OpulenZ/adplug \
+                         @CMAKE_SOURCE_DIR@/../plugins/Sid/resid/resid \
+                         @CMAKE_SOURCE_DIR@/../plugins/Xpressive/exprtk \
+                         @CMAKE_SOURCE_DIR@/../plugins/ZynAddSubFx/zynaddsubfx
+USE_MDFILE_AS_MAINPAGE = @CMAKE_SOURCE_DIR@/../README.md
+GENERATE_TREEVIEW      = NO
+HTML_EXTRA_STYLESHEET  = @CMAKE_SOURCE_DIR@/extra.css
+USE_MATHJAX            = YES
+GENERATE_LATEX         = NO
+PREDEFINED             = LMMS_BUILD_LINUX= \
+                         LMMS_HOST_X86_64= \
+                         LMMS_HAVE_ALSA= \
+                         LMMS_HAVE_FLUIDSYNTH= \
+                         LMMS_HAVE_JACK= \
+                         LMMS_HAVE_JACK_PRENAME= \
+                         LMMS_HAVE_WEAKJACK= \
+                         LMMS_HAVE_LV2= \
+                         LMMS_HAVE_SUIL= \
+                         LMMS_HAVE_MP3LAME= \
+                         LMMS_HAVE_SNDFILE_MP3= \
+                         LMMS_HAVE_OGGVORBIS= \
+                         LMMS_HAVE_SNDIO= \
+                         LMMS_HAVE_PORTAUDIO= \
+                         LMMS_HAVE_PULSEAUDIO= \
+                         LMMS_HAVE_SDL= \
+                         LMMS_HAVE_STK= \
+                         LMMS_HAVE_VST= \
+                         LMMS_HAVE_VST_32= \
+                         LMMS_HAVE_VST_64= \
+                         LMMS_HAVE_SF_COMPLEVEL= \
+                         LMMS_DEBUG_FPE= \
+                         LMMS_HAVE_PTHREAD_H= \
+                         LMMS_HAVE_UNISTD_H= \
+                         LMMS_HAVE_SYS_IPC_H= \
+                         LMMS_HAVE_SEMAPHORE_H= \
+                         LMMS_HAVE_SYS_TIMES_H= \
+                         LMMS_HAVE_SYS_PRCTL_H= \
+                         LMMS_HAVE_SCHED_H= \
+                         LMMS_HAVE_SYS_SOUNDCARD_H= \
+                         LMMS_HAVE_SOUNDCARD_H= \
+                         LMMS_HAVE_FCNTL_H= \
+                         LMMS_HAVE_SYS_IOCTL_H= \
+                         LMMS_HAVE_PROCESS_H=

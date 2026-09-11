@@ -1,0 +1,16 @@
+data/locale/* linguist-documentation
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.ogg binary
+*.wav binary
+*.flac binary
+*.ttf binary
+*.icns binary
+*.ico binary
+*.bin binary
+*.bmp binary
+*.xiz binary
+*.xmz binary
+*.mmpz binary
