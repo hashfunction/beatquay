@@ -16,7 +16,10 @@
       "qtsvg",
       "qttools"
     ],
-    "corresponding_source_closure_complete": false
+    "corresponding_source_closure_complete": false,
+    "installer_source": "https://github.com/miurahr/aqtinstall",
+    "installer_commit": "16db45a70b5905ad596941b223469bc86a56901e",
+    "installer_reason": "aqt3.3.0 failed to locate Qt6.11 architecture-specific metadata; this exact upstream commit handles the observed new repository layout."
   },
   "submodules": [
     {

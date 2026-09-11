@@ -36,6 +36,9 @@ try {
     } | ConvertTo-Json -Depth 3 | Set-Content build-evidence/stage-inventory.json
     @{ source_commit=$env:GITHUB_SHA; candidate=$lock.candidate; built=$true; tests_passed=$true; installed_stage=$true; modernization_accepted=$false; physical_audio_verified=$false; source_license_closure=$false; store_submitted=$false } | ConvertTo-Json | Set-Content build-evidence/result.json
 } finally {
+    Get-ChildItem .qt-archives -File -ErrorAction SilentlyContinue | ForEach-Object {
+        @{ file=$_.Name; bytes=$_.Length; sha256=(Get-FileHash $_.FullName -Algorithm SHA256).Hash }
+    } | ConvertTo-Json -Depth 3 | Set-Content build-evidence/qt-downloads.json
     Get-ChildItem .ci-vcpkg/downloads -File -ErrorAction SilentlyContinue | ForEach-Object {
         @{ file=$_.Name; bytes=$_.Length; sha256=(Get-FileHash $_.FullName -Algorithm SHA256).Hash }
     } | ConvertTo-Json -Depth 3 | Set-Content build-evidence/dependency-downloads.json
