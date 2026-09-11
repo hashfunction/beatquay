@@ -22,7 +22,12 @@ foreach(LMMS_TEST_SRC IN LISTS LMMS_TESTS)
 	get_filename_component(LMMS_TEST_NAME ${LMMS_TEST_SRC} NAME_WE)
 
 	add_executable(${LMMS_TEST_NAME} ${LMMS_TEST_SRC})
-	add_test(NAME ${LMMS_TEST_NAME} COMMAND ${LMMS_TEST_NAME})
+	# Preserve individual assertions even when Windows does not forward QtTest's
+	# default logger to CTest's captured stdout. Reports contain metadata only.
+	add_test(NAME ${LMMS_TEST_NAME} COMMAND ${LMMS_TEST_NAME}
+		-o "${CMAKE_CURRENT_BINARY_DIR}/${LMMS_TEST_NAME}.qt-test.xml,junitxml"
+		-o "${CMAKE_CURRENT_BINARY_DIR}/${LMMS_TEST_NAME}.qt-test.txt,txt"
+	)
 
 	# TODO CMake 3.12: Propagate usage requirements by linking to lmmsobjs
 	target_include_directories(${LMMS_TEST_NAME} PRIVATE $<TARGET_PROPERTY:lmmsobjs,INCLUDE_DIRECTORIES>)

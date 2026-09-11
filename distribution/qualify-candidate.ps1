@@ -38,6 +38,11 @@ try {
     Invoke-Checked python @('tests/scripted/candidate_render.py','--executable',"$(Get-Location)/stage/lmms.exe",'--stage',"$(Get-Location)/stage",'--work',"$(Get-Location)/.cache/native-render-smoke",'--evidence',"$(Get-Location)/build-evidence")
     @{ source_commit=$env:GITHUB_SHA; candidate=$lock.candidate; built=$true; tests_passed=$true; installed_stage=$true; native_render_smoke_passed=$true; modernization_accepted=$false; physical_audio_verified=$false; source_license_closure=$false; store_submitted=$false } | ConvertTo-Json | Set-Content build-evidence/result.json
 } finally {
+    $qtReports = @(Get-ChildItem build/tests -File -Filter '*.qt-test.*' -ErrorAction SilentlyContinue)
+    if ($qtReports.Count) {
+        New-Item -ItemType Directory -Force build-evidence/qt-tests | Out-Null
+        $qtReports | Copy-Item -Destination build-evidence/qt-tests
+    }
     Get-ChildItem .qt-archives -File -ErrorAction SilentlyContinue | ForEach-Object {
         @{ file=$_.Name; bytes=$_.Length; sha256=(Get-FileHash $_.FullName -Algorithm SHA256).Hash }
     } | ConvertTo-Json -Depth 3 | Set-Content build-evidence/qt-downloads.json
