@@ -19,5 +19,7 @@ compile_commands.json
 /build-evidence/
 /stage/
 /.qt-archives/
+/aqtinstall.log
 
 /tests/scripted/__pycache__/
+/cmake/msix/__pycache__/

@@ -147,3 +147,46 @@ accepted commit from this local candidate, and fast-forward `codex/beatquay` wit
 accepted commit/tree and original ancestry in the modernization record. Do not
 advance the original checkout or label the full modernization accepted solely
 because compilation passes. No original source checkout was changed by this task.
+
+## Bootstrap checkout failure: generated metadata, not source EOL
+
+Windows run `34636291106` stopped at the new source-clean preflight before
+compilation. Its tiny metadata artifact contains only `candidate-inputs.json`;
+the original rejection did not persist the offending status rows. The exact
+public `0ec9db77e995619018005851f9e6a5114c32beef` checkout was reproduced locally
+with `core.autocrlf=true`, `core.eol=crlf`, `core.symlinks=false` and
+`core.filemode=false`; it is clean and has no case-colliding tracked paths.
+No source-blob or line-ending rewrite was justified.
+
+The pinned Qt action runs aqt in the repository working directory. The pinned
+installer `16db45a70b5905ad596941b223469bc86a56901e` calls
+`logging.config.fileConfig`; its `aqt/logging.ini` opens the relative
+`aqtinstall.log` with `FileHandler`. Running that exact logging configuration in
+the fresh public checkout changed real Git status from empty to
+`?? aqtinstall.log`. The required installer-generated log is now ignored only at
+the repository root. The package helpers' generated `cmake/msix/__pycache__/`
+also has a narrow ignore rule, matching the existing scripted-test cache rule.
+Tracked source changes, unrelated logs and unexpected helper source still fail.
+
+The unchanged strict predicate now records `source-status-before-build.txt` and
+the saved native Git exit code before rejection, within the existing metadata
+artifact paths. No files are removed or normalized by preflight. A required
+three-case regression clones a real temporary Git repository with the actual
+attributes/ignores and Windows-style Git settings, creates a real installer log
+and Python bytecode, and executes the actual production PowerShell preflight
+statements. It also proves tracked changes and three unrelated path variants
+are preserved, rejected and recorded. Local execution:
+
+```sh
+BEATQUAY_TEST_PWSH=/absolute/path/to/pwsh python3 tests/scripted/test_source_checkout.py -v
+```
+
+All three cases passed after reproducing three failures before the correction.
+The same tests run before dependency bootstrap on Windows. This establishes the
+reproduced bootstrap pollution fix, not a Windows compiler/MSIX/GUI pass; the next
+native run must establish that no additional checkout issue remains.
+
+Primary pinned source:
+- https://github.com/miurahr/aqtinstall/blob/16db45a70b5905ad596941b223469bc86a56901e/aqt/logging.ini
+- https://github.com/miurahr/aqtinstall/blob/16db45a70b5905ad596941b223469bc86a56901e/aqt/helper.py
+- https://github.com/jurplel/install-qt-action/blob/d325aaf2a8baeeda41ad0b5d39f84a6af9bcf005/action/src/main.ts

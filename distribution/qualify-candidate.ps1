@@ -10,8 +10,12 @@ function Invoke-Checked([string]$Program, [string[]]$Arguments) {
 $sourceCommit=(git rev-parse HEAD).Trim()
 if ($LASTEXITCODE -ne 0 -or $sourceCommit -cne $env:GITHUB_SHA) { throw 'Source differs from this qualification run.' }
 $sourceStatus=@(git status --porcelain --untracked-files=all)
-if ($LASTEXITCODE -ne 0 -or $sourceStatus.Count) { throw 'Source checkout must be clean before native build and package evidence collection.' }
+$sourceStatusExit=$LASTEXITCODE
+Set-Content -LiteralPath build-evidence/source-status-before-build.txt -Value $sourceStatus -Encoding utf8
+Set-Content -LiteralPath build-evidence/source-status-exit-code.txt -Value $sourceStatusExit -Encoding utf8
+if ($sourceStatusExit -ne 0 -or $sourceStatus.Count) { throw 'Source checkout must be clean before native build and package evidence collection.' }
 $lock = Get-Content distribution/candidate-inputs.json -Raw | ConvertFrom-Json
+Invoke-Checked python @('tests/scripted/test_source_checkout.py','-v')
 if ((git -C .ci-vcpkg rev-parse HEAD) -ne $lock.vcpkg.commit) { throw 'vcpkg revision mismatch.' }
 $submodules = @(git submodule status --recursive)
 if ($LASTEXITCODE -ne 0 -or @($submodules | Where-Object { -not $_.StartsWith(' ') }).Count) { throw 'Submodules are missing or changed.' }
