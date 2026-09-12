@@ -14,11 +14,12 @@ param(
 
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
+. (Join-Path $PSScriptRoot 'first-run.ps1')
 
 function Invoke-BeatQuayQualificationCore([Collections.IDictionary]$Operations) {
     $required = @(
         'Preflight','PrepareSignedCopy','Install','ActivateAndVerify','CloseCleanly','UninstallAndVerify',
-        'StopOwnedProcess','RemoveOwnedPackage','RemoveTrustedCertificate','RemovePersonalCertificate','RemoveTemporaryFiles'
+        'StopOwnedProcess','RemoveOwnedPackage','RemoveTrustedCertificate','RemovePersonalCertificate','RemoveOwnedWorkingDirectory','RemoveTemporaryFiles'
     )
     foreach ($name in $required) {
         if (-not $Operations.Contains($name) -or $Operations[$name] -isnot [scriptblock]) {
@@ -36,7 +37,7 @@ function Invoke-BeatQuayQualificationCore([Collections.IDictionary]$Operations) 
     } catch {
         $primaryError = $_.Exception.Message
     } finally {
-        foreach ($name in @('StopOwnedProcess','RemoveOwnedPackage','RemoveTrustedCertificate','RemovePersonalCertificate','RemoveTemporaryFiles')) {
+        foreach ($name in @('StopOwnedProcess','RemoveOwnedPackage','RemoveTrustedCertificate','RemovePersonalCertificate','RemoveOwnedWorkingDirectory','RemoveTemporaryFiles')) {
             try {
                 & $Operations[$name] | Out-Host
             } catch {
@@ -218,46 +219,18 @@ function Assert-BeatQuayWindowEvidence($Snapshot) {
 }
 
 function Assert-BeatQuayFirstRunEvidence($Snapshot) {
+    if (-not $Snapshot.Contains('working_directory') -or
+        $Snapshot.working_directory.title -cne 'Working directory' -or -not $Snapshot.working_directory.visible -or
+        $Snapshot.working_directory.action_name -cne 'Yes' -or -not $Snapshot.working_directory.action_invoked -or
+        $Snapshot.working_directory.process_id -le 0 -or -not [IO.Path]::IsPathFullyQualified($Snapshot.working_directory.path) -or
+        $Snapshot.working_directory.message -cne (Get-BeatQuayWorkingDirectoryMessage $Snapshot.working_directory.path)) {
+        throw 'The exact owned working-directory creation prompt and action were not observed.'
+    }
     if ($Snapshot.setup_title -cne 'BeatQuay - Settings' -or -not $Snapshot.setup_visible -or
         $Snapshot.action_name -cne 'OK' -or -not $Snapshot.action_invoked -or
         $Snapshot.editor_title -cne 'BeatQuay 1.0.0' -or -not $Snapshot.editor_visible) {
         throw 'Normal first-run setup and resulting BeatQuay editor were not both observed.'
     }
-}
-
-function Complete-BeatQuayFirstRun([Diagnostics.Process]$Process) {
-    Add-Type -AssemblyName UIAutomationClient
-    Add-Type -AssemblyName UIAutomationTypes
-    $condition = [Windows.Automation.PropertyCondition]::new([Windows.Automation.AutomationElement]::ProcessIdProperty,$Process.Id)
-    $deadline = [DateTime]::UtcNow.AddSeconds(30)
-    $setup = $null
-    do {
-        $windows = [Windows.Automation.AutomationElement]::RootElement.FindAll([Windows.Automation.TreeScope]::Children,$condition)
-        for ($index=0; $index -lt $windows.Count; $index++) {
-            if ($windows.Item($index).Current.Name -ceq 'BeatQuay - Settings') { $setup=$windows.Item($index); break }
-        }
-        if (-not $setup) { Start-Sleep -Milliseconds 250 }
-    } until ($setup -or [DateTime]::UtcNow -ge $deadline)
-    if (-not $setup -or $setup.Current.IsOffscreen) { throw 'Fresh installed activation did not show the Settings first-run dialog.' }
-    $buttons = $setup.FindAll([Windows.Automation.TreeScope]::Subtree,
-        [Windows.Automation.PropertyCondition]::new([Windows.Automation.AutomationElement]::NameProperty,'OK'))
-    $valid = [Collections.Generic.List[object]]::new()
-    for ($index=0; $index -lt $buttons.Count; $index++) {
-        $button=$buttons.Item($index)
-        if ($button.Current.ControlType -eq [Windows.Automation.ControlType]::Button -and $button.Current.IsEnabled -and -not $button.Current.IsOffscreen) { $valid.Add($button) }
-    }
-    if ($valid.Count -ne 1) { throw 'First-run Settings dialog lacks one visible enabled OK action.' }
-    $pattern = $valid[0].GetCurrentPattern([Windows.Automation.InvokePattern]::Pattern)
-    if (-not $pattern) { throw 'First-run OK action is not invokable.' }
-    $pattern.Invoke()
-    $deadline = [DateTime]::UtcNow.AddSeconds(30)
-    do {
-        Start-Sleep -Milliseconds 250; $Process.Refresh()
-        if ($Process.HasExited) { throw 'BeatQuay exited while completing first-run setup.' }
-    } until ($Process.MainWindowTitle -ceq 'BeatQuay 1.0.0' -or [DateTime]::UtcNow -ge $deadline)
-    $snapshot = [ordered]@{setup_title='BeatQuay - Settings';setup_visible=$true;action_name='OK';action_invoked=$true;editor_title=$Process.MainWindowTitle;editor_visible=($Process.MainWindowHandle -ne 0)}
-    Assert-BeatQuayFirstRunEvidence $snapshot
-    return $snapshot
 }
 
 function Get-WindowQualification([Diagnostics.Process]$Process, [string]$OutputDirectory) {
@@ -380,7 +353,7 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
         installAttempted = $false; brokerProcessId = 0; addCompleted = $false; ownedPackageFullName = $null; preflightPackageFullNames = @(); residualPackageFullNames = @(); processHandle = $null; processExit = $null
         unsignedPackageSha256 = $null; signedPackageSha256 = $null; signTool = $null
         aumid = $null; processPackageFullName = $null; modules = @(); window = $null
-        python = $Python; firstRun = $null
+        python = $Python; firstRun = $null; firstRunObservations = [ordered]@{}; workingDirectory = $null
         executableSha256 = $null
         cleanClose = $false; uninstallVerified = $false
     }
@@ -398,7 +371,7 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
         }
         if (-not $state.python -or -not [IO.Path]::IsPathFullyQualified($state.python)) { throw 'Absolute qualification Python path is required.' }
         if (Test-Path -LiteralPath (Join-Path $env:USERPROFILE '.beatquayrc.xml')) { throw 'Preexisting BeatQuay settings invalidate first-run qualification.' }
-        if (Test-Path -LiteralPath (Join-Path ([Environment]::GetFolderPath('MyDocuments')) 'BeatQuay')) { throw 'Preexisting BeatQuay documents invalidate first-run qualification.' }
+        $state.workingDirectory = New-BeatQuayWorkingDirectoryRecord (Join-Path ([Environment]::GetFolderPath('MyDocuments')) 'BeatQuay') $env:GITHUB_SHA
         $state.package = (Resolve-Path -LiteralPath $PackagePath).Path
         $recordFile = (Resolve-Path -LiteralPath $RecordPath).Path
         $state.signTool = (Resolve-Path -LiteralPath $SignToolPath).Path
@@ -529,7 +502,7 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
             if ($state.process.HasExited) { throw "Activated BeatQuay exited during startup: $($state.process.ExitCode)" }
         } until ($state.process.MainWindowHandle -ne 0 -or [DateTime]::UtcNow -ge $deadline)
         if ($state.process.MainWindowHandle -eq 0) { throw 'Activated BeatQuay did not create a main window.' }
-        $state.firstRun = Complete-BeatQuayFirstRun $state.process
+        $state.firstRun = Complete-BeatQuayFirstRun $state.process $state.workingDirectory $state.ownedPackageFullName $state.firstRunObservations
         $state.processPackageFullName = [BeatQuayQualification.NativePackageProbe]::GetFullName($state.process.Handle)
         if ($state.processPackageFullName -cne [string]$state.installed.PackageFullName) { throw 'Activated process does not own the exact installed package full name.' }
         Start-Sleep -Seconds 3
@@ -635,6 +608,14 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
         }
     }.GetNewClosure()
 
+    $operations.RemoveOwnedWorkingDirectory = {
+        if ($state.workingDirectory -and $state.workingDirectory.ownership_established -and
+            (-not $state.cleanupProcessExit -or -not $state.cleanupProcessExit.wait_completed -or $state.cleanupProcessExit.observation_error)) {
+            throw 'Owned process termination is unproven; preserving its working directory.'
+        }
+        Remove-BeatQuayOwnedWorkingDirectory $state.workingDirectory
+    }.GetNewClosure()
+
     $operations.RemoveTemporaryFiles = {
         if ($state.temporary -and (Test-Path -LiteralPath $state.temporary)) {
             Remove-Item -LiteralPath $state.temporary -Recurse -Force -ErrorAction Stop
@@ -682,6 +663,8 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
         executable_sha256 = $state.executableSha256
         loaded_module_count = @($state.modules).Count
         first_run = $state.firstRun
+        first_run_observations = $state.firstRunObservations
+        working_directory = $state.workingDirectory
         window = $state.window
         process_exit = $state.processExit
         cleanup_process_exit = $state.cleanupProcessExit

@@ -2,7 +2,27 @@
 
 These MIT helpers build and install a temporary CI-only identity from the exact Windows native stage. They preserve the retained pipeline notices, bind original BeatQuay source/artwork/starters, copied Qt and vcpkg notices, same-run render results and every PE import. The full stage is copied byte-for-byte, then package-owned manifest, tiles and notices are added.
 
-`distribution/qualify-candidate.ps1` is the supported entry point on a disposable Windows runner. It compiles/tests/renders the native app, records PE imports and notices, creates `build-evidence/package-input.json`, then invokes `cmake/msix/qualify-msix.ps1`. The latter runs portable/PowerShell regressions, uses Windows SDK 10.0.26100.0 MakeAppx, independently verifies the OPC container and SDK unpack, test-signs a private copy, installs it through the package broker, observes exact package/PID/path/hash/module identity, completes the real `BeatQuay - Settings` first-run dialog through its scoped `OK` control, requires the visible `BeatQuay 1.0.0` editor and screenshot, closes normally, and removes only the exact owned registration and ephemeral certificate.
+`distribution/qualify-candidate.ps1` is the supported entry point on a disposable Windows runner. It compiles/tests/renders the native app, records PE imports and notices, creates `build-evidence/package-input.json`, then invokes `cmake/msix/qualify-msix.ps1`. The latter runs portable/PowerShell regressions, uses Windows SDK 10.0.26100.0 MakeAppx, independently verifies the OPC container and SDK unpack, test-signs a private copy, installs it through the package broker, observes exact package/PID/path/hash/module identity, completes the normal working-directory and Settings prompts, requires the visible `BeatQuay 1.0.0` editor and screenshot, closes normally, and removes only the exact owned registration and ephemeral certificate.
+
+Fresh startup first asks `Working directory` whether to create the exact Qt
+Documents `/BeatQuay/` path; `GuiApplication` waits for this answer before it
+constructs the Settings dialog. The qualification helper observes the exact
+title, complete question/path and one visible enabled `Yes` belonging to the
+retained installed process, then requires `BeatQuay - Settings` and its exact
+`OK`. It rereads each live UIA provider before invocation, tolerates only the
+ordinary transition/splash, and retains bounded per-phase observations in the
+final receipt even when a later step fails. Each wait remains limited to 30
+seconds. Unexpected titles, content, ownership or actions fail without input.
+
+The working folder must be absent in preflight and immediately before `Yes`.
+Once Settings proves startup advanced, an exclusive marker binds the observed
+empty folder tree to this source, installed package and process. Cleanup requires
+proven termination of the retained process, an unchanged marker/tree and no
+reparse paths or unexpected files; it deletes only empty directories and its own
+marker. Changed, unowned or uncertain state is preserved and fails qualification.
+`test_first_run_flow.ps1` exercises the actual orchestration, marker/filesystem
+operations and final cleanup/reporting closure with only Windows UIA/process IO
+substituted. These fixtures do not establish actual Windows GUI acceptance.
 
 The PE collector resolves nonpackaged Windows API-set imports through the actual
 OS: `IsApiSetImplemented`, then `LoadLibraryExW` with

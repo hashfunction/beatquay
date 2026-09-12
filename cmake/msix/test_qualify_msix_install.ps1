@@ -19,7 +19,7 @@ function New-FakeOperations([string]$PrimaryFailure, [string[]]$CleanupFailures,
             if ($PrimaryFailure -eq $operationName) { throw "primary:$operationName" }
         }.GetNewClosure()
     }
-    foreach ($name in @('StopOwnedProcess','RemoveOwnedPackage','RemoveTrustedCertificate','RemovePersonalCertificate','RemoveTemporaryFiles')) {
+    foreach ($name in @('StopOwnedProcess','RemoveOwnedPackage','RemoveTrustedCertificate','RemovePersonalCertificate','RemoveOwnedWorkingDirectory','RemoveTemporaryFiles')) {
         $operationName = $name
         $operations[$name] = {
             $global:BeatQuayQualificationTestCalls.Add($operationName)
@@ -34,7 +34,7 @@ $result = Invoke-BeatQuayQualificationCore -Operations (New-FakeOperations '' @(
 Assert-True $result.installation_qualification_passed 'success path must pass'
 Assert-True (-not $result.primary_error) 'success path must have no primary error'
 Assert-True ($result.cleanup_errors.Count -eq 0) 'success path must have no cleanup errors'
-Assert-True (($global:BeatQuayQualificationTestCalls -join ',') -eq 'Preflight,PrepareSignedCopy,Install,ActivateAndVerify,CloseCleanly,UninstallAndVerify,StopOwnedProcess,RemoveOwnedPackage,RemoveTrustedCertificate,RemovePersonalCertificate,RemoveTemporaryFiles') 'all qualification and cleanup steps must run in order'
+Assert-True (($global:BeatQuayQualificationTestCalls -join ',') -eq 'Preflight,PrepareSignedCopy,Install,ActivateAndVerify,CloseCleanly,UninstallAndVerify,StopOwnedProcess,RemoveOwnedPackage,RemoveTrustedCertificate,RemovePersonalCertificate,RemoveOwnedWorkingDirectory,RemoveTemporaryFiles') 'all qualification and cleanup steps must run in order'
 
 $result = Invoke-BeatQuayQualificationCore -Operations (New-FakeOperations 'ActivateAndVerify' @('RemoveOwnedPackage','RemovePersonalCertificate'))
 Assert-True (-not $result.installation_qualification_passed) 'primary and cleanup failure must fail'
@@ -42,7 +42,7 @@ Assert-True ($result.primary_error -eq 'primary:ActivateAndVerify') 'primary fai
 Assert-True ($result.cleanup_errors.Count -eq 2) 'all cleanup failures must be retained'
 Assert-True (($result.cleanup_errors -join '|') -match 'RemoveOwnedPackage.*RemovePersonalCertificate') 'cleanup failures must identify their operations'
 Assert-True (-not ($global:BeatQuayQualificationTestCalls -contains 'CloseCleanly')) 'later primary operations must not run after failure'
-foreach ($cleanup in @('StopOwnedProcess','RemoveOwnedPackage','RemoveTrustedCertificate','RemovePersonalCertificate','RemoveTemporaryFiles')) {
+foreach ($cleanup in @('StopOwnedProcess','RemoveOwnedPackage','RemoveTrustedCertificate','RemovePersonalCertificate','RemoveOwnedWorkingDirectory','RemoveTemporaryFiles')) {
     Assert-True ($global:BeatQuayQualificationTestCalls -contains $cleanup) "cleanup operation $cleanup must still run"
 }
 
@@ -53,7 +53,7 @@ Assert-True ($result.cleanup_errors.Count -eq 1) 'cleanup-only failure must be r
 
 $result = Invoke-BeatQuayQualificationCore -Operations (New-FakeOperations 'Preflight' @())
 Assert-True (-not $result.installation_qualification_passed) 'preexisting-install/preflight failure must fail qualification'
-Assert-True (($global:BeatQuayQualificationTestCalls -join ',') -eq 'Preflight,StopOwnedProcess,RemoveOwnedPackage,RemoveTrustedCertificate,RemovePersonalCertificate,RemoveTemporaryFiles') 'preflight failure must skip mutation and still execute safe cleanup adapters'
+Assert-True (($global:BeatQuayQualificationTestCalls -join ',') -eq 'Preflight,StopOwnedProcess,RemoveOwnedPackage,RemoveTrustedCertificate,RemovePersonalCertificate,RemoveOwnedWorkingDirectory,RemoveTemporaryFiles') 'preflight failure must skip mutation and still execute safe cleanup adapters'
 
 $result = @(Invoke-BeatQuayQualificationCore -Operations (New-FakeOperations '' @() -Noisy))
 Assert-True ($result.Count -eq 1) 'native stdout must not contaminate the one structured result'
