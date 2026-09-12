@@ -67,6 +67,17 @@ class QualificationTests(unittest.TestCase):
         with self.assertRaises(ValueError): self.stage()
         self.source.joinpath('LICENSE.txt').write_bytes(b'source:LICENSE.txt'); self.release.joinpath('manual.pdf').write_bytes(b'changed')
         with self.assertRaises(ValueError): self.stage()
+    def test_consumer_helpers_are_bound_before_package_creation(self):
+        names=('cmake/msix/consumer-workflow.ps1','cmake/msix/consumer-display.ps1','cmake/msix/consumer_files.py',
+               'cmake/msix/qualify-msix-install.ps1','cmake/msix/first-run.ps1','tests/scripted/starter_render.py')
+        for name in names:
+            path=self.source/name; path.parent.mkdir(parents=True,exist_ok=True)
+            if not path.exists(): path.write_bytes(b'original consumer helper')
+        self.refresh_inventory()
+        for name in names:
+            path=self.source/name; original=path.read_bytes(); path.write_bytes(b'changed verifier or UI driver')
+            with self.subTest(name=name), self.assertRaises(ValueError): self.stage()
+            path.write_bytes(original)
     def test_api_set_receipt_requires_exact_coverage_and_host_provenance(self):
         path=self.evidence/'pe-imports.json'
         record=json.loads(path.read_text())

@@ -55,6 +55,7 @@ jobs:
             build-evidence/**/*.xml
             build-evidence/**/*.log
             build-evidence/**/*.png
+            build-evidence/msix-install/consumer-workflow/*.mmp
             build/CMakeCache.txt
             build/CMakeFiles/CMakeConfigureLog.yaml
             build/tests/Testing/Temporary/LastTest.log

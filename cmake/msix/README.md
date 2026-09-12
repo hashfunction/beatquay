@@ -2,7 +2,7 @@
 
 These MIT helpers build and install a temporary CI-only identity from the exact Windows native stage. They preserve the retained pipeline notices, bind original BeatQuay source/artwork/starters, copied Qt and vcpkg notices, same-run render results and every PE import. The full stage is copied byte-for-byte, then package-owned manifest, tiles and notices are added.
 
-`distribution/qualify-candidate.ps1` is the supported entry point on a disposable Windows runner. It compiles/tests/renders the native app, records PE imports and notices, creates `build-evidence/package-input.json`, then invokes `cmake/msix/qualify-msix.ps1`. The latter runs portable/PowerShell regressions, uses Windows SDK 10.0.26100.0 MakeAppx, independently verifies the OPC container and SDK unpack, test-signs a private copy, installs it through the package broker, observes exact package/PID/path/hash/module identity, completes the normal working-directory and Settings prompts, requires the visible `BeatQuay 1.0.0` editor and screenshot, closes normally, and removes only the exact owned registration and ephemeral certificate.
+`distribution/qualify-candidate.ps1` is the supported entry point on a disposable Windows runner. It compiles/tests/renders the native app, records PE imports and notices, creates `build-evidence/package-input.json`, then invokes `cmake/msix/qualify-msix.ps1`. The latter runs portable/PowerShell regressions, uses Windows SDK 10.0.26100.0 MakeAppx, independently verifies the OPC container and SDK unpack, test-signs a private copy, installs it through the package broker, observes exact package/PID/path/hash/module identity, completes the normal working-directory and Settings prompts, requires the visible `BeatQuay 1.0.0` editor, completes the musical project/save/reopen/UI export and screenshot flow described below, closes normally, and removes only the exact owned registration and ephemeral certificate.
 
 Fresh startup first asks `Working directory` whether to create the exact Qt
 Documents `/BeatQuay/` path; `GuiApplication` waits for this answer before it
@@ -53,4 +53,39 @@ an unavailable-contract negative control. Local fixtures cannot establish native
 resolution, a Windows version compatibility floor, exported-function availability
 or installed MSIX success; the exact candidate still needs Windows qualification.
 
-Only JSON, text, XML and screenshot evidence is uploaded. MSIX/EXE/DLL/package/certificate outputs stay in the disposable runner. The identity `Trieflow.BeatQuay.Qualification` / `CN=BeatQuay-CI-Qualification` is not a Store identity. Records keep license clearance, corresponding-source completion, public release, WACK, physical audio and Store submission false. A fresh successful Windows run is required before claiming any native packaging or installation result.
+Only JSON, text, XML, the two actual small `.mmp` projects and screenshot evidence is uploaded. MSIX/EXE/DLL/package/certificate outputs stay in the disposable runner. The identity `Trieflow.BeatQuay.Qualification` / `CN=BeatQuay-CI-Qualification` is not a Store identity. Records keep license clearance, corresponding-source completion, public release, WACK, physical audio and Store submission false. A fresh successful Windows run is required before claiming any native packaging or installation result.
+
+
+The installed consumer gate now uses the normal File menu to create a new project
+from the packaged original CC0 Drum Grid, enters 116 BPM through the actual Tempo
+dialog, saves `Evening Pulse.mmp`, creates a new empty project, reopens the saved
+file, and saves its in-memory state as `Evening Pulse Reopened.mmp`. It then uses
+the real WAV destination/settings/Start UI and requires the exact `Export
+completed` dialog with the resulting path and byte count. No app test API,
+configuration injection, synthetic screen, or CLI rendering substitutes for a UI
+action. The read-only file checker reuses the tested CLI renderer's WAV inspection:
+stereo PCM16 at 44100 Hz, four musical bars plus the normal one-bar tail
+(10.3448276 seconds at 116 BPM, tolerance strictly below 0.25 seconds), audible AC
+content in every musical bar, complete frames, and no PCM clipping. The two saved
+projects must match all 55 authored notes, all three synth tracks and parameters,
+and each other’s complete serialized head/track/mixer state. Exact file hashes
+must remain unchanged through export. Kicker and every loaded runtime module are
+reverified against the package record after the consumer workflow.
+
+The native screenshots record the owned PID, current source, exact package and
+executable hashes, actual desktop/window/DPI and unedited PNG hashes. The retained
+CutQuay MIT display helper enumerates supported modes, uses CDS_TEST and a dynamic
+nonpersistent mode change, then restores the original mode in mandatory cleanup.
+The app is resized through the native window manager and the real Song-Editor
+Maximize control. Screenshots currently require final product-branding review;
+no capture from this source candidate is yet Windows-qualified or public.
+
+The absent-before-activation profile can acquire cleanup ownership only after the
+normal first-run UI, exact working directory, creation interval and bounded XML
+have been verified. Later writes may only add the exact opened/saved projects or
+the seven source-traced editor preferences written on normal shutdown. Other
+changes retain the last owned hash and fail closed. Cleanup requires the original
+process’s observed termination and an unchanged last verified profile hash.
+Existing marker/working-directory, package, module, certificate and normal-close
+requirements remain mandatory. Physical speaker playback, WACK, Store identity,
+upgrade and public-release claims remain false.

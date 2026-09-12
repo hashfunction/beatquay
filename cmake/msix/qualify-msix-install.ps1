@@ -15,11 +15,12 @@ param(
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 . (Join-Path $PSScriptRoot 'first-run.ps1')
+. (Join-Path $PSScriptRoot 'consumer-workflow.ps1')
 
 function Invoke-BeatQuayQualificationCore([Collections.IDictionary]$Operations) {
     $required = @(
-        'Preflight','PrepareSignedCopy','Install','ActivateAndVerify','CloseCleanly','UninstallAndVerify',
-        'StopOwnedProcess','RemoveOwnedPackage','RemoveTrustedCertificate','RemovePersonalCertificate','RemoveOwnedWorkingDirectory','RemoveTemporaryFiles'
+        'Preflight','PrepareSignedCopy','Install','ActivateAndVerify','ConsumerWorkflow','CloseCleanly','UninstallAndVerify',
+        'StopOwnedProcess','RemoveOwnedPackage','RemoveTrustedCertificate','RemovePersonalCertificate','RemoveOwnedProfile','RemoveOwnedWorkingDirectory','RestoreDisplay','RemoveTemporaryFiles'
     )
     foreach ($name in $required) {
         if (-not $Operations.Contains($name) -or $Operations[$name] -isnot [scriptblock]) {
@@ -29,7 +30,7 @@ function Invoke-BeatQuayQualificationCore([Collections.IDictionary]$Operations) 
     $primaryError = $null
     $cleanupErrors = [Collections.Generic.List[string]]::new()
     try {
-        foreach ($name in @('Preflight','PrepareSignedCopy','Install','ActivateAndVerify','CloseCleanly','UninstallAndVerify')) {
+        foreach ($name in @('Preflight','PrepareSignedCopy','Install','ActivateAndVerify','ConsumerWorkflow','CloseCleanly','UninstallAndVerify')) {
             # Native tools such as SignTool emit stdout. Keep it in the host
             # log without turning this function's structured result into an array.
             & $Operations[$name] | Out-Host
@@ -37,7 +38,7 @@ function Invoke-BeatQuayQualificationCore([Collections.IDictionary]$Operations) 
     } catch {
         $primaryError = $_.Exception.Message
     } finally {
-        foreach ($name in @('StopOwnedProcess','RemoveOwnedPackage','RemoveTrustedCertificate','RemovePersonalCertificate','RemoveOwnedWorkingDirectory','RemoveTemporaryFiles')) {
+        foreach ($name in @('StopOwnedProcess','RemoveOwnedPackage','RemoveTrustedCertificate','RemovePersonalCertificate','RemoveOwnedProfile','RemoveOwnedWorkingDirectory','RestoreDisplay','RemoveTemporaryFiles')) {
             try {
                 & $Operations[$name] | Out-Host
             } catch {
@@ -345,6 +346,39 @@ function Assert-BeatQuayWindowsCi {
     if ([Environment]::OSVersion.Platform -ne [PlatformID]::Win32NT -or $env:CI -ne 'true') { throw 'Requires an isolated disposable Windows CI runner.' }
 }
 
+function Get-BeatQuayVerifiedModules($State) {
+        $installRoot = Get-CanonicalPath $state.installed.InstallLocation
+        $windowsRoot = Get-CanonicalPath $env:SystemRoot
+        $modules = [Collections.Generic.List[object]]::new()
+        $requiredRuntime = @{}
+        foreach ($entry in $state.record.runtime.PSObject.Properties) { $requiredRuntime[[string]$entry.Value] = $false }
+        foreach ($module in @($state.process.Modules)) {
+            Assert-NoReparsePath $module.FileName
+            $path = Get-CanonicalPath $module.FileName
+            $platformSignature = $null
+            if (Test-PathInside $path $installRoot) {
+                $relative = $path.Substring($installRoot.Length).TrimStart('\','/').Replace('\','/')
+                $expected = Get-RecordPayloadEntry $state.record $relative
+                $hash = Assert-FileMatchesRecord $path $expected "Loaded module $relative"
+                if ($requiredRuntime.ContainsKey($relative)) { $requiredRuntime[$relative] = $true }
+                $origin = 'package'
+            } elseif (Test-PathInside $path $windowsRoot) {
+                $relative = $null
+                $hash = (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToLowerInvariant()
+                $origin = 'windows'
+            } else {
+                $defenderRoot = Join-Path ([Environment]::GetFolderPath('CommonApplicationData')) 'Microsoft/Windows Defender/Platform'
+                $platformSignature = Get-VerifiedDefenderModuleEvidence -Path $path -PlatformRoot $defenderRoot
+                $relative = $null
+                $hash = $platformSignature.sha256
+                $origin = 'microsoft_defender_signed_platform'
+            }
+            $modules.Add([ordered]@{ name=$module.ModuleName; path=$path; origin=$origin; relative_path=$relative; sha256=$hash; platform_signature=$platformSignature })
+        }
+        foreach ($relative in $requiredRuntime.Keys) { if (-not $requiredRuntime[$relative]) { throw "Activated process did not load required packaged BeatQuay/Qt6 runtime: $relative" } }
+        return @($modules)
+}
+
 function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$RecordPath, [string]$SignToolPath, [string]$OutputPath) {
     $state = [ordered]@{
         package = $null; record = $null; output = $null; temporary = $null; signedCopy = $null
@@ -354,7 +388,8 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
         unsignedPackageSha256 = $null; signedPackageSha256 = $null; signTool = $null
         aumid = $null; processPackageFullName = $null; modules = @(); window = $null
         python = $Python; firstRun = $null; firstRunObservations = [ordered]@{}; workingDirectory = $null
-        executableSha256 = $null
+        executableSha256 = $null; workflow = $null; profile = $null; activationStartedUtc = $null
+        displayOriginalMode=$null; displayDevice=$null; displayRestoreRequired=$false; displayEvidence=$null
         cleanClose = $false; uninstallVerified = $false
     }
     $expectedIdentity = [ordered]@{
@@ -370,7 +405,11 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
             if (-not $argument) { throw 'Package, package record, SignTool, and output are required.' }
         }
         if (-not $state.python -or -not [IO.Path]::IsPathFullyQualified($state.python)) { throw 'Absolute qualification Python path is required.' }
-        if (Test-Path -LiteralPath (Join-Path $env:USERPROFILE '.beatquayrc.xml')) { throw 'Preexisting BeatQuay settings invalidate first-run qualification.' }
+        $profilePath=Join-Path $env:USERPROFILE '.beatquayrc.xml'
+        if (Test-Path -LiteralPath $profilePath) { throw 'Preexisting BeatQuay settings invalidate first-run qualification.' }
+        $state.profile=[ordered]@{path=$profilePath;source_commit=$env:GITHUB_SHA;absent_before_activation=$false;ownership_established=$false;
+            process_id=0;package_full_name=$null;sha256=$null;creation_utc=$null;initial_path=$null;projects=@();
+            observations=[Collections.Generic.List[object]]::new();cleanup_verified=$false}
         $state.workingDirectory = New-BeatQuayWorkingDirectoryRecord (Join-Path ([Environment]::GetFolderPath('MyDocuments')) 'BeatQuay') $env:GITHUB_SHA
         $state.package = (Resolve-Path -LiteralPath $PackagePath).Path
         $recordFile = (Resolve-Path -LiteralPath $RecordPath).Path
@@ -484,6 +523,9 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
             (Join-Path $PSScriptRoot 'verify_record.py'),'--record',$RecordPath,'--package',$state.package,
             '--source-commit',$env:GITHUB_SHA,'--installed-root',$state.installed.InstallLocation)
         Add-BeatQuayActivationTypes
+        if(Test-Path -LiteralPath $state.profile.path){throw 'Profile appeared before owned activation; preserving it'}
+        $state.profile.absent_before_activation=$true
+        $state.activationStartedUtc=[DateTime]::UtcNow
         $processId = [BeatQuayQualification.ActivationBroker]::Activate($state.aumid)
         $state.brokerProcessId = [int]$processId
         $state.process = [Diagnostics.Process]::GetProcessById([int]$processId)
@@ -503,45 +545,27 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
         } until ($state.process.MainWindowHandle -ne 0 -or [DateTime]::UtcNow -ge $deadline)
         if ($state.process.MainWindowHandle -eq 0) { throw 'Activated BeatQuay did not create a main window.' }
         $state.firstRun = Complete-BeatQuayFirstRun $state.process $state.workingDirectory $state.ownedPackageFullName $state.firstRunObservations
+        Confirm-BeatQuayConsumerProfile $state -Initial
         $state.processPackageFullName = [BeatQuayQualification.NativePackageProbe]::GetFullName($state.process.Handle)
         if ($state.processPackageFullName -cne [string]$state.installed.PackageFullName) { throw 'Activated process does not own the exact installed package full name.' }
         Start-Sleep -Seconds 3
         $state.process.Refresh()
         if ($state.process.HasExited -or $state.process.MainWindowHandle -eq 0 -or $state.process.MainWindowTitle -cne 'BeatQuay 1.0.0') { throw 'Activated BeatQuay did not survive the stable-window interval.' }
-        $installRoot = Get-CanonicalPath $state.installed.InstallLocation
-        $windowsRoot = Get-CanonicalPath $env:SystemRoot
-        $modules = [Collections.Generic.List[object]]::new()
-        $requiredRuntime = @{}
-        foreach ($entry in $state.record.runtime.PSObject.Properties) { $requiredRuntime[[string]$entry.Value] = $false }
-        foreach ($module in @($state.process.Modules)) {
-            Assert-NoReparsePath $module.FileName
-            $path = Get-CanonicalPath $module.FileName
-            $platformSignature = $null
-            if (Test-PathInside $path $installRoot) {
-                $relative = $path.Substring($installRoot.Length).TrimStart('\','/').Replace('\','/')
-                $expected = Get-RecordPayloadEntry $state.record $relative
-                $hash = Assert-FileMatchesRecord $path $expected "Loaded module $relative"
-                if ($requiredRuntime.ContainsKey($relative)) { $requiredRuntime[$relative] = $true }
-                $origin = 'package'
-            } elseif (Test-PathInside $path $windowsRoot) {
-                $relative = $null
-                $hash = (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToLowerInvariant()
-                $origin = 'windows'
-            } else {
-                $defenderRoot = Join-Path ([Environment]::GetFolderPath('CommonApplicationData')) 'Microsoft/Windows Defender/Platform'
-                $platformSignature = Get-VerifiedDefenderModuleEvidence -Path $path -PlatformRoot $defenderRoot
-                $relative = $null
-                $hash = $platformSignature.sha256
-                $origin = 'microsoft_defender_signed_platform'
-            }
-            $modules.Add([ordered]@{ name=$module.ModuleName; path=$path; origin=$origin; relative_path=$relative; sha256=$hash; platform_signature=$platformSignature })
-        }
-        foreach ($relative in $requiredRuntime.Keys) { if (-not $requiredRuntime[$relative]) { throw "Activated process did not load required packaged BeatQuay/Qt6 runtime: $relative" } }
-        $state.modules = @($modules)
+        $state.modules = @(Get-BeatQuayVerifiedModules $state)
         Write-NewUtf8Json (Join-Path $state.output 'loaded-modules.json') $state.modules
         $state.window = Get-WindowQualification $state.process $state.output
         $state.process.Refresh()
         if ($state.process.HasExited -or $state.process.MainWindowHandle -eq 0) { throw 'Activated BeatQuay did not survive the stable-window interval.' }
+    }.GetNewClosure()
+
+    $operations.ConsumerWorkflow = {
+        Invoke-BeatQuayConsumerWorkflow $state
+        if(-not $state.workflow -or -not $state.workflow.acceptance){throw 'Actual installed musical project/export workflow did not pass'}
+        $state.modules=@(Get-BeatQuayVerifiedModules $state)
+        # Original runtime checks now also cover the actual instrument loaded by the UI-created project.
+        $synth=@($state.modules|Where-Object {$_.origin -ceq 'package' -and $_.name -ieq 'kicker.dll'})
+        if($synth.Count -ne 1){throw 'Actual UI project did not load exactly one verified packaged Kicker synth'}
+        Write-NewUtf8Json (Join-Path $state.output 'loaded-modules-after-workflow.json') $state.modules
     }.GetNewClosure()
 
     $operations.CloseCleanly = {
@@ -549,6 +573,7 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
         $state.processExit = Get-BeatQuayProcessExitEvidence $state.process 15000
         if (-not $state.processExit.normal_exit) { throw ('Activated BeatQuay normal-close observation failed: ' + ($state.processExit | ConvertTo-Json -Compress)) }
         $state.cleanClose = $true
+        Confirm-BeatQuayConsumerProfile $state -AfterClose
     }.GetNewClosure()
 
     $operations.UninstallAndVerify = {
@@ -608,6 +633,13 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
         }
     }.GetNewClosure()
 
+    $operations.RemoveOwnedProfile = {
+        $terminated=$state.cleanupProcessExit -and $state.cleanupProcessExit.wait_completed -and -not $state.cleanupProcessExit.observation_error
+        Remove-BeatQuayOwnedProfile $state.profile ([bool]$terminated)
+    }.GetNewClosure()
+
+    $operations.RestoreDisplay = { Restore-BeatQuayConsumerDisplay $state }.GetNewClosure()
+
     $operations.RemoveOwnedWorkingDirectory = {
         if ($state.workingDirectory -and $state.workingDirectory.ownership_established -and
             (-not $state.cleanupProcessExit -or -not $state.cleanupProcessExit.wait_completed -or $state.cleanupProcessExit.observation_error)) {
@@ -618,6 +650,7 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
 
     $operations.RemoveTemporaryFiles = {
         if ($state.temporary -and (Test-Path -LiteralPath $state.temporary)) {
+            if($state.workflow -and (-not $state.cleanupProcessExit -or -not $state.cleanupProcessExit.wait_completed -or $state.cleanupProcessExit.observation_error)){throw 'Consumer process termination unproven; preserving temporary project/export files'}
             Remove-Item -LiteralPath $state.temporary -Recurse -Force -ErrorAction Stop
             if (Test-Path -LiteralPath $state.temporary) { throw 'Temporary signed-copy directory remains after cleanup.' }
         }
@@ -672,7 +705,10 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
         clean_close_verified = $state.cleanClose
         uninstall_verified = $state.uninstallVerified
         installation_qualification_passed = $qualificationPassed
-        workflow_acceptance = $false
+        workflow_acceptance = ($qualificationPassed -and $state.workflow -and $state.workflow.acceptance)
+        project_export_workflow = $state.workflow
+        owned_profile = $state.profile
+        native_display = $state.displayEvidence
         cleanup_restore_workflow_tested = $false
         duplicate_scanning_tested = $false
         upgrade_tested = $false
@@ -691,7 +727,7 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
     if (-not $qualificationPassed) {
         throw "BeatQuay installation qualification failed. Primary: $($result.primary_error); cleanup: $($result.cleanup_errors -join '; '); evidence: $($evidenceErrors -join '; ')"
     }
-    Write-Output 'PASS: broker-activated exact package, verified owned modules/window/close, uninstalled, and cleaned certificate state.'
+    Write-Output 'PASS: exact installed package completed actual project/edit/save/reopen/UI WAV export, verified files/modules/screens, normal close, uninstall and owned profile/certificate cleanup.'
 }
 
 if (-not $LibraryOnly) {

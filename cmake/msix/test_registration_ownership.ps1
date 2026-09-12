@@ -58,7 +58,7 @@ function Invoke-BeatQuayQualificationCore([Collections.IDictionary]$Operations) 
     # Native preflight is unavailable locally. Capture the empty preflight view;
     # actual Add/Get/Remove production closures run through the controlled adapter.
     $Operations.Preflight={ if (@(Get-AppxPackage -Name 'Trieflow.BeatQuay.Qualification').Count) { throw 'Fixture must start empty' } }
-    foreach ($name in @('PrepareSignedCopy','VerifyInstalledMedia','CaptureInstalledStderr','ActivateAndVerify','UninstallAndVerify','StopOwnedProcess','RemoveTrustedCertificate','RemovePersonalCertificate','RemoveTemporaryFiles')) {
+    foreach ($name in @('PrepareSignedCopy','VerifyInstalledMedia','CaptureInstalledStderr','ActivateAndVerify','ConsumerWorkflow','UninstallAndVerify','StopOwnedProcess','RemoveTrustedCertificate','RemovePersonalCertificate','RemoveTemporaryFiles')) {
         if ($name -eq 'UninstallAndVerify' -and $fixture.scenario -in @('normal-owned','normal-with-foreign')) { continue }
         $Operations[$name]={}
     }
