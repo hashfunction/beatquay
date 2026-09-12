@@ -16,7 +16,7 @@ clean pinned native build, tests, install, and render checks succeed, it:
 Before bootstrap, the entry point removes only the original TortoiseSVN MSI
 from the approved GitHub-hosted `win22` image `20260907.297.1`. This runner
 preparation checks the original MSI product identity, both original overlay DLL
-hashes and 72 installer-defined registry values in both registry views. It
+hashes and 90 installer-defined registry values in both registry views. It
 records original inputs twice, the exact system MSI command and original exit,
 then requires all relevant registrations and DLL files absent. Unknown images,
 versions, paths, shared overlay clients, mutations, read errors, reboot-required

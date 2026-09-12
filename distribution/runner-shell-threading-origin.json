@@ -1,0 +1,171 @@
+{
+  "original_msi": {
+    "bytes": 31268864,
+    "sha256": "244f3d754212ff65d057a1a02f99dd59f8b4c7ea4e4dd33eae8fb9b52895eec2"
+  },
+  "Registry": [
+    {
+      "Registry": "reg774CE1C3BF84E61F500C4176D38F7423.3C89127D_F335_46EB_8720_CAFE0C0FEB7E",
+      "Root": 2,
+      "Key": "Software\\Classes\\CLSID\\{C5994560-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+      "Name": "ThreadingModel",
+      "Value": "Apartment",
+      "Component_": "C__overlaydll.3C89127D_F335_46EB_8720_CAFE0C0FEB7E"
+    },
+    {
+      "Registry": "reg1CF5D3DE683D82AEF59FB4CA238BBE1C.3C89127D_F335_46EB_8720_CAFE0C0FEB7E",
+      "Root": 2,
+      "Key": "Software\\Classes\\CLSID\\{C5994561-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+      "Name": "ThreadingModel",
+      "Value": "Apartment",
+      "Component_": "C__overlaydll.3C89127D_F335_46EB_8720_CAFE0C0FEB7E"
+    },
+    {
+      "Registry": "regE649AF71B35A4ECEB7E4DDA906C20CA6.3C89127D_F335_46EB_8720_CAFE0C0FEB7E",
+      "Root": 2,
+      "Key": "Software\\Classes\\CLSID\\{C5994562-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+      "Name": "ThreadingModel",
+      "Value": "Apartment",
+      "Component_": "C__overlaydll.3C89127D_F335_46EB_8720_CAFE0C0FEB7E"
+    },
+    {
+      "Registry": "regBCAFAFFBBB687B0ABC4A2B4986CC3FFD.3C89127D_F335_46EB_8720_CAFE0C0FEB7E",
+      "Root": 2,
+      "Key": "Software\\Classes\\CLSID\\{C5994563-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+      "Name": "ThreadingModel",
+      "Value": "Apartment",
+      "Component_": "C__overlaydll.3C89127D_F335_46EB_8720_CAFE0C0FEB7E"
+    },
+    {
+      "Registry": "reg5B8B0637C2015EFFBF15796FD1459867.3C89127D_F335_46EB_8720_CAFE0C0FEB7E",
+      "Root": 2,
+      "Key": "Software\\Classes\\CLSID\\{C5994564-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+      "Name": "ThreadingModel",
+      "Value": "Apartment",
+      "Component_": "C__overlaydll.3C89127D_F335_46EB_8720_CAFE0C0FEB7E"
+    },
+    {
+      "Registry": "reg7BD44F5BFCE008477D893BE5CF66935D.3C89127D_F335_46EB_8720_CAFE0C0FEB7E",
+      "Root": 2,
+      "Key": "Software\\Classes\\CLSID\\{C5994565-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+      "Name": "ThreadingModel",
+      "Value": "Apartment",
+      "Component_": "C__overlaydll.3C89127D_F335_46EB_8720_CAFE0C0FEB7E"
+    },
+    {
+      "Registry": "reg71463152E1844C606C384DFEBA102086.3C89127D_F335_46EB_8720_CAFE0C0FEB7E",
+      "Root": 2,
+      "Key": "Software\\Classes\\CLSID\\{C5994566-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+      "Name": "ThreadingModel",
+      "Value": "Apartment",
+      "Component_": "C__overlaydll.3C89127D_F335_46EB_8720_CAFE0C0FEB7E"
+    },
+    {
+      "Registry": "regDA95E2F6364FEF701ADC2D9540E4D978.3C89127D_F335_46EB_8720_CAFE0C0FEB7E",
+      "Root": 2,
+      "Key": "Software\\Classes\\CLSID\\{C5994567-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+      "Name": "ThreadingModel",
+      "Value": "Apartment",
+      "Component_": "C__overlaydll.3C89127D_F335_46EB_8720_CAFE0C0FEB7E"
+    },
+    {
+      "Registry": "reg17FEB32D81B48233579EE4FDD7A5354B.3C89127D_F335_46EB_8720_CAFE0C0FEB7E",
+      "Root": 2,
+      "Key": "Software\\Classes\\CLSID\\{C5994568-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+      "Name": "ThreadingModel",
+      "Value": "Apartment",
+      "Component_": "C__overlaydll.3C89127D_F335_46EB_8720_CAFE0C0FEB7E"
+    },
+    {
+      "Registry": "reg774CE1C3BF84E61F500C4176D38F7423.9D3DBC93_494B_45A8_88D7_430AB5568B0F",
+      "Root": 2,
+      "Key": "Software\\Classes\\CLSID\\{C5994560-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+      "Name": "ThreadingModel",
+      "Value": "Apartment",
+      "Component_": "C__overlaydll.9D3DBC93_494B_45A8_88D7_430AB5568B0F"
+    },
+    {
+      "Registry": "reg1CF5D3DE683D82AEF59FB4CA238BBE1C.9D3DBC93_494B_45A8_88D7_430AB5568B0F",
+      "Root": 2,
+      "Key": "Software\\Classes\\CLSID\\{C5994561-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+      "Name": "ThreadingModel",
+      "Value": "Apartment",
+      "Component_": "C__overlaydll.9D3DBC93_494B_45A8_88D7_430AB5568B0F"
+    },
+    {
+      "Registry": "regE649AF71B35A4ECEB7E4DDA906C20CA6.9D3DBC93_494B_45A8_88D7_430AB5568B0F",
+      "Root": 2,
+      "Key": "Software\\Classes\\CLSID\\{C5994562-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+      "Name": "ThreadingModel",
+      "Value": "Apartment",
+      "Component_": "C__overlaydll.9D3DBC93_494B_45A8_88D7_430AB5568B0F"
+    },
+    {
+      "Registry": "regBCAFAFFBBB687B0ABC4A2B4986CC3FFD.9D3DBC93_494B_45A8_88D7_430AB5568B0F",
+      "Root": 2,
+      "Key": "Software\\Classes\\CLSID\\{C5994563-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+      "Name": "ThreadingModel",
+      "Value": "Apartment",
+      "Component_": "C__overlaydll.9D3DBC93_494B_45A8_88D7_430AB5568B0F"
+    },
+    {
+      "Registry": "reg5B8B0637C2015EFFBF15796FD1459867.9D3DBC93_494B_45A8_88D7_430AB5568B0F",
+      "Root": 2,
+      "Key": "Software\\Classes\\CLSID\\{C5994564-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+      "Name": "ThreadingModel",
+      "Value": "Apartment",
+      "Component_": "C__overlaydll.9D3DBC93_494B_45A8_88D7_430AB5568B0F"
+    },
+    {
+      "Registry": "reg7BD44F5BFCE008477D893BE5CF66935D.9D3DBC93_494B_45A8_88D7_430AB5568B0F",
+      "Root": 2,
+      "Key": "Software\\Classes\\CLSID\\{C5994565-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+      "Name": "ThreadingModel",
+      "Value": "Apartment",
+      "Component_": "C__overlaydll.9D3DBC93_494B_45A8_88D7_430AB5568B0F"
+    },
+    {
+      "Registry": "reg71463152E1844C606C384DFEBA102086.9D3DBC93_494B_45A8_88D7_430AB5568B0F",
+      "Root": 2,
+      "Key": "Software\\Classes\\CLSID\\{C5994566-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+      "Name": "ThreadingModel",
+      "Value": "Apartment",
+      "Component_": "C__overlaydll.9D3DBC93_494B_45A8_88D7_430AB5568B0F"
+    },
+    {
+      "Registry": "regDA95E2F6364FEF701ADC2D9540E4D978.9D3DBC93_494B_45A8_88D7_430AB5568B0F",
+      "Root": 2,
+      "Key": "Software\\Classes\\CLSID\\{C5994567-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+      "Name": "ThreadingModel",
+      "Value": "Apartment",
+      "Component_": "C__overlaydll.9D3DBC93_494B_45A8_88D7_430AB5568B0F"
+    },
+    {
+      "Registry": "reg17FEB32D81B48233579EE4FDD7A5354B.9D3DBC93_494B_45A8_88D7_430AB5568B0F",
+      "Root": 2,
+      "Key": "Software\\Classes\\CLSID\\{C5994568-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+      "Name": "ThreadingModel",
+      "Value": "Apartment",
+      "Component_": "C__overlaydll.9D3DBC93_494B_45A8_88D7_430AB5568B0F"
+    }
+  ],
+  "Class": [],
+  "Component": [
+    {
+      "Component": "C__overlaydll.3C89127D_F335_46EB_8720_CAFE0C0FEB7E",
+      "ComponentId": "{BC54248D-096E-4EF0-A072-EE0C3113DB93}",
+      "Directory_": "TortoiseOverlays.3C89127D_F335_46EB_8720_CAFE0C0FEB7E",
+      "Attributes": 256,
+      "Condition": "",
+      "KeyPath": "F__overlaydll.3C89127D_F335_46EB_8720_CAFE0C0FEB7E"
+    },
+    {
+      "Component": "C__overlaydll.9D3DBC93_494B_45A8_88D7_430AB5568B0F",
+      "ComponentId": "{8BBB749A-154B-4A35-ACC0-A48E26F2DE64}",
+      "Directory_": "TortoiseOverlays.9D3DBC93_494B_45A8_88D7_430AB5568B0F",
+      "Attributes": 0,
+      "Condition": "",
+      "KeyPath": "F__overlaydll.9D3DBC93_494B_45A8_88D7_430AB5568B0F"
+    }
+  ]
+}

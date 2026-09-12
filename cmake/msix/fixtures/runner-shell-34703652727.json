@@ -1,0 +1,780 @@
+{
+  "schema_version": 1,
+  "binding": {
+    "source_commit": "b2296ca0efbb6489867bdd8ca3e3dc5f95631a32",
+    "workflow_run_id": "34703652727",
+    "workflow_run_attempt": "1"
+  },
+  "context": {
+    "windows": true,
+    "os64": true,
+    "process64": true,
+    "ci": "true",
+    "actions": "true",
+    "environment": "github-hosted",
+    "repository": "hashfunction/beatquay",
+    "image_os": "win22",
+    "image_version": "20260907.297.1",
+    "system_root": "C:\\Windows"
+  },
+  "started_utc": "2026-09-12T15:56:51.4522336Z",
+  "pin_sha256": "4b123e3ef3e7de77969c1dbb9bf9e48ca04d1894ea0ea9af7c04a45b7ddc4474",
+  "before": {
+    "products": [
+      {
+        "key": "{23095FB3-EE67-4F2C-9827-7BE50F389442}",
+        "view": "Registry64",
+        "values": {
+          "DisplayName": "TortoiseSVN 1.14.9.29743 (64 bit)",
+          "DisplayVersion": "1.14.29743",
+          "Publisher": "TortoiseSVN",
+          "WindowsInstaller": 1,
+          "InstallLocation": "",
+          "UninstallString": "MsiExec.exe /I{23095FB3-EE67-4F2C-9827-7BE50F389442}"
+        },
+        "hive": "LocalMachine"
+      }
+    ],
+    "registry": [
+      {
+        "hive": "LocalMachine",
+        "value": "C:\\Program Files (x86)\\Common Files\\TortoiseOverlays\\TortoiseOverlays.dll",
+        "key": "Software\\Classes\\CLSID\\{C5994560-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry32",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "Apartment",
+        "key": "Software\\Classes\\CLSID\\{C5994560-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry32",
+        "name": "ThreadingModel"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "C:\\Program Files (x86)\\Common Files\\TortoiseOverlays\\TortoiseOverlays.dll",
+        "key": "Software\\Classes\\CLSID\\{C5994561-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry32",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "Apartment",
+        "key": "Software\\Classes\\CLSID\\{C5994561-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry32",
+        "name": "ThreadingModel"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "C:\\Program Files (x86)\\Common Files\\TortoiseOverlays\\TortoiseOverlays.dll",
+        "key": "Software\\Classes\\CLSID\\{C5994562-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry32",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "Apartment",
+        "key": "Software\\Classes\\CLSID\\{C5994562-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry32",
+        "name": "ThreadingModel"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "C:\\Program Files (x86)\\Common Files\\TortoiseOverlays\\TortoiseOverlays.dll",
+        "key": "Software\\Classes\\CLSID\\{C5994563-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry32",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "Apartment",
+        "key": "Software\\Classes\\CLSID\\{C5994563-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry32",
+        "name": "ThreadingModel"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "C:\\Program Files (x86)\\Common Files\\TortoiseOverlays\\TortoiseOverlays.dll",
+        "key": "Software\\Classes\\CLSID\\{C5994564-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry32",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "Apartment",
+        "key": "Software\\Classes\\CLSID\\{C5994564-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry32",
+        "name": "ThreadingModel"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "C:\\Program Files (x86)\\Common Files\\TortoiseOverlays\\TortoiseOverlays.dll",
+        "key": "Software\\Classes\\CLSID\\{C5994565-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry32",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "Apartment",
+        "key": "Software\\Classes\\CLSID\\{C5994565-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry32",
+        "name": "ThreadingModel"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "C:\\Program Files (x86)\\Common Files\\TortoiseOverlays\\TortoiseOverlays.dll",
+        "key": "Software\\Classes\\CLSID\\{C5994566-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry32",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "Apartment",
+        "key": "Software\\Classes\\CLSID\\{C5994566-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry32",
+        "name": "ThreadingModel"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "C:\\Program Files (x86)\\Common Files\\TortoiseOverlays\\TortoiseOverlays.dll",
+        "key": "Software\\Classes\\CLSID\\{C5994567-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry32",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "Apartment",
+        "key": "Software\\Classes\\CLSID\\{C5994567-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry32",
+        "name": "ThreadingModel"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "C:\\Program Files (x86)\\Common Files\\TortoiseOverlays\\TortoiseOverlays.dll",
+        "key": "Software\\Classes\\CLSID\\{C5994568-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry32",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "Apartment",
+        "key": "Software\\Classes\\CLSID\\{C5994568-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry32",
+        "name": "ThreadingModel"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{C5994560-53D9-4125-87C9-F193FC689CB2}",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ShellIconOverlayIdentifiers\\  Tortoise1Normal",
+        "kind": "String",
+        "view": "Registry32",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{C5994561-53D9-4125-87C9-F193FC689CB2}",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ShellIconOverlayIdentifiers\\  Tortoise2Modified",
+        "kind": "String",
+        "view": "Registry32",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{C5994562-53D9-4125-87C9-F193FC689CB2}",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ShellIconOverlayIdentifiers\\  Tortoise3Conflict",
+        "kind": "String",
+        "view": "Registry32",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{C5994563-53D9-4125-87C9-F193FC689CB2}",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ShellIconOverlayIdentifiers\\  Tortoise4Locked",
+        "kind": "String",
+        "view": "Registry32",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{C5994564-53D9-4125-87C9-F193FC689CB2}",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ShellIconOverlayIdentifiers\\  Tortoise5ReadOnly",
+        "kind": "String",
+        "view": "Registry32",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{C5994565-53D9-4125-87C9-F193FC689CB2}",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ShellIconOverlayIdentifiers\\  Tortoise6Deleted",
+        "kind": "String",
+        "view": "Registry32",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{C5994566-53D9-4125-87C9-F193FC689CB2}",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ShellIconOverlayIdentifiers\\  Tortoise7Added",
+        "kind": "String",
+        "view": "Registry32",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{C5994567-53D9-4125-87C9-F193FC689CB2}",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ShellIconOverlayIdentifiers\\  Tortoise8Ignored",
+        "kind": "String",
+        "view": "Registry32",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{C5994568-53D9-4125-87C9-F193FC689CB2}",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ShellIconOverlayIdentifiers\\  Tortoise9Unversioned",
+        "kind": "String",
+        "view": "Registry32",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "TortoiseOverlays",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved",
+        "kind": "String",
+        "view": "Registry32",
+        "name": "{C5994560-53D9-4125-87C9-F193FC689CB2}"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "TortoiseOverlays",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved",
+        "kind": "String",
+        "view": "Registry32",
+        "name": "{C5994561-53D9-4125-87C9-F193FC689CB2}"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "TortoiseOverlays",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved",
+        "kind": "String",
+        "view": "Registry32",
+        "name": "{C5994562-53D9-4125-87C9-F193FC689CB2}"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "TortoiseOverlays",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved",
+        "kind": "String",
+        "view": "Registry32",
+        "name": "{C5994563-53D9-4125-87C9-F193FC689CB2}"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "TortoiseOverlays",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved",
+        "kind": "String",
+        "view": "Registry32",
+        "name": "{C5994564-53D9-4125-87C9-F193FC689CB2}"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "TortoiseOverlays",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved",
+        "kind": "String",
+        "view": "Registry32",
+        "name": "{C5994565-53D9-4125-87C9-F193FC689CB2}"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "TortoiseOverlays",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved",
+        "kind": "String",
+        "view": "Registry32",
+        "name": "{C5994566-53D9-4125-87C9-F193FC689CB2}"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "TortoiseOverlays",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved",
+        "kind": "String",
+        "view": "Registry32",
+        "name": "{C5994567-53D9-4125-87C9-F193FC689CB2}"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "TortoiseOverlays",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved",
+        "kind": "String",
+        "view": "Registry32",
+        "name": "{C5994568-53D9-4125-87C9-F193FC689CB2}"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{3035134E-7B7D-4FCC-81B4-1E394CA267EB}",
+        "key": "Software\\TortoiseOverlays\\Added",
+        "kind": "String",
+        "view": "Registry32",
+        "name": "SVN"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{30351348-7B7D-4FCC-81B4-1E394CA267EB}",
+        "key": "Software\\TortoiseOverlays\\Conflict",
+        "kind": "String",
+        "view": "Registry32",
+        "name": "SVN"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{3035134C-7B7D-4FCC-81B4-1E394CA267EB}",
+        "key": "Software\\TortoiseOverlays\\Deleted",
+        "kind": "String",
+        "view": "Registry32",
+        "name": "SVN"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{3035134F-7B7D-4FCC-81B4-1E394CA267EB}",
+        "key": "Software\\TortoiseOverlays\\Ignored",
+        "kind": "String",
+        "view": "Registry32",
+        "name": "SVN"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{3035134D-7B7D-4FCC-81B4-1E394CA267EB}",
+        "key": "Software\\TortoiseOverlays\\Locked",
+        "kind": "String",
+        "view": "Registry32",
+        "name": "SVN"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{30351347-7B7D-4FCC-81B4-1E394CA267EB}",
+        "key": "Software\\TortoiseOverlays\\Modified",
+        "kind": "String",
+        "view": "Registry32",
+        "name": "SVN"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{30351346-7B7D-4FCC-81B4-1E394CA267EB}",
+        "key": "Software\\TortoiseOverlays\\Normal",
+        "kind": "String",
+        "view": "Registry32",
+        "name": "SVN"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{3035134B-7B7D-4FCC-81B4-1E394CA267EB}",
+        "key": "Software\\TortoiseOverlays\\ReadOnly",
+        "kind": "String",
+        "view": "Registry32",
+        "name": "SVN"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{30351350-7B7D-4FCC-81B4-1E394CA267EB}",
+        "key": "Software\\TortoiseOverlays\\Unversioned",
+        "kind": "String",
+        "view": "Registry32",
+        "name": "SVN"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "C:\\Program Files\\Common Files\\TortoiseOverlays\\TortoiseOverlays.dll",
+        "key": "Software\\Classes\\CLSID\\{C5994560-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry64",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "Apartment",
+        "key": "Software\\Classes\\CLSID\\{C5994560-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry64",
+        "name": "ThreadingModel"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "C:\\Program Files\\Common Files\\TortoiseOverlays\\TortoiseOverlays.dll",
+        "key": "Software\\Classes\\CLSID\\{C5994561-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry64",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "Apartment",
+        "key": "Software\\Classes\\CLSID\\{C5994561-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry64",
+        "name": "ThreadingModel"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "C:\\Program Files\\Common Files\\TortoiseOverlays\\TortoiseOverlays.dll",
+        "key": "Software\\Classes\\CLSID\\{C5994562-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry64",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "Apartment",
+        "key": "Software\\Classes\\CLSID\\{C5994562-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry64",
+        "name": "ThreadingModel"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "C:\\Program Files\\Common Files\\TortoiseOverlays\\TortoiseOverlays.dll",
+        "key": "Software\\Classes\\CLSID\\{C5994563-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry64",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "Apartment",
+        "key": "Software\\Classes\\CLSID\\{C5994563-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry64",
+        "name": "ThreadingModel"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "C:\\Program Files\\Common Files\\TortoiseOverlays\\TortoiseOverlays.dll",
+        "key": "Software\\Classes\\CLSID\\{C5994564-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry64",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "Apartment",
+        "key": "Software\\Classes\\CLSID\\{C5994564-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry64",
+        "name": "ThreadingModel"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "C:\\Program Files\\Common Files\\TortoiseOverlays\\TortoiseOverlays.dll",
+        "key": "Software\\Classes\\CLSID\\{C5994565-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry64",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "Apartment",
+        "key": "Software\\Classes\\CLSID\\{C5994565-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry64",
+        "name": "ThreadingModel"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "C:\\Program Files\\Common Files\\TortoiseOverlays\\TortoiseOverlays.dll",
+        "key": "Software\\Classes\\CLSID\\{C5994566-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry64",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "Apartment",
+        "key": "Software\\Classes\\CLSID\\{C5994566-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry64",
+        "name": "ThreadingModel"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "C:\\Program Files\\Common Files\\TortoiseOverlays\\TortoiseOverlays.dll",
+        "key": "Software\\Classes\\CLSID\\{C5994567-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry64",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "Apartment",
+        "key": "Software\\Classes\\CLSID\\{C5994567-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry64",
+        "name": "ThreadingModel"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "C:\\Program Files\\Common Files\\TortoiseOverlays\\TortoiseOverlays.dll",
+        "key": "Software\\Classes\\CLSID\\{C5994568-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry64",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "Apartment",
+        "key": "Software\\Classes\\CLSID\\{C5994568-53D9-4125-87C9-F193FC689CB2}\\InProcServer32",
+        "kind": "String",
+        "view": "Registry64",
+        "name": "ThreadingModel"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{C5994560-53D9-4125-87C9-F193FC689CB2}",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ShellIconOverlayIdentifiers\\  Tortoise1Normal",
+        "kind": "String",
+        "view": "Registry64",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{C5994561-53D9-4125-87C9-F193FC689CB2}",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ShellIconOverlayIdentifiers\\  Tortoise2Modified",
+        "kind": "String",
+        "view": "Registry64",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{C5994562-53D9-4125-87C9-F193FC689CB2}",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ShellIconOverlayIdentifiers\\  Tortoise3Conflict",
+        "kind": "String",
+        "view": "Registry64",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{C5994563-53D9-4125-87C9-F193FC689CB2}",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ShellIconOverlayIdentifiers\\  Tortoise4Locked",
+        "kind": "String",
+        "view": "Registry64",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{C5994564-53D9-4125-87C9-F193FC689CB2}",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ShellIconOverlayIdentifiers\\  Tortoise5ReadOnly",
+        "kind": "String",
+        "view": "Registry64",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{C5994565-53D9-4125-87C9-F193FC689CB2}",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ShellIconOverlayIdentifiers\\  Tortoise6Deleted",
+        "kind": "String",
+        "view": "Registry64",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{C5994566-53D9-4125-87C9-F193FC689CB2}",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ShellIconOverlayIdentifiers\\  Tortoise7Added",
+        "kind": "String",
+        "view": "Registry64",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{C5994567-53D9-4125-87C9-F193FC689CB2}",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ShellIconOverlayIdentifiers\\  Tortoise8Ignored",
+        "kind": "String",
+        "view": "Registry64",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{C5994568-53D9-4125-87C9-F193FC689CB2}",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ShellIconOverlayIdentifiers\\  Tortoise9Unversioned",
+        "kind": "String",
+        "view": "Registry64",
+        "name": ""
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "TortoiseOverlays",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved",
+        "kind": "String",
+        "view": "Registry64",
+        "name": "{C5994560-53D9-4125-87C9-F193FC689CB2}"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "TortoiseOverlays",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved",
+        "kind": "String",
+        "view": "Registry64",
+        "name": "{C5994561-53D9-4125-87C9-F193FC689CB2}"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "TortoiseOverlays",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved",
+        "kind": "String",
+        "view": "Registry64",
+        "name": "{C5994562-53D9-4125-87C9-F193FC689CB2}"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "TortoiseOverlays",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved",
+        "kind": "String",
+        "view": "Registry64",
+        "name": "{C5994563-53D9-4125-87C9-F193FC689CB2}"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "TortoiseOverlays",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved",
+        "kind": "String",
+        "view": "Registry64",
+        "name": "{C5994564-53D9-4125-87C9-F193FC689CB2}"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "TortoiseOverlays",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved",
+        "kind": "String",
+        "view": "Registry64",
+        "name": "{C5994565-53D9-4125-87C9-F193FC689CB2}"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "TortoiseOverlays",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved",
+        "kind": "String",
+        "view": "Registry64",
+        "name": "{C5994566-53D9-4125-87C9-F193FC689CB2}"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "TortoiseOverlays",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved",
+        "kind": "String",
+        "view": "Registry64",
+        "name": "{C5994567-53D9-4125-87C9-F193FC689CB2}"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "TortoiseOverlays",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved",
+        "kind": "String",
+        "view": "Registry64",
+        "name": "{C5994568-53D9-4125-87C9-F193FC689CB2}"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{3035134E-7B7D-4FCC-81B4-1E394CA267EB}",
+        "key": "Software\\TortoiseOverlays\\Added",
+        "kind": "String",
+        "view": "Registry64",
+        "name": "SVN"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{30351348-7B7D-4FCC-81B4-1E394CA267EB}",
+        "key": "Software\\TortoiseOverlays\\Conflict",
+        "kind": "String",
+        "view": "Registry64",
+        "name": "SVN"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{3035134C-7B7D-4FCC-81B4-1E394CA267EB}",
+        "key": "Software\\TortoiseOverlays\\Deleted",
+        "kind": "String",
+        "view": "Registry64",
+        "name": "SVN"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{3035134F-7B7D-4FCC-81B4-1E394CA267EB}",
+        "key": "Software\\TortoiseOverlays\\Ignored",
+        "kind": "String",
+        "view": "Registry64",
+        "name": "SVN"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{3035134D-7B7D-4FCC-81B4-1E394CA267EB}",
+        "key": "Software\\TortoiseOverlays\\Locked",
+        "kind": "String",
+        "view": "Registry64",
+        "name": "SVN"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{30351347-7B7D-4FCC-81B4-1E394CA267EB}",
+        "key": "Software\\TortoiseOverlays\\Modified",
+        "kind": "String",
+        "view": "Registry64",
+        "name": "SVN"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{30351346-7B7D-4FCC-81B4-1E394CA267EB}",
+        "key": "Software\\TortoiseOverlays\\Normal",
+        "kind": "String",
+        "view": "Registry64",
+        "name": "SVN"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{3035134B-7B7D-4FCC-81B4-1E394CA267EB}",
+        "key": "Software\\TortoiseOverlays\\ReadOnly",
+        "kind": "String",
+        "view": "Registry64",
+        "name": "SVN"
+      },
+      {
+        "hive": "LocalMachine",
+        "value": "{30351350-7B7D-4FCC-81B4-1E394CA267EB}",
+        "key": "Software\\TortoiseOverlays\\Unversioned",
+        "kind": "String",
+        "view": "Registry64",
+        "name": "SVN"
+      }
+    ],
+    "files": [
+      {
+        "sha256": "45a6942bec99b4975b70ec2209037de1b45b3c8e1ff47edff4b9c275f55f8976",
+        "path": "C:\\Program Files (x86)\\Common Files\\TortoiseOverlays\\TortoiseOverlays.dll",
+        "bytes": 106184
+      },
+      {
+        "sha256": "65c22cb11e8415f31f25a0273abe7c68ffa0a39bcd7d74c2e2ac9d9b59231f5c",
+        "path": "C:\\Program Files\\Common Files\\TortoiseOverlays\\TortoiseOverlays.dll",
+        "bytes": 142024
+      }
+    ],
+    "errors": []
+  },
+  "rechecked": null,
+  "uninstall": null,
+  "after": null,
+  "prepared": false,
+  "error": "Unknown original Tortoise registry",
+  "completed_utc": "2026-09-12T15:56:52.2406104Z"
+}

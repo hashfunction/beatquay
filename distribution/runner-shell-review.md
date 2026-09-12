@@ -39,7 +39,7 @@ that either complete lifecycle or a Store export has passed on Windows.
   (106,184 bytes). Both File-table versions are `1.1.5.29440`. The MSI Registry
   table supplies the nine overlay CLSIDs, exact two-leading-space shell names,
   in-process server paths, Approved entries and SVN provider mappings in each
-  registry view. These 72 values are retained in `runner-shell-inputs.json`.
+  registry view. These 90 values are retained in `runner-shell-inputs.json`.
   Unrelated icon preferences are not runtime DLL registrations. Any additional
   provider client, alias, unexpected value, subtree or DLL path fails inspection.
 - The app already uses Qt's non-native file dialog and suppresses custom folder
@@ -121,3 +121,28 @@ requires that commit to equal the run's actual checkout and anonymous public Git
 tree; a private source commit or a previous successful source is invalid. Its
 only two final outputs remain the unsigned `BeatSprig_1.0.1.0_x64.msix` and its
 `.export.json` receipt. No native run is dispatched by this change.
+
+## Original Windows registry correction
+
+Run 34703652727 stopped before MSI invocation because its original observation
+contained 90 registry values and the first pin enumerated 72. The sole difference
+was 18 `ThreadingModel=Apartment` values, one for each of nine original overlay
+classes in both registry views. Original DLL bytes, product and all other
+registry values matched. The unchanged 28,148-byte failed receipt is retained in
+`cmake/msix/fixtures/runner-shell-34703652727.json`, SHA-256
+`30a7a4732ef73f8580f77d3ebcfebbab07d969f69907c0de7b66dd362a15185f`.
+
+An independent read of the original SHA-256-pinned MSI Registry table found all
+18 entries. Their two Component records explicitly have attributes 256 and 0
+and the original x64/x86 overlay file key paths. The first audit selected rows
+by TortoiseOverlay text, which omitted these rows named ThreadingModel with
+value Apartment and generic C__overlaydll component names. No Class-table
+inference or new runtime allowlist is used. Exact original rows and component
+records are retained in `runner-shell-threading-origin.json`; the pin adds only
+these 18 installer-declared values. The complete 90-value set equals the actual
+Windows observation.
+
+The production verifier replay of the unchanged original failed before this
+data correction and passed afterward. Missing or changed threading registrations
+still fail. The original receipt remains `prepared=false`, with `uninstall=null`;
+no successful uninstall or Windows lifecycle is claimed from this correction.

@@ -103,6 +103,24 @@
     {"hive":"LocalMachine","view":"Registry64","key":"Software\\TortoiseOverlays\\Modified","name":"SVN","value":"{30351347-7B7D-4FCC-81B4-1E394CA267EB}","kind":"String"},
     {"hive":"LocalMachine","view":"Registry64","key":"Software\\TortoiseOverlays\\Normal","name":"SVN","value":"{30351346-7B7D-4FCC-81B4-1E394CA267EB}","kind":"String"},
     {"hive":"LocalMachine","view":"Registry64","key":"Software\\TortoiseOverlays\\ReadOnly","name":"SVN","value":"{3035134B-7B7D-4FCC-81B4-1E394CA267EB}","kind":"String"},
-    {"hive":"LocalMachine","view":"Registry64","key":"Software\\TortoiseOverlays\\Unversioned","name":"SVN","value":"{30351350-7B7D-4FCC-81B4-1E394CA267EB}","kind":"String"}
+    {"hive":"LocalMachine","view":"Registry64","key":"Software\\TortoiseOverlays\\Unversioned","name":"SVN","value":"{30351350-7B7D-4FCC-81B4-1E394CA267EB}","kind":"String"},
+    {"hive":"LocalMachine","view":"Registry32","key":"Software\\Classes\\CLSID\\{C5994560-53D9-4125-87C9-F193FC689CB2}\\InProcServer32","name":"ThreadingModel","value":"Apartment","kind":"String"},
+    {"hive":"LocalMachine","view":"Registry32","key":"Software\\Classes\\CLSID\\{C5994561-53D9-4125-87C9-F193FC689CB2}\\InProcServer32","name":"ThreadingModel","value":"Apartment","kind":"String"},
+    {"hive":"LocalMachine","view":"Registry32","key":"Software\\Classes\\CLSID\\{C5994562-53D9-4125-87C9-F193FC689CB2}\\InProcServer32","name":"ThreadingModel","value":"Apartment","kind":"String"},
+    {"hive":"LocalMachine","view":"Registry32","key":"Software\\Classes\\CLSID\\{C5994563-53D9-4125-87C9-F193FC689CB2}\\InProcServer32","name":"ThreadingModel","value":"Apartment","kind":"String"},
+    {"hive":"LocalMachine","view":"Registry32","key":"Software\\Classes\\CLSID\\{C5994564-53D9-4125-87C9-F193FC689CB2}\\InProcServer32","name":"ThreadingModel","value":"Apartment","kind":"String"},
+    {"hive":"LocalMachine","view":"Registry32","key":"Software\\Classes\\CLSID\\{C5994565-53D9-4125-87C9-F193FC689CB2}\\InProcServer32","name":"ThreadingModel","value":"Apartment","kind":"String"},
+    {"hive":"LocalMachine","view":"Registry32","key":"Software\\Classes\\CLSID\\{C5994566-53D9-4125-87C9-F193FC689CB2}\\InProcServer32","name":"ThreadingModel","value":"Apartment","kind":"String"},
+    {"hive":"LocalMachine","view":"Registry32","key":"Software\\Classes\\CLSID\\{C5994567-53D9-4125-87C9-F193FC689CB2}\\InProcServer32","name":"ThreadingModel","value":"Apartment","kind":"String"},
+    {"hive":"LocalMachine","view":"Registry32","key":"Software\\Classes\\CLSID\\{C5994568-53D9-4125-87C9-F193FC689CB2}\\InProcServer32","name":"ThreadingModel","value":"Apartment","kind":"String"},
+    {"hive":"LocalMachine","view":"Registry64","key":"Software\\Classes\\CLSID\\{C5994560-53D9-4125-87C9-F193FC689CB2}\\InProcServer32","name":"ThreadingModel","value":"Apartment","kind":"String"},
+    {"hive":"LocalMachine","view":"Registry64","key":"Software\\Classes\\CLSID\\{C5994561-53D9-4125-87C9-F193FC689CB2}\\InProcServer32","name":"ThreadingModel","value":"Apartment","kind":"String"},
+    {"hive":"LocalMachine","view":"Registry64","key":"Software\\Classes\\CLSID\\{C5994562-53D9-4125-87C9-F193FC689CB2}\\InProcServer32","name":"ThreadingModel","value":"Apartment","kind":"String"},
+    {"hive":"LocalMachine","view":"Registry64","key":"Software\\Classes\\CLSID\\{C5994563-53D9-4125-87C9-F193FC689CB2}\\InProcServer32","name":"ThreadingModel","value":"Apartment","kind":"String"},
+    {"hive":"LocalMachine","view":"Registry64","key":"Software\\Classes\\CLSID\\{C5994564-53D9-4125-87C9-F193FC689CB2}\\InProcServer32","name":"ThreadingModel","value":"Apartment","kind":"String"},
+    {"hive":"LocalMachine","view":"Registry64","key":"Software\\Classes\\CLSID\\{C5994565-53D9-4125-87C9-F193FC689CB2}\\InProcServer32","name":"ThreadingModel","value":"Apartment","kind":"String"},
+    {"hive":"LocalMachine","view":"Registry64","key":"Software\\Classes\\CLSID\\{C5994566-53D9-4125-87C9-F193FC689CB2}\\InProcServer32","name":"ThreadingModel","value":"Apartment","kind":"String"},
+    {"hive":"LocalMachine","view":"Registry64","key":"Software\\Classes\\CLSID\\{C5994567-53D9-4125-87C9-F193FC689CB2}\\InProcServer32","name":"ThreadingModel","value":"Apartment","kind":"String"},
+    {"hive":"LocalMachine","view":"Registry64","key":"Software\\Classes\\CLSID\\{C5994568-53D9-4125-87C9-F193FC689CB2}\\InProcServer32","name":"ThreadingModel","value":"Apartment","kind":"String"}
   ]
 }

@@ -17,3 +17,6 @@ data/locale/* linguist-documentation
 distribution/qt-notices/** -text -whitespace
 distribution/native-source/notices/** -text -whitespace
 distribution/native-source/GPL-3.0.txt -text -whitespace
+
+# Original Windows observation remains byte-identical across checkouts.
+cmake/msix/fixtures/runner-shell-34703652727.json -text

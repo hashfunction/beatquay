@@ -85,4 +85,17 @@ try{
         }
     }finally{$env:GITHUB_SHA=$oldBinding[0];$env:GITHUB_RUN_ID=$oldBinding[1];$env:GITHUB_RUN_ATTEMPT=$oldBinding[2]}
 }finally{Remove-Item -LiteralPath $fixture -Recurse -Force}
+# Original Windows observation is retained byte-for-byte; it is a failed run,
+# never a synthetic preparation-success or native uninstall claim.
+$originalPath=Join-Path $PSScriptRoot 'fixtures/runner-shell-34703652727.json'
+if((Get-Item -LiteralPath $originalPath).Length -ne 28148 -or (Get-FileHash -LiteralPath $originalPath).Hash.ToLowerInvariant() -cne '30a7a4732ef73f8580f77d3ebcfebbab07d969f69907c0de7b66dd362a15185f'){throw 'Original Windows shell receipt changed'}
+$original=Get-Content -LiteralPath $originalPath -Raw|ConvertFrom-Json -AsHashtable
+if($original.prepared -or $null -ne $original.uninstall -or $original.binding.workflow_run_id -cne '34703652727'){throw 'Original failed shell receipt was reinterpreted'}
+Assert-BeatSprigShellState $original.before $pin 'present'
+$threading=@($original.before.registry|Where-Object name -CEQ 'ThreadingModel')
+if($threading.Count -ne 18 -or @($threading|Where-Object value -CNE 'Apartment').Count){throw 'Original apartment registration set differs'}
+$bad=Copy-Data $original.before;($bad.registry|Where-Object name -CEQ 'ThreadingModel'|Select-Object -First 1).value='Both'
+Refuses {Assert-BeatSprigShellState $bad $pin 'present'} 'registry'
+$bad=Copy-Data $original.before;$bad.registry=@($bad.registry|Where-Object name -CNE 'ThreadingModel')
+Refuses {Assert-BeatSprigShellState $bad $pin 'present'} 'registry'
 Write-Output 'PASS exact runner/product/DLL/registry/shared-client refusals, read failures, strict absence, mutation before uninstall, original exits and production sequencing.'
