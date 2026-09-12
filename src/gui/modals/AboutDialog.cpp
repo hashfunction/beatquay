@@ -64,7 +64,10 @@ AboutDialog::AboutDialog(QWidget* parent) :
 
 	authorLabel->setPlainText( embed::getText( "AUTHORS" ) );
 
-	licenseLabel->setPlainText( embed::getText( "LICENSE.txt" ) );
+	licenseLabel->setPlainText( embed::getText( "COMBINED-LICENSE.md" ) + "\n\n"
+		+ embed::getText( "GPL-3.0.txt" ) + "\n\n"
+		+ tr("Original application license (preserved):") + "\n\n"
+		+ embed::getText( "LICENSE.txt" ) );
 
 	involvedLabel->setPlainText( embed::getText( "CONTRIBUTORS" ) );
 }

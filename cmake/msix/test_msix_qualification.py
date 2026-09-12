@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
 """Real filesystem and archive tests for BeatQuay's qualification package."""
 import json
+import hashlib
 from pathlib import Path
+import shutil
 import struct
 import tempfile
 import unittest
+from unittest.mock import patch
 import zipfile
 import zlib
 import msix_qualification as msix
+REPOSITORY = Path(__file__).resolve().parents[2]
 
 def png(size=16):
     raw=b''.join(b'\0'+bytes((20,80,100,255))*size for _ in range(size))
@@ -17,20 +21,61 @@ def png(size=16):
 class QualificationTests(unittest.TestCase):
     def setUp(self):
         temp=tempfile.TemporaryDirectory(); self.addCleanup(temp.cleanup)
-        self.root=Path(temp.name); self.release=self.root/'release'; self.source=self.root/'source'; self.evidence=self.root/'evidence'; self.commit='a'*40
+        self.root=Path(temp.name).resolve(); self.release=self.root/'release'; self.source=self.root/'source'; self.evidence=self.root/'evidence'; self.commit='a'*40
         files={name:('stage:'+name).encode() for name in msix.REQUIRED_RELEASE_FILES}; files['manual.pdf']=b'ordinary complete stage file'
+        files['msvcp140.dll']=b'exact original Microsoft fixture'
         for name,data in files.items():
             path=self.release/name; path.parent.mkdir(parents=True,exist_ok=True); path.write_bytes(data)
         for name in msix.SOURCE_FILES:
-            path=self.source/name; path.parent.mkdir(parents=True,exist_ok=True); path.write_bytes(files.get(name,('source:'+name).encode()))
+            path=self.source/name; path.parent.mkdir(parents=True,exist_ok=True); path.write_bytes(files.get(name,(REPOSITORY/name).read_bytes()))
+        for folder in ('distribution/native-source','distribution/qt-notices'):
+            shutil.copytree(REPOSITORY/folder,self.source/folder)
         self.artwork=self.source/'data/branding/beatquay-256.png'; self.artwork.parent.mkdir(parents=True,exist_ok=True); self.artwork.write_bytes(png())
-        (self.evidence/'notices/qt').mkdir(parents=True); (self.evidence/'notices/qt/LGPL-3.0-only.txt').write_bytes(b'Qt license')
-        (self.evidence/'notices/zlib').mkdir(); (self.evidence/'notices/zlib/copyright.txt').write_bytes(b'zlib notice')
+        (self.evidence/'notices').mkdir(parents=True)
+        shutil.copytree(self.source/'distribution/qt-notices/6.11.2',self.evidence/'notices/qt')
         for name in msix.EVIDENCE_FILES:
             path=self.evidence/name
             if not path.exists(): path.write_bytes(b'fixture')
         (self.evidence/'candidate-inputs.json').write_bytes((self.source/'distribution/candidate-inputs.json').read_bytes())
+        self.seed_source_and_runtime_evidence(files['msvcp140.dll'])
         self.refresh_evidence(); self.inventory=self.root/'package-input.json'; self.refresh_inventory()
+
+    def seed_source_and_runtime_evidence(self, runtime):
+        native=msix.native_source; root=self.source/'distribution/native-source'
+        release=native.load_release(root/'source-release.json')
+        for name,data in native.original_notices(root).items():
+            target=self.evidence/'notices/native'/name;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(data)
+        checked=[{k:x[k] for k in ('owner','file','bytes','sha256','sha512')} for x in release['archives'] if 'recipeSha512' in x]
+        build=dict(schemaVersion=1,sourceCommit=self.commit,applicationSourceUrl=native.REPOSITORY+'/tree/'+self.commit,
+            sourceReleaseManifest=native.record((root/'source-release.json').read_bytes()),
+            originalNoticeManifest=native.record((root/'notice-manifest.json').read_bytes()),preparedArchiveCount=17,
+            actualVcpkgSourceArchives=checked,qtBinaryInputsBound=True,compiledModulePinsBound=True,
+            publicationVerified=False,correspondingSourceComplete=False,licenseClearanceClaimed=False)
+        (self.evidence/'notices/native/build-source.json').write_text(json.dumps(build))
+        (self.evidence/'qt-downloads.json').write_text(json.dumps(release['qtBinaryInputs']))
+        (self.evidence/'dependency-downloads.json').write_text(json.dumps([{k:x[k] for k in ('file','bytes','sha256')} for x in release['archives'] if 'recipeSha512' in x]))
+        for port,name in native.COPYRIGHT_FILES.items():
+            target=self.evidence/'notices/vcpkg'/port/'copyright.txt';target.parent.mkdir(parents=True)
+            target.write_bytes((root/'notices/vcpkg'/port/name).read_bytes())
+        redist='C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Redist/MSVC/14.44.35112'
+        original=redist+'/x64/Microsoft.VC143.CRT/msvcp140.dll';module='C:/CMake/Modules/InstallRequiredSystemLibraries.cmake'
+        origin_file=self.root/'original-runtime.dll';origin_file.write_bytes(runtime)
+        module_file=self.root/'discovery-module.cmake';module_file.write_bytes(b'real discovery fixture bytes')
+        selected=dict(schemaVersion=1,sourcePaths=[original],architecture='x64',buildType='RelWithDebInfo',
+            msvcRedistRoot=redist,windowsKitsRoot='C:/Program Files (x86)/Windows Kits/10',discoveryModule=module,
+            discoveryModuleSha256=hashlib.sha256(module_file.read_bytes()).hexdigest(),cmakeVersion='3.31.6')
+        selector_path=self.evidence/'ms-runtime-selection.json';selector_path.write_text(json.dumps(selected))
+        origin=dict(schemaVersion=1,sourceCommit=self.commit,selectionSha256=hashlib.sha256(selector_path.read_bytes()).hexdigest(),
+            files=[dict(path='msvcp140.dll',sourcePath=original,bytes=len(runtime),sha256=hashlib.sha256(runtime).hexdigest(),
+                fileVersion='fixture-version',productVersion='fixture-product-version',companyName='Microsoft Corporation',
+                signatureStatus='NotSigned',signerSubject='')],licenseClearanceClaimed=False,redistributionTerms=msix.ms_runtime_origins.TERMS)
+        (self.evidence/'ms-runtime-origins.json').write_text(json.dumps(origin))
+        # Only resolution of these two Windows-only source paths is redirected to
+        # owned fixture files. The production verifier and all actual file reads,
+        # hashes, stage comparisons and path predicates execute unchanged.
+        reader=msix.file_record;mapping={original:origin_file,module:module_file}
+        override=patch.object(msix,'file_record',lambda path:reader(mapping.get(str(path),path)))
+        override.start();self.addCleanup(override.stop)
     def refresh_evidence(self):
         files=msix.inventory_tree(self.release)
         rows=[dict(path=name.replace('/','\\'),bytes=row['bytes'],sha256=row['sha256'].upper()) for name,row in files.items()]
@@ -47,7 +92,29 @@ class QualificationTests(unittest.TestCase):
     def stage(self): return msix.stage_release(self.release,self.artwork,self.root/'stage',self.commit,self.inventory,self.evidence,self.source)
     def test_complete_stage_binds_whole_input_notices_and_internal_host(self):
         record=self.stage(); self.assertEqual(record['identity']['executable'],'beatsprig.exe'); self.assertEqual(record['releaseInput'],msix.inventory_tree(self.release)); self.assertEqual(record['payload'],msix.inventory_tree(self.root/'stage'))
-        self.assertEqual((self.root/'stage/licenses/BeatSprig/LICENSE.txt').read_bytes(),(self.source/'LICENSE.txt').read_bytes()); self.assertEqual((self.root/'stage/licenses/dependencies/qt/LGPL-3.0-only.txt').read_bytes(),b'Qt license'); self.assertFalse(record['licenseClearanceClaimed']); self.assertFalse(record['correspondingSourceComplete'])
+        self.assertEqual((self.root/'stage/licenses/BeatSprig/LICENSE.txt').read_bytes(),(self.source/'LICENSE.txt').read_bytes()); self.assertEqual((self.root/'stage/licenses/dependencies/qt/qtsvg/src/svg/LICENSE.XSVG.txt').read_bytes(),(self.source/'distribution/qt-notices/6.11.2/qtsvg/src/svg/LICENSE.XSVG.txt').read_bytes()); self.assertFalse(record['licenseClearanceClaimed']); self.assertFalse(record['correspondingSourceComplete'])
+        self.assertEqual((self.root/'stage/licenses/BeatSprig/GPL-3.0.txt').read_bytes(),(self.source/'distribution/native-source/notices/app-submodules/ringbuffer/LICENSE.txt').read_bytes())
+        for name in ('ms-runtime-origins.json','ms-runtime-selection.json'):
+            self.assertEqual((self.root/'stage/licenses/Microsoft'/name).read_bytes(),(self.evidence/name).read_bytes())
+
+    def test_detailed_original_notices_and_origin_receipts_cannot_be_omitted(self):
+        for name in ('notices/native/notices/app-submodules/ringbuffer/LICENSE.txt',
+                     'notices/qt/qtsvg/src/svg/LICENSE.XSVG.txt',
+                     'notices/vcpkg/libogg/copyright.txt','ms-runtime-origins.json',
+                     'notices/native/build-source.json'):
+            path=self.evidence/name;original=path.read_bytes();path.unlink()
+            with self.subTest(name=name),self.assertRaises((OSError,ValueError)):self.stage()
+            self.assertFalse((self.root/'stage').exists());path.write_bytes(original)
+
+    def test_source_preparation_receipt_cannot_claim_published_delivery(self):
+        path=self.evidence/'notices/native/build-source.json';record=json.loads(path.read_bytes())
+        record['publicationVerified']=True;path.write_text(json.dumps(record))
+        with self.assertRaisesRegex(ValueError,'source receipt'):self.refresh_inventory()
+
+    def test_changed_microsoft_original_is_rejected_before_package_output(self):
+        (self.root/'original-runtime.dll').write_bytes(b'foreign runtime original')
+        with self.assertRaisesRegex(ValueError,'Independent original'):self.stage()
+        self.assertFalse((self.root/'stage').exists())
     def test_exact_plugins_projects_and_no_debug_crt(self):
         for name in ('plugins/unknown.dll','data/projects/demo.mmp','msvcp140d.dll'):
             with self.subTest(name=name):

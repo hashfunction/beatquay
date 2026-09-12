@@ -199,6 +199,666 @@
           "bytes": 5291,
           "gitBlob": "af88a01e5c40ee5cc91f75f355880e5f8d62819e",
           "sha256": "56a2d79d2e56893411d04becd342312b3c1c1ff67096aaed5639ff3d0fb0d490"
+        },
+        "cmake/3rdparty/extra-cmake-modules/COPYING-CMAKE-SCRIPTS": {
+          "bytes": 1327,
+          "gitBlob": "4b417765f3a834ce6b0a216f6b6c0fe2d3f0bed5",
+          "sha256": "46cde7dc11e64c78d650b4851b88f6704b4665ff60f22a1caf68ceb15e217e5b"
+        },
+        "cmake/3rdparty/extra-cmake-modules/qt_attribution.json": {
+          "bytes": 479,
+          "gitBlob": "687045b07da277e98dd2037ac7df313b5152b406",
+          "sha256": "f34f498d6c63a78a882b352fa38c9dd076a59b1696cd6a6f921151a61f2a02e0"
+        },
+        "cmake/3rdparty/kwin/COPYING-CMAKE-SCRIPTS": {
+          "bytes": 1327,
+          "gitBlob": "4b417765f3a834ce6b0a216f6b6c0fe2d3f0bed5",
+          "sha256": "46cde7dc11e64c78d650b4851b88f6704b4665ff60f22a1caf68ceb15e217e5b"
+        },
+        "cmake/3rdparty/kwin/qt_attribution.json": {
+          "bytes": 663,
+          "gitBlob": "b1554af856712b2cee5b82d92c0241b18305046a",
+          "sha256": "bf3a3c09e99f1c9fab7553ebc4a7548b71dc23fcfdbe6e5df0fa0e7847c2efc3"
+        },
+        "src/3rdparty/D3D12MemoryAllocator/LICENSE.txt": {
+          "bytes": 1099,
+          "gitBlob": "bc2ab4dc052999618a986602ea9e74dca5806226",
+          "sha256": "1b3941c52b26d42c510afbdf205a8b96a6d64f5a7b8ebff0287979fd91dfd52f"
+        },
+        "src/3rdparty/D3D12MemoryAllocator/qt_attribution.json": {
+          "bytes": 727,
+          "gitBlob": "48cd78e74963c10adb1cc20c0c1561fb693c2334",
+          "sha256": "182d7e5ed90dc592b01a50635c85f4039ca6f25f88ec4700b08faf6f07fda09e"
+        },
+        "src/3rdparty/VulkanMemoryAllocator/LICENSE.txt": {
+          "bytes": 1099,
+          "gitBlob": "67b0d01dcc324988001b825f3e89b0d01e8cb6f1",
+          "sha256": "846d97c8b74ccaa92b9ad031140a04363b3b3985f318094552f297b8bda1c68e"
+        },
+        "src/3rdparty/VulkanMemoryAllocator/qt_attribution.json": {
+          "bytes": 699,
+          "gitBlob": "1dadd5845a84a72fa6e9654db66b9d3572bdb547",
+          "sha256": "833626a9e955bdae274f076786ca2cc7c8b50f9e382dff566db89ec69f8178cf"
+        },
+        "src/3rdparty/android/LICENSE": {
+          "bytes": 525,
+          "gitBlob": "c026b6b79a3fec99ed59fc737f8513de3865f145",
+          "sha256": "4a51cf7f724f51bedb5fa4f9583a2762f1db8d05e43a577e2487c7aab2fdce18"
+        },
+        "src/3rdparty/android/qt_attribution.json": {
+          "bytes": 373,
+          "gitBlob": "9660cb17c79bdb9f80e98674f42b697eaf10a763",
+          "sha256": "120710d661892ceb44a94556c56998795372334674c79710947282e8279ef415"
+        },
+        "src/3rdparty/blake2/COPYING": {
+          "bytes": 17914,
+          "gitBlob": "4133656d1ef98e70b04c05db69e7bc59347f1fa9",
+          "sha256": "4103f471877ed0bae500752c5fcd7ecca409d4a4a8dc2ad40437daba60f1a2bc"
+        },
+        "src/3rdparty/blake2/qt_attribution.json": {
+          "bytes": 926,
+          "gitBlob": "8b14922f2e6bd4e9eb51d1f587d17a53332154ad",
+          "sha256": "bab552307bdd03ed9a4cf7f8f1397c3d18d4dbee19ee576033284104785245be"
+        },
+        "src/3rdparty/double-conversion/LICENSE": {
+          "bytes": 1527,
+          "gitBlob": "933718a9ef9dae4cb4afa56e490211760d8a949f",
+          "sha256": "4af93c12062c58058378de2397dc1c92bbff9ddfb1d583a01c84127557ce97ca"
+        },
+        "src/3rdparty/double-conversion/qt_attribution.json": {
+          "bytes": 771,
+          "gitBlob": "468a309d6f16c4a3a3de976b0c04812f6670346e",
+          "sha256": "4d9c7505a7c12e4e6b57bbee63af926c861abb5515cdf802b8f3491e321146fe"
+        },
+        "src/3rdparty/easing/LICENSE": {
+          "bytes": 1505,
+          "gitBlob": "5dc85c4712b3b1db970e09ca67f5af461680345e",
+          "sha256": "92fac99458f1754b73edf50f9c9983e0efaa06ad96e2afd5e538c79f45b4b191"
+        },
+        "src/3rdparty/easing/qt_attribution.json": {
+          "bytes": 471,
+          "gitBlob": "154d7a06038e13d3e1dae7b67240900339763b13",
+          "sha256": "77d67a1db5882bb0b9a1278b014885bee45a4c059d1da9f835b6da5bc4b9c93d"
+        },
+        "src/3rdparty/emoji-segmenter/qt_attribution.json": {
+          "bytes": 682,
+          "gitBlob": "91dca1f4620a6258ff82f8695c26bdd053f8fa45",
+          "sha256": "9a980fc0f9e478d2a7e9a571d4cd234c259aaf8e2ea3fb60a0a7cf02cc3c3700"
+        },
+        "src/3rdparty/forkfd/LICENSE": {
+          "bytes": 1148,
+          "gitBlob": "36ab6129518a7536a4fd5b10c536f30426c0cb02",
+          "sha256": "d0d683ae18e78fbef90eb41168fb781920da2d12bf80704490f0882915c18ae0"
+        },
+        "src/3rdparty/forkfd/qt_attribution.json": {
+          "bytes": 493,
+          "gitBlob": "6ba54c18cb66c63e66e9a8342f18d616f3e21fc1",
+          "sha256": "525fd890017a3966f542da42a9ff0ca2a0d71bc45f80a4871de3e0bd0f612612"
+        },
+        "src/3rdparty/freetype/BDF-LICENSE.txt": {
+          "bytes": 2305,
+          "gitBlob": "6fb375cf8bafbc336c72126ff692411bc5b1c476",
+          "sha256": "e4e792f29e66750f2e410fd7b50a567652c180f6ee15e1a4dfa0bb5cde524537"
+        },
+        "src/3rdparty/freetype/LICENSE.txt": {
+          "bytes": 26234,
+          "gitBlob": "824f5c61290dec89f70df254990cb2a9e40fd6a9",
+          "sha256": "bf543cdda11864477b8d2ca2aa9afc2aaa8f9133461b4d962ed6ec73646256a1"
+        },
+        "src/3rdparty/freetype/PCF-LICENSE.txt": {
+          "bytes": 2218,
+          "gitBlob": "2668007a5c0223011084b23179d7d3275b5a013c",
+          "sha256": "6938597bfdeca0db191a8f9ede52eaf2482c2c71a0094c084747a1235f9958fe"
+        },
+        "src/3rdparty/freetype/ZLIB-LICENSE.txt": {
+          "bytes": 962,
+          "gitBlob": "abbdfcc017787ab9737b2a649fad72cbd4dc5f63",
+          "sha256": "2b1f5d615382a151af3eb71462ad17d89e2efee8fa7664058d35d3d9237ebb19"
+        },
+        "src/3rdparty/freetype/qt_attribution.json": {
+          "bytes": 5328,
+          "gitBlob": "427ecb1f7db74bca1bde87962f5f12348342441d",
+          "sha256": "628b68bf60eb3bc1616342bc3545b63be2392e78bbebbc4c19f49675dd2ac8a7"
+        },
+        "src/3rdparty/gradle/LICENSE": {
+          "bytes": 23645,
+          "gitBlob": "5ab898e679a59275347dbc57d5e9be3fa3875702",
+          "sha256": "cf234c4188d773406f640bf89be680d9288f40ff96901c70d643fcea96ad46df"
+        },
+        "src/3rdparty/gradle/qt_attribution.json": {
+          "bytes": 581,
+          "gitBlob": "b37af5f829ab03f48450d1ab88b732d80b5a7758",
+          "sha256": "0c8a9faae83c1df704d52a9c320c2e8c0309cda282bf95584bb62b00bb37567e"
+        },
+        "src/3rdparty/harfbuzz-ng/AUTHORS": {
+          "bytes": 201,
+          "gitBlob": "83c0c66f99e967fa669854f1837f656a705e6ba0",
+          "sha256": "19bfe8f5ed100636cd24ab0c90a3f71c21d8b02d9ba00719447a0faab364d49f"
+        },
+        "src/3rdparty/harfbuzz-ng/COPYING": {
+          "bytes": 1971,
+          "gitBlob": "1dd917e9f2e72167de69e3b5dadbc4e7db417da1",
+          "sha256": "ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64"
+        },
+        "src/3rdparty/harfbuzz-ng/qt_attribution.json": {
+          "bytes": 1646,
+          "gitBlob": "dbe5996a536ee137fc06ea187d0dbc2501748a87",
+          "sha256": "15fb72e213bc590be310de8b453792a0b0a42cfd302b97387abf49252b9dd63f"
+        },
+        "src/3rdparty/icc/LICENSE.txt": {
+          "bytes": 463,
+          "gitBlob": "e25b1d39f1ee489362fe15dae6b01b9522735dc7",
+          "sha256": "9e34ff47b3a44814e183342e7e198d127a6740e29d20e8381fba7688dafc79dd"
+        },
+        "src/3rdparty/icc/qt_attribution.json": {
+          "bytes": 775,
+          "gitBlob": "b99b9ce12272d4a73318ce2a98ed1e80c34e459c",
+          "sha256": "509da9bd2b3f769c730aa4627b1080d65f39b0ecd4130111c9e1122e13cd35b5"
+        },
+        "src/3rdparty/libjpeg/COPYRIGHT.txt": {
+          "bytes": 606,
+          "gitBlob": "5085059192a96782d65492b0a6964a7beac69a33",
+          "sha256": "e5b349c6a98d997a8d0f5fcfe5cc900b1f76bbc32743674c52a70981498748c0"
+        },
+        "src/3rdparty/libjpeg/LICENSE": {
+          "bytes": 6077,
+          "gitBlob": "37a489b245eeb16c9ad8fae217b54f07ca00a65c",
+          "sha256": "ba6bceebcba0fdd35488477c2cca8c4632ce82c74dbfbc87d886ce6fc4433579"
+        },
+        "src/3rdparty/libjpeg/ijg-license.txt": {
+          "bytes": 1815,
+          "gitBlob": "eec5341d1c4e9ded532479684d061ffe3f6915b2",
+          "sha256": "1cb448f5e2e6d3aca60943f4eee1a04675628dc0266a074a42bc1560ebc28d61"
+        },
+        "src/3rdparty/libjpeg/qt_attribution.json": {
+          "bytes": 859,
+          "gitBlob": "82a65bcfd4bdb9a7dcc59496f554cadf0673b341",
+          "sha256": "ed7cb7abdd9124f664acd26cf552ba821c8cf236c4cd34a6737f202215bd41bc"
+        },
+        "src/3rdparty/libpng/LICENSE": {
+          "bytes": 5345,
+          "gitBlob": "1b765ae9f96abea77d3d9a88c543e3b5f4725813",
+          "sha256": "bdb0a645ea18c60507d0368379b1ac5474b92255fcc2d115e07486a7672ba526"
+        },
+        "src/3rdparty/libpng/qt_attribution.json": {
+          "bytes": 1763,
+          "gitBlob": "1c932936219bb83aa841c3d49459a1e28b7289d7",
+          "sha256": "a43ff8e146c949f7cd14e00bd681f4957e27def06ecafec55ccc7231c451d3fa"
+        },
+        "src/3rdparty/libpsl/PSL-LICENSE.txt": {
+          "bytes": 16726,
+          "gitBlob": "d0a1fa1482eea82e19510e7920cbe3a03e41f691",
+          "sha256": "3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04"
+        },
+        "src/3rdparty/libpsl/qt_attribution.json": {
+          "bytes": 2458,
+          "gitBlob": "b283b66973bae9521b6c460885e3b724ae3668f7",
+          "sha256": "ae227b5f2cf40511fe1a84d4c752f4005917b7eeb44e7c4495b1403c27cc3647"
+        },
+        "src/3rdparty/libpsl/src/LICENSE.chromium": {
+          "bytes": 1664,
+          "gitBlob": "e29f4ffbe499f0af97f146a333eaa159ddffbb66",
+          "sha256": "1d7f52747a9169751cdf2641a8299c0098e9ecdf9429296ffd55bdb14c9ed5b3"
+        },
+        "src/3rdparty/md4/qt_attribution.json": {
+          "bytes": 574,
+          "gitBlob": "757c7996ab700adda4ededf6d2b02f1c3d8bbbf9",
+          "sha256": "34bda63a2fcc23c83f2e5364ccd394553b4baa505b1f79ded9cc2161c56a9b4c"
+        },
+        "src/3rdparty/md4c/LICENSE.md": {
+          "bytes": 1096,
+          "gitBlob": "c80b3a95cedc65986c5afaa6d2b895fcbcc6177a",
+          "sha256": "d30937367d5413e7eaa218b1640b8946ff76fd34d97152f6979fd96169d5d0fc"
+        },
+        "src/3rdparty/md4c/qt_attribution.json": {
+          "bytes": 673,
+          "gitBlob": "5e78ab1d10e4ee13f996c6eb95772fcb8e29498c",
+          "sha256": "7b2bc7be22e4be2a2984119ce3d0bfc210ddd0d8ef6193d66e8479d4c22af4ba"
+        },
+        "src/3rdparty/md5/qt_attribution.json": {
+          "bytes": 446,
+          "gitBlob": "0c2f5feda8a32df8e058f7b5b272c8033e0180f2",
+          "sha256": "20b0f1b17ccd1bd5e8d763b1cdca4b095b8f0c037644b5ee18154536b7d8425e"
+        },
+        "src/3rdparty/pcre2/AUTHORS.md": {
+          "bytes": 4013,
+          "gitBlob": "ced81e68adc54acdb15520b397556fee9e83d0c2",
+          "sha256": "66d9adef4d4bcb7c2dd99a499a89a52033375785edaa8a35ada0f2db7d05a1a4"
+        },
+        "src/3rdparty/pcre2/LICENCE.md": {
+          "bytes": 4011,
+          "gitBlob": "f6fba35db25ba5a4326fa2f4a86a536a24392b30",
+          "sha256": "197d8a73ffee0d6b09adba2f9c677b5f5aede24edf89258a68e48248d010d811"
+        },
+        "src/3rdparty/pcre2/LICENSE-SLJIT": {
+          "bytes": 1444,
+          "gitBlob": "0aaecaaa28677aa1d3d69025ffab957131eca25d",
+          "sha256": "5f216505c0f6ea3273caec89e766eef93cdeb7bbb0c429f9360116d7c938feeb"
+        },
+        "src/3rdparty/pcre2/qt_attribution.json": {
+          "bytes": 1829,
+          "gitBlob": "0468bca1b3e031ea2a462586c7caf1fec211101f",
+          "sha256": "e009f73100ef4aed400257a095cdb25ee31980c4a290f1aca52d147cb3067abc"
+        },
+        "src/3rdparty/pixman/LICENSE": {
+          "bytes": 1092,
+          "gitBlob": "3cb51484f10d1f1377fab8db4e7c1f6211fcdb31",
+          "sha256": "942c4f2a80394d3f53599b8382e9f27349b95c45d92b69b84f26d404f4dd74a5"
+        },
+        "src/3rdparty/pixman/qt_attribution.json": {
+          "bytes": 597,
+          "gitBlob": "2a273f068115b0350983fcfd4f4fe1fa26f783ac",
+          "sha256": "f1dc159b63bf84a4c9c367e8ff79aa748b63f5fc622d5080c0a7ddd98ddc7ac7"
+        },
+        "src/3rdparty/rfc6234/LICENSE": {
+          "bytes": 1568,
+          "gitBlob": "7075960ee2352927c085b342778cad0921e41e59",
+          "sha256": "7ccebd514aaabc86192f957d773cebf06577c12fe9f25ecd419c6cac5da7a14c"
+        },
+        "src/3rdparty/rfc6234/qt_attribution.json": {
+          "bytes": 660,
+          "gitBlob": "282590da0baca0829fdc75ebb2027a81b8cdb4e4",
+          "sha256": "fa24413bdc5015fc7fc84297fa17d4c8a598f8f7c76b9495a6e6b26a77b4a324"
+        },
+        "src/3rdparty/sha1/qt_attribution.json": {
+          "bytes": 618,
+          "gitBlob": "04933a27005d467e8496a674c75252d1c6b07501",
+          "sha256": "53cab2c771f7f7ffbf6a58ff759e5846b746e91d98dfe467d5145edf8cd7d306"
+        },
+        "src/3rdparty/sha3/BRG_ENDIAN_LICENSE": {
+          "bytes": 645,
+          "gitBlob": "175347c263695d49a36af6ff40d4893753ae0867",
+          "sha256": "2fed6f252ca4a7e813811de3cd3cd08183edd4138bdee909410ef6eee394e82c"
+        },
+        "src/3rdparty/sha3/CC0_LICENSE": {
+          "bytes": 7013,
+          "gitBlob": "cff12c3d88965af8aff06e83420b546ea9b54f02",
+          "sha256": "1f2786e2c5befeb4dcba6638db6528bf96ef5d2cf24bc85ab5a81ef00abef59d"
+        },
+        "src/3rdparty/sha3/qt_attribution.json": {
+          "bytes": 2322,
+          "gitBlob": "6c6a44e1b6b4c254cfc30dba6113174ec022d6e4",
+          "sha256": "d904a6c21c150d9cac693c0806a469480306cb4e5879cc13c994fbadba71a56e"
+        },
+        "src/3rdparty/siphash/qt_attribution.json": {
+          "bytes": 793,
+          "gitBlob": "1687742f03f9a605f3cf0f8c05060d9b4458563d",
+          "sha256": "8614947dfc0ca1d21aad2f88b4400598262ab8c08aa87c4f7acc0c2de6e5619e"
+        },
+        "src/3rdparty/sqlite/qt_attribution.json": {
+          "bytes": 799,
+          "gitBlob": "5c48c3e979143643a83cc0ac763abb1bc90917bb",
+          "sha256": "fcba08e23508524b77ee22186a5ef2d35957979fe9e2a604d994c5e9604c8fb9"
+        },
+        "src/3rdparty/tinycbor/LICENSE": {
+          "bytes": 1074,
+          "gitBlob": "4aad977ceb5eff86d2e86b6e22c6626e27c2e388",
+          "sha256": "3c6ba0b5bfa7830505301ffb336a17b0748e0d61c4d34216e9dc98f10e40395e"
+        },
+        "src/3rdparty/tinycbor/qt_attribution.json": {
+          "bytes": 685,
+          "gitBlob": "04e566013f3a89bf8f861f8e8bfe8deb92dd2dc0",
+          "sha256": "788408509fb7967042640f24ba78b263712e816d886303ba1733f49753d33863"
+        },
+        "src/3rdparty/wasm/DEJAVU-LICENSE": {
+          "bytes": 8816,
+          "gitBlob": "df52c1709bea171104d41bf084313ea434858423",
+          "sha256": "7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93"
+        },
+        "src/3rdparty/wasm/qt_attribution.json": {
+          "bytes": 730,
+          "gitBlob": "4814d94cdf0b961528cd91c1deb85f0635ba30a6",
+          "sha256": "2019d37665bfb2ce7d4931d0bdf7427ea178919399cf37c0fef14a229144936b"
+        },
+        "src/3rdparty/wayland/protocols/MIT_LICENSE.txt": {
+          "bytes": 1055,
+          "gitBlob": "edc2e5fb5e0277fec3b5dd3d6065945f7519c380",
+          "sha256": "a8341b9c90ef447a77f55d550e6691e370d3ac15d60edb584def356e348ab828"
+        },
+        "src/3rdparty/wayland/protocols/appmenu/LGPL-2.1-or-later.txt": {
+          "bytes": 25906,
+          "gitBlob": "04bb156e77d5714dc2ee29bd0a37f16532ec741c",
+          "sha256": "1ccf09bf2f598308df4bed9cd8e9657dc5cd0973d2800318f2e241486e2edf3f"
+        },
+        "src/3rdparty/wayland/protocols/appmenu/qt_attribution.json": {
+          "bytes": 629,
+          "gitBlob": "53f10b090d19c21d5fe407813d560a7e8d156ab7",
+          "sha256": "b7200f7fdfd2223aaecbd9b2ec8e4145eebe4f0b376ffbcb3859154661fb1095"
+        },
+        "src/3rdparty/wayland/protocols/color-management/qt_attribution.json": {
+          "bytes": 885,
+          "gitBlob": "1001cc9b90d225311f3e978e3271577020caddd3",
+          "sha256": "6081490578a0a5ff17e450a3f9a05a36a3433de0832f1b2b497ca3c8ec1f9ba9"
+        },
+        "src/3rdparty/wayland/protocols/fractional-scale/qt_attribution.json": {
+          "bytes": 719,
+          "gitBlob": "653a8eb0c1514a66709572ec02353a2f0150620d",
+          "sha256": "bf87b7dc5bf42e91c9d98ad2a109d197141aaebffe563ab247dd771e0b9b07c8"
+        },
+        "src/3rdparty/wayland/protocols/fullscreen-shell/qt_attribution.json": {
+          "bytes": 830,
+          "gitBlob": "07926f1642905771c54dba3eb3116bbf2fc80f62",
+          "sha256": "24ebba6014034dcf2c9a23a5b1085dc9708eaa81c021dfe51ba3f6b51ba788a7"
+        },
+        "src/3rdparty/wayland/protocols/linux-dmabuf/qt_attribution.json": {
+          "bytes": 791,
+          "gitBlob": "e93e2e790b1d32d500acd730f81e994ad7d9f029",
+          "sha256": "64ea0d933ff0d0868e820b443c14feda5208f90bd02032cdc9a1b6881a05f446"
+        },
+        "src/3rdparty/wayland/protocols/pointer-gestures/qt_attribution.json": {
+          "bytes": 720,
+          "gitBlob": "9cd44450e740cc32144bd9740016644062fb3368",
+          "sha256": "3c85ce329ccb30c469aa3f3c71596eb915c9cccd645ac1192d94a8fe548556b7"
+        },
+        "src/3rdparty/wayland/protocols/pointer-warp/qt_attribution.json": {
+          "bytes": 764,
+          "gitBlob": "83cd73c357034cd07f74bf20160d8c547de88543",
+          "sha256": "3eb309adae44fe120dab08dca8c4df57a34ac347ecf1764cafdd7542cd0a0a11"
+        },
+        "src/3rdparty/wayland/protocols/presentation-time/qt_attribution.json": {
+          "bytes": 742,
+          "gitBlob": "8d54400d3348e4a8069eb2055b90269dd682029a",
+          "sha256": "c3af7f51726c7584d5e8ad74a29813d66cac6a215a9675da7cfc9a42f15c2d0a"
+        },
+        "src/3rdparty/wayland/protocols/scaler/qt_attribution.json": {
+          "bytes": 718,
+          "gitBlob": "4b1f7303b8aa240020e3a28de49348279a0bbc71",
+          "sha256": "8b7751412fc26d70f641d6bad9c6aadd406317cbf17359ffcc58651f58aa2fca"
+        },
+        "src/3rdparty/wayland/protocols/session-management/qt_attribution.json": {
+          "bytes": 856,
+          "gitBlob": "8539749f1124d15ff47c49b203ce4616b351c788",
+          "sha256": "509ab9b7a310628d00ced3a293f4f1e8e9146bde3555eeac483c5d00c07de431"
+        },
+        "src/3rdparty/wayland/protocols/tablet/qt_attribution.json": {
+          "bytes": 726,
+          "gitBlob": "150eb2fbc4c3a052c081779d24f99606ff1ea7c1",
+          "sha256": "a46626dbac8fc1f57d5b34eb077425fc402fc0767b75ec06578e1465502883b5"
+        },
+        "src/3rdparty/wayland/protocols/text-input/v1/qt_attribution.json": {
+          "bytes": 836,
+          "gitBlob": "ea0d59237c259a4ae6d41b7ec6c4ea664a9aab6f",
+          "sha256": "882ac88020f0ecaea6d991f7e8d292542c9422592ede0396c4d217f040ef6a54"
+        },
+        "src/3rdparty/wayland/protocols/text-input/v2/HPND_LICENSE.txt": {
+          "bytes": 1095,
+          "gitBlob": "e7a4915da0a293b94e28e0ca2067da41a6455625",
+          "sha256": "8172d52f3b7bba7d10af2f9134c63d0f699ba6b20a47e35f5ac45654c500bfd7"
+        },
+        "src/3rdparty/wayland/protocols/text-input/v2/qt_attribution.json": {
+          "bytes": 693,
+          "gitBlob": "f0be562662a3563b8a2669a55389b9f74b80a2d2",
+          "sha256": "197d9edcc6fb17d7bc2b230f7061ce0d2ef90fa4291c86e87ae2817e8f2809fe"
+        },
+        "src/3rdparty/wayland/protocols/text-input/v3/qt_attribution.json": {
+          "bytes": 927,
+          "gitBlob": "2a9226e3ea4ade700767c297e5b1ca29d9cf2c1c",
+          "sha256": "476225d10cb5789d993c38335c6cc442fdc19a8d91f1ceb7a3ddb50414a8e68a"
+        },
+        "src/3rdparty/wayland/protocols/viewporter/qt_attribution.json": {
+          "bytes": 758,
+          "gitBlob": "fbdda2c029459afef0b3f04bf66a775db723b9c7",
+          "sha256": "95139e441967bc289d174078f1ca0485363e8405bd8d06eb9946356c09c0a5e4"
+        },
+        "src/3rdparty/wayland/protocols/wayland/qt_attribution.json": {
+          "bytes": 794,
+          "gitBlob": "000ee0d4b2e6445234afc3620233967f6904aeb5",
+          "sha256": "d2b263d97853d72128987f55fb912fc197f488de003a8e4bbc53cae2549d0e6e"
+        },
+        "src/3rdparty/wayland/protocols/wl-eglstream/qt_attribution.json": {
+          "bytes": 786,
+          "gitBlob": "f11023f26817225ed8bbcfe88da625cd2aee8118",
+          "sha256": "2432510e17446887decd1fc58770aeeef060aff5331a8bfec7fb668555f3b347"
+        },
+        "src/3rdparty/wayland/protocols/wlr-data-control/qt_attribution.json": {
+          "bytes": 815,
+          "gitBlob": "eea2dde6ef6824f607de3c84bcb154adb42ba7be",
+          "sha256": "433a74149249d01d946d86aa0d88d30bc755523f1a978f640f6142e9c8fa1035"
+        },
+        "src/3rdparty/wayland/protocols/wp-primary-selection/qt_attribution.json": {
+          "bytes": 824,
+          "gitBlob": "ab305bb6924d7238921e803dcaffe3dd63007d11",
+          "sha256": "14586c06e09439e9c2b7719766f68e219d0ff0231811e13e44f4587dabf52707"
+        },
+        "src/3rdparty/wayland/protocols/xdg-activation/qt_attribution.json": {
+          "bytes": 865,
+          "gitBlob": "1f55ad27b612a53ced8f53bb25f83b537a66f407",
+          "sha256": "8f13cfd4c78a2f116d3e674c329d3d211b647d80190e7a95493528cd6dedbd89"
+        },
+        "src/3rdparty/wayland/protocols/xdg-decoration/qt_attribution.json": {
+          "bytes": 843,
+          "gitBlob": "7e551a5d2003b5f7ce6fce9b7ee9aef8e5ec9ef7",
+          "sha256": "b8d9102ff3c7eccd840f7d5332d072e41e95eb055a8a9f2e3719a83005879c86"
+        },
+        "src/3rdparty/wayland/protocols/xdg-dialog/qt_attribution.json": {
+          "bytes": 566,
+          "gitBlob": "4a6d959e4a1757b42abb6818574ed10d9459d11e",
+          "sha256": "c7918fb63ad5be29e9a95db3464a7832224c7d904d21617ccfc689e6b0ab04c0"
+        },
+        "src/3rdparty/wayland/protocols/xdg-foreign/qt_attribution.json": {
+          "bytes": 729,
+          "gitBlob": "00daedd5b953d2acc6b640f368a9bd67bacc8fe4",
+          "sha256": "0ed6fbddba411b647bbe895b6e7a842c2a884905206888c0b4df6b6cd3bb9f79"
+        },
+        "src/3rdparty/wayland/protocols/xdg-output/qt_attribution.json": {
+          "bytes": 813,
+          "gitBlob": "04c6bf482f5e88655dcf5421ac9e92f66951c9a1",
+          "sha256": "c5e4f132de8d08a75af02682bba3a9349a00f49b773e23ef5543648209b76658"
+        },
+        "src/3rdparty/wayland/protocols/xdg-shell/qt_attribution.json": {
+          "bytes": 990,
+          "gitBlob": "b47679c71487dda753629b9d73a162a67e5e5610",
+          "sha256": "e1367b44fe28fce2eee7656cda75203f4102662bb6aa370b3c9f3eb5a2cc3f82"
+        },
+        "src/3rdparty/wayland/protocols/xdg-system-bell/qt_attribution.json": {
+          "bytes": 820,
+          "gitBlob": "cf8b0e5bde8bd544da5e8680ea97db4cf9a87b1d",
+          "sha256": "43a10e6b73a26d9c75e99447f5e731d170047ed2e709878e61eb83f6453cb3da"
+        },
+        "src/3rdparty/wayland/protocols/xdg-toplevel-icon/qt_attribution.json": {
+          "bytes": 845,
+          "gitBlob": "e0a675b93d330b930bfcd9824b4b501d13e6315c",
+          "sha256": "2e022951f22a56051a099b9045f4fb0c569daa896a218d23f47b0dac3e905c04"
+        },
+        "src/3rdparty/wintab/qt_attribution.json": {
+          "bytes": 602,
+          "gitBlob": "6c3a0ef6fe687facbc4c1a3fc9d0383fb47e0f8b",
+          "sha256": "b879ea91b719531d45e1cfe33d2241d060a9260200bd91a09ada074b16063f9c"
+        },
+        "src/3rdparty/xcb/LICENSE": {
+          "bytes": 1246,
+          "gitBlob": "8f4e5c3a72e2e08469fbb7b5074ed2735135022d",
+          "sha256": "82775191bc05f85b40404d77bb69b1edeaeb4033f48387e9e5eab4dd67f5d6f1"
+        },
+        "src/3rdparty/xcb/qt_attribution.json": {
+          "bytes": 825,
+          "gitBlob": "26dc030a3ee96158fc3f4cc74e8c81439dc17aeb",
+          "sha256": "8bae8861957bc0168d586d24da6e8e93edceb11796811c5f614d211f4674d437"
+        },
+        "src/3rdparty/zlib/LICENSE": {
+          "bytes": 1465,
+          "gitBlob": "9c57e18006ec54be5d52d0bd4ff04cd5432c975f",
+          "sha256": "d7e3139972874dc8abdbbfce27ec1e6f942b28279dd7d27453630a8b4610e080"
+        },
+        "src/3rdparty/zlib/qt_attribution.json": {
+          "bytes": 731,
+          "gitBlob": "d550c40ac61c2ab7acb92429566750ce1157a9fa",
+          "sha256": "0346805e9c4048316dbc7c58d560a20c12482ea0218de264282212e9619b6d64"
+        },
+        "src/corelib/CMakeLists.txt": {
+          "bytes": 62690,
+          "gitBlob": "8c9e61e2b23450947961abcdc215e17ac4af2451",
+          "sha256": "432ecea503b04ed8f7c066f04862329913b7473338253b4f5e6991b6f8af29af"
+        },
+        "src/corelib/global/qt_attribution.json": {
+          "bytes": 814,
+          "gitBlob": "22379e261913af86c9ec3fe6837cb5fb7d38b53b",
+          "sha256": "64698063a65a1502b986bd61163b5eb9c6bde87f93feb28e4eab43ff07a4f10a"
+        },
+        "src/corelib/kernel/LICENSE.QEVENTDISPATCHER_CF.txt": {
+          "bytes": 1501,
+          "gitBlob": "8c08f48528fb29cfe2cd83c9517a00ab1965c086",
+          "sha256": "e9e5b9f66d21c0e88a4179525ab39cd8d7eac9af78a8404f322c32b0874783d5"
+        },
+        "src/corelib/kernel/qt_attribution.json": {
+          "bytes": 564,
+          "gitBlob": "3fa6f179dfab05eaed00b17382f6e17647e4519c",
+          "sha256": "27bb1f28d336f1f8f6d44689f28cb650f0844cc82672e36ae168d0716783fad5"
+        },
+        "src/corelib/mimetypes/3rdparty/qt_attribution.json": {
+          "bytes": 1383,
+          "gitBlob": "b30d70417529fef3e12a3cf615e919d748ec7968",
+          "sha256": "329652c93e6b47663115543cfd746cb56b96a98d774d540d58e64614bd9739eb"
+        },
+        "src/corelib/text/qt_attribution.json": {
+          "bytes": 2170,
+          "gitBlob": "5bc5e3f58f60febeb87ff12d745210a31496ba77",
+          "sha256": "4e23736600be956e4214849ad8baaa955441656db7324713fab6353c1163b4f5"
+        },
+        "src/dbus/LICENSE.LIBDBUS-1.txt": {
+          "bytes": 27248,
+          "gitBlob": "ff2c19be4599e53c694dfc2f6570818ec57a4041",
+          "sha256": "ad90aa08bb1a9b7056aa51e2e215b36630855457cde5dffd36aa0faa7b169f24"
+        },
+        "src/dbus/qt_attribution.json": {
+          "bytes": 959,
+          "gitBlob": "faffd45685af14d9de98ca387238d189dbd836f3",
+          "sha256": "346532e1fb3bf653bc949408834c305646fc93f96650a2af9b2171d141c107ee"
+        },
+        "src/gui/CMakeLists.txt": {
+          "bytes": 44793,
+          "gitBlob": "b04556eb2a7bf6f8be005e64b90c9c0ac737a662",
+          "sha256": "3f1e30f10369a97d6cd105b2f44ffc2fbe9d39bb5556593cfa21bee97416bbe0"
+        },
+        "src/gui/opengl/LICENSE.KHRONOS.txt": {
+          "bytes": 1084,
+          "gitBlob": "63b1e1f94076b2b8b0cc977a23d8430cc3ee4993",
+          "sha256": "2e484f3c26ff5008c704a3ca9dd809d43f24a004a1abb6c202660fbff0d19715"
+        },
+        "src/gui/opengl/qt_attribution.json": {
+          "bytes": 1526,
+          "gitBlob": "e346e262862650816e54d4c61c75e86af0828f76",
+          "sha256": "d05626e02386f22186b385b3ce2cd5a6431b84e2fc552c68f7133e38da552fc1"
+        },
+        "src/gui/painting/LICENSE.QIMAGETRANSFORM.txt": {
+          "bytes": 3004,
+          "gitBlob": "67c910826a99b2fe3c3e78c022c0aa56b102db1a",
+          "sha256": "46b3cbfa2f2946b93291506351e9be1dd0a28d2a53260f5aa488abd36fbeca9d"
+        },
+        "src/gui/painting/LICENSE.XCONSORTIUM.txt": {
+          "bytes": 2294,
+          "gitBlob": "5d98625787e83d0a65b0b2230c7d7e6f682001f7",
+          "sha256": "a216b01291eb38fc1af93cfccf1fc67b48d9923612e517c2a695e95b3f03c22c"
+        },
+        "src/gui/painting/qt_attribution.json": {
+          "bytes": 2256,
+          "gitBlob": "f238cb56733c712fd2d7a47c858c5c96aeabd9cc",
+          "sha256": "8cddd6c73a885f697261c4d6d60e5cd814a2544fcd407504b52a5eb9b7cc3600"
+        },
+        "src/gui/rhi/LICENSE.MiniEngine.txt": {
+          "bytes": 1077,
+          "gitBlob": "b8b569d7746d98d07183806fb4af673fca6dfb57",
+          "sha256": "cf248820bf1178370bb4f1670a59f8748d46bc96d0f64080cd631511c6046409"
+        },
+        "src/gui/rhi/qt_attribution.json": {
+          "bytes": 782,
+          "gitBlob": "e1094396af24ddbfaeee533b2e50791b1aea4c92",
+          "sha256": "59df3efb041ed346aa797602a76ef8d284e84c3cc6ace30967d6704fc65dbb47"
+        },
+        "src/gui/text/LICENSE.AGLFN.txt": {
+          "bytes": 1425,
+          "gitBlob": "50abffca157c2b31aabcdc880a008ff8c15197c5",
+          "sha256": "40818155548ff41c67d3a40edf355e9658992b292c227f4c1147425cedc746c6"
+        },
+        "src/gui/text/qt_attribution.json": {
+          "bytes": 807,
+          "gitBlob": "47af803ee90c570258453b69079d3c25506e3dc7",
+          "sha256": "73066a55ff52c6546753e1dc0802d8890d58e93e7efa394565cd8bdd0df0995b"
+        },
+        "src/gui/vulkan/LICENSE.txt": {
+          "bytes": 11473,
+          "gitBlob": "21dd179fc9ae5cfbce853b4d40803777f42865f3",
+          "sha256": "5f618873b0cdd1e84c611c5529212c2524bfc887bdfd7d1f3b568bad3c649612"
+        },
+        "src/gui/vulkan/qt_attribution.json": {
+          "bytes": 801,
+          "gitBlob": "acc66a8210efe3591e1c1212d698723fe47d5571",
+          "sha256": "b4beb6ac27b066a6a71408da116fea60131c06ac9799c9763fe9cef28a76e7b9"
+        },
+        "src/plugins/platforms/cocoa/LICENSE.COCOA.txt": {
+          "bytes": 1501,
+          "gitBlob": "8c08f48528fb29cfe2cd83c9517a00ab1965c086",
+          "sha256": "e9e5b9f66d21c0e88a4179525ab39cd8d7eac9af78a8404f322c32b0874783d5"
+        },
+        "src/plugins/platforms/cocoa/qt_attribution.json": {
+          "bytes": 720,
+          "gitBlob": "927315c38eef74edc16ef6667b995b809f187561",
+          "sha256": "27a435bfea96ca950f4a5ad6a82be7fe2a62bb4db0d8851e7a84fc5dce0c3ff3"
+        },
+        "src/plugins/platforms/windows/CMakeLists.txt": {
+          "bytes": 7975,
+          "gitBlob": "4cb2689e820d58f86d6b3eedcc01115386b07ed6",
+          "sha256": "cbcfb8a503b3dd5446e0deb42a6686a90dc9afe9390510ce018647063f8c6af3"
+        },
+        "src/testinternal/3rdparty/cmake/Copyright.txt": {
+          "bytes": 5477,
+          "gitBlob": "2074109b019445458a65e6cd3935aa24a0878c7c",
+          "sha256": "0676e30827684487aa0ea8f72f01e9460a6320fa34a2888df0ad1dd3e8a06eb8"
+        },
+        "src/testinternal/3rdparty/cmake/qt_attribution.json": {
+          "bytes": 515,
+          "gitBlob": "e1cdbcdb9f8179997200c703737654cf9f6aa9c3",
+          "sha256": "f194ea33cf9b0d44615a6fa9eb4d45e7796b50cb0a88cdadf5d9b15745bf52f0"
+        },
+        "src/testlib/3rdparty/catch2/LICENSE.txt": {
+          "bytes": 1338,
+          "gitBlob": "36b7cd93cdfbac762f5be4c6ce276df2ea6305c2",
+          "sha256": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566"
+        },
+        "src/testlib/3rdparty/catch2/qt_attribution.json": {
+          "bytes": 898,
+          "gitBlob": "ad231efd4266ac3910f6c9fd72f5097b5baf13a5",
+          "sha256": "8149331a9f68c529955173cbfb12e3f0193c2e4db23ae4117bcd537ee1eacde0"
+        },
+        "src/testlib/3rdparty/cycle/LICENSE.txt": {
+          "bytes": 1023,
+          "gitBlob": "c9b44cb8aaebb163e8524d67558696aa965ad0ec",
+          "sha256": "cb5aedb296c5246d1f22e9099f925a65146f9f0d6b4eebba97fd27a6cdbbab2d"
+        },
+        "src/testlib/3rdparty/cycle/qt_attribution.json": {
+          "bytes": 1227,
+          "gitBlob": "6f3af0ac1d68608b0cfe2bd467d3c0d4a9711728",
+          "sha256": "5b4c5fc477cd61b935983b93ec6d09b39a8f5644ea4fe5ac787c84583f521c7c"
+        },
+        "src/testlib/3rdparty/linux/LICENSE.txt": {
+          "bytes": 18458,
+          "gitBlob": "c0ff68a2b2a68336b73079916836499348bf283b",
+          "sha256": "ed71cfca021790f74094e9810f42e31288e7f43cf00c8d9ac8d6f904124bd815"
+        },
+        "src/testlib/3rdparty/linux/qt_attribution.json": {
+          "bytes": 1678,
+          "gitBlob": "0f04f56fb81d16a5866b1a64aaa662fcc4259fb6",
+          "sha256": "44299f5c08474790c164e73894b81b650463f9e40121041cefdeebd9b5eb734c"
+        },
+        "src/testlib/3rdparty/valgrind/LICENSE.txt": {
+          "bytes": 1667,
+          "gitBlob": "d17836a47df3e24b01253119b63c0f9323e7feaa",
+          "sha256": "ec72eebd6326165156787da828caaa18386489387aefaa073c9bd40b8b2a400e"
+        },
+        "src/testlib/3rdparty/valgrind/qt_attribution.json": {
+          "bytes": 979,
+          "gitBlob": "262bc8380b4f34b3fc3fa85388de88ae3ffaa8c2",
+          "sha256": "202daf86588d8cded6c492d490cec190e5790796fff23ec5065b116b78e70fbc"
+        },
+        "util/gradientgen/LICENSE.WEBGRADIENTS.txt": {
+          "bytes": 1062,
+          "gitBlob": "1a4d527a4d23f06c1fd3afe8650a0055ff62b540",
+          "sha256": "9be732e45b638c74f9c0e5248541dd54dc7e8e9a5545df96b5c4b7c9ac0c68ba"
+        },
+        "util/gradientgen/qt_attribution.json": {
+          "bytes": 596,
+          "gitBlob": "c6bd57462490aab12442bd983ee6bbf1e674038c",
+          "sha256": "6e87ac5d79ab92110e6e517b2c74e4f4fd15878540e93eea0300e529d3318572"
         }
       },
       "name": "qtbase",
@@ -249,6 +909,16 @@
           "bytes": 2169,
           "gitBlob": "9712cda455e2ba9ca4151ff08801d30a41eaa428",
           "sha256": "a72f1a9217e1092ea11c22c7ed7222914e32555518e4b8d3b5fd5d74d81cff5b"
+        },
+        "src/svg/LICENSE.XSVG.txt": {
+          "bytes": 1185,
+          "gitBlob": "9ad49316a65be2048c83c45f1f2b50420d198cbf",
+          "sha256": "3a946598a9f674d44df764279ca0b85b5d6faba08f3bc75d8e0fcf6cd729a9bd"
+        },
+        "src/svg/qt_attribution.json": {
+          "bytes": 551,
+          "gitBlob": "6c5ed854d2a712654f37df6ccd72e212b1cba32d",
+          "sha256": "c1b0472511c791561b89ee0d11c11d78a85fbdf5df5ad94c1a4653e192367759"
         }
       },
       "name": "qtsvg",
@@ -319,6 +989,26 @@
           "bytes": 6818,
           "gitBlob": "9d0a4ea824284b622460eefec629180a1155d355",
           "sha256": "5fd619087a464ce885462d1ec2a7aa5ac62301d7650dcb78793da5f4779c76bf"
+        },
+        "src/qdoc/catch/LICENSE.CATCH.txt": {
+          "bytes": 1338,
+          "gitBlob": "36b7cd93cdfbac762f5be4c6ce276df2ea6305c2",
+          "sha256": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566"
+        },
+        "src/qdoc/catch/qt_attribution.json": {
+          "bytes": 705,
+          "gitBlob": "ad2cfb796fde81cc7336ebeb335c2a20c657e28f",
+          "sha256": "0cf3d536104ede1a1e1c3ddd2f192ab039bc2fd0c3b626f096ccd9decc142748"
+        },
+        "src/qdoc/qdoc/src/qdoc/clang/AST/LICENSE.LLVM.txt": {
+          "bytes": 15141,
+          "gitBlob": "fa6ac540007032cbd0ec772a1c72e6cb5527a4fe",
+          "sha256": "8d85c1057d742e597985c7d4e6320b015a9139385cff4cbae06ffc0ebe89afee"
+        },
+        "src/qdoc/qdoc/src/qdoc/clang/AST/qt_attribution.json": {
+          "bytes": 840,
+          "gitBlob": "d71bdecd016c69aef6715db2ac73b984dded11b7",
+          "sha256": "c44e85ec30b36bf497d685de3db85e5dd5d5dad52a79c8184eeac82600b10295"
         }
       },
       "name": "qttools",
@@ -330,6 +1020,6 @@
   ],
   "retrievedAt": "2026-09-11",
   "schemaVersion": 1,
-  "scope": "Complete upstream LICENSES directories and REUSE.toml metadata for the exact qtbase, qtsvg, and build-only qttools modules selected by the Windows qualification workflow.",
+  "scope": "Original module licenses, attribution files, referenced and adjacent upstream notices, and reviewed build conditions. QtTools and other-platform entries are preserved as source provenance; they are not claims of shipped runtime components.",
   "version": "6.11.2"
 }

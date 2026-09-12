@@ -23,3 +23,4 @@ compile_commands.json
 
 /tests/scripted/__pycache__/
 /cmake/msix/__pycache__/
+/distribution/__pycache__/

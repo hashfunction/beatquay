@@ -6,6 +6,7 @@ CMake configure/generate/install are real. Only compiler redistributable discove
 is replaced: no Windows CRT or compiler is installed on the test host.
 """
 from pathlib import Path
+import json
 import subprocess
 import tempfile
 import unittest
@@ -102,6 +103,10 @@ list(PREPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}")
                         self.assertEqual(
                             (stage / "bin/debug.dll").exists(), config == "Debug"
                         )
+                        selection = json.loads((build / 'ms-runtime-selection.json').read_text())
+                        self.assertEqual(selection['sourcePaths'], [(root / 'release.dll').as_posix()])
+                        self.assertNotIn((root / 'debug.dll').as_posix(), selection['sourcePaths'])
+                        self.assertEqual(selection['discoveryModule'], (root / 'InstallRequiredSystemLibraries.cmake').as_posix())
 
 
 if __name__ == "__main__":

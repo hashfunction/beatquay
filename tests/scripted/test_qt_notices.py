@@ -83,5 +83,46 @@ class QtNoticeTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertEqual(sentinel.read_bytes(), b"keep")
 
+    def test_original_attributions_and_referenced_notices_are_complete(self):
+        result, output = self.collect()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        names = list(output.rglob('qt_attribution.json'))
+        self.assertEqual(len(names), 79)
+        raw = (output / 'qtbase/src/corelib/text/qt_attribution.json').read_bytes()
+        with self.assertRaises(ValueError): json.loads(raw)
+        self.assertEqual(json.loads(raw, strict=False)[0]['Id'], 'unicode-character-database')
+        self.assertIn(b'Copyright', (output / 'qtsvg/src/svg/LICENSE.XSVG.txt').read_bytes())
+
+    def test_changed_git_blob_and_missing_reference_cannot_be_reauthorized_by_sha256(self):
+        for mutation in ('git', 'reference'):
+            bundle = self.root / mutation
+            shutil.copytree(BUNDLE, bundle)
+            manifest_path = bundle / '6.11.2/manifest.json'
+            manifest = json.loads(manifest_path.read_bytes())
+            module = next(x for x in manifest['modules'] if x['name'] == 'qtsvg')
+            if mutation == 'git':
+                module['files']['REUSE.toml']['gitBlob'] = '0' * 40
+            else:
+                module['files'].pop('src/svg/LICENSE.XSVG.txt')
+                (bundle / '6.11.2/qtsvg/src/svg/LICENSE.XSVG.txt').unlink()
+            manifest_path.write_text(json.dumps(manifest))
+            result, output = self.collect(bundle=bundle, output=self.root / (mutation + '-output'))
+            self.assertNotEqual(result.returncode, 0)
+            self.assertFalse(output.exists())
+
+    def test_symlink_parent_and_uninventoried_file_are_rejected(self):
+        for mutation in ('link', 'extra'):
+            bundle = self.root / mutation
+            shutil.copytree(BUNDLE, bundle)
+            if mutation == 'link':
+                target = bundle / '6.11.2/qtsvg/LICENSES'
+                external = self.root / 'foreign-licenses'
+                target.rename(external); target.symlink_to(external, target_is_directory=True)
+            else:
+                (bundle / '6.11.2/qtsvg/foreign.txt').write_bytes(b'not inventoried')
+            result, output = self.collect(bundle=bundle, output=self.root / (mutation + '-output'))
+            self.assertNotEqual(result.returncode, 0)
+            self.assertFalse(output.exists())
+
 if __name__ == "__main__":
     unittest.main()

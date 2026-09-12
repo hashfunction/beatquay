@@ -1,0 +1,365 @@
+{
+  "archives": [
+    {
+      "bytes": 4310712,
+      "file": "fftw-3.3.11.tar.gz",
+      "license": "GPL-2.0-or-later",
+      "originalUrl": "https://www.fftw.org/fftw-3.3.11.tar.gz",
+      "owner": "fftw3",
+      "portVersion": 0,
+      "proposedDownloadUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/fftw-3.3.11.tar.gz",
+      "recipePath": "vcpkg-9e593bb18ea69cc5095e012465dcd675a822ed0d/ports/fftw3/portfile.cmake",
+      "recipeSha512": "ca1bf80490dc6955a0ab49b1af05d6658c2ecc0968b3bde5b4af22271e47d30cd38f6f8347e8e6124091b6a17717447942bee95f94ca29574ba71c4d167af351",
+      "role": "runtime",
+      "sha256": "5630c24cdeb33b131612f7eb4b1a9934234754f9f388ff8617458d0be6f239a1",
+      "sha512": "ca1bf80490dc6955a0ab49b1af05d6658c2ecc0968b3bde5b4af22271e47d30cd38f6f8347e8e6124091b6a17717447942bee95f94ca29574ba71c4d167af351",
+      "stageFiles": [
+        "fftw3f.dll"
+      ],
+      "version": "3.3.11"
+    },
+    {
+      "bytes": 77777,
+      "commit": "4a9a1e67fa6f8ce7688e1c0c8a2b017cecd206a3",
+      "file": "hiir-4a9a1e67fa6f8ce7688e1c0c8a2b017cecd206a3.tar.gz",
+      "modulePath": "src/3rdparty/hiir/hiir",
+      "originalUrl": "https://github.com/LostRobotMusic/hiir",
+      "owner": "hiir",
+      "proposedDownloadUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/hiir-4a9a1e67fa6f8ce7688e1c0c8a2b017cecd206a3.tar.gz",
+      "role": "compiled-in-core",
+      "sha256": "fb9535bb3141fcf85ae1f65e44192fe974987d068905800379a208cb6d89c334",
+      "sha512": "d54b546c780fcc7c19258062da14015406aab779ae106f3290aefad8fc9eec2de43c0dadf4d03d8d6df07756c6df41ecf7618b0f2ab79713999cc413347f2b34",
+      "stageFiles": [
+        "beatsprig.exe"
+      ],
+      "tree": "1bae8c7af24bcd8f3ab0faaeea7158c4f530e57f"
+    },
+    {
+      "bytes": 974901,
+      "file": "xiph-flac-1.5.0.tar.gz",
+      "license": "BSD-3-Clause",
+      "originalUrl": "https://github.com/xiph/flac/archive/1.5.0.tar.gz",
+      "owner": "libflac",
+      "portVersion": 0,
+      "proposedDownloadUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/xiph-flac-1.5.0.tar.gz",
+      "recipePath": "vcpkg-9e593bb18ea69cc5095e012465dcd675a822ed0d/ports/libflac/portfile.cmake",
+      "recipeSha512": "c8e119462205cfd8bbe22b0aff112625d3e51ca11de97e4de06a46fb43a0768d7ec9c245b299b09b7aa4d811c6fc7b57856eaa1c217e82cca9b3ad1c0e545cbe",
+      "role": "runtime",
+      "sha256": "aea54ed186ad07a34750399cb27fc216a2b62d0ffcd6dc2e3064a3518c3146f8",
+      "sha512": "c8e119462205cfd8bbe22b0aff112625d3e51ca11de97e4de06a46fb43a0768d7ec9c245b299b09b7aa4d811c6fc7b57856eaa1c217e82cca9b3ad1c0e545cbe",
+      "stageFiles": [
+        "flac.dll"
+      ],
+      "version": "1.5.0"
+    },
+    {
+      "bytes": 254178,
+      "file": "xiph-ogg-v1.3.6.tar.gz",
+      "license": "BSD-3-Clause",
+      "originalUrl": "https://github.com/xiph/ogg/archive/v1.3.6.tar.gz",
+      "owner": "libogg",
+      "portVersion": 1,
+      "proposedDownloadUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/xiph-ogg-v1.3.6.tar.gz",
+      "recipePath": "vcpkg-9e593bb18ea69cc5095e012465dcd675a822ed0d/ports/libogg/portfile.cmake",
+      "recipeSha512": "c247e1da8b12f8b33272fafb6d7c171a1a2687c3632977439fa60b96ccc2ad751d88a2931bb3e18e1ddf2eea2e82cdd0aab087b2ec5393a9228c703476fa0167",
+      "role": "runtime",
+      "sha256": "95b643da661155d79db9de2fca55daed3a8d491039829def246aacb3d9201c81",
+      "sha512": "c247e1da8b12f8b33272fafb6d7c171a1a2687c3632977439fa60b96ccc2ad751d88a2931bb3e18e1ddf2eea2e82cdd0aab087b2ec5393a9228c703476fa0167",
+      "stageFiles": [
+        "ogg.dll"
+      ],
+      "version": "1.3.6"
+    },
+    {
+      "bytes": 3954784,
+      "file": "libsndfile-libsamplerate-0.2.2.tar.gz",
+      "license": "BSD-2-Clause",
+      "originalUrl": "https://github.com/libsndfile/libsamplerate/archive/0.2.2.tar.gz",
+      "owner": "libsamplerate",
+      "portVersion": 1,
+      "proposedDownloadUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/libsndfile-libsamplerate-0.2.2.tar.gz",
+      "recipePath": "vcpkg-9e593bb18ea69cc5095e012465dcd675a822ed0d/ports/libsamplerate/portfile.cmake",
+      "recipeSha512": "37e0fd604907caf978659466289315befd66eec16c21a94e0b6106de18ffe803fbf2e7f3a8fb0430b33c0b784ecd6d4eaf3b9a862ed2670104647decbee913d6",
+      "role": "runtime",
+      "sha256": "16e881487f184250deb4fcb60432d7556ab12cb58caea71ef23960aec6c0405a",
+      "sha512": "37e0fd604907caf978659466289315befd66eec16c21a94e0b6106de18ffe803fbf2e7f3a8fb0430b33c0b784ecd6d4eaf3b9a862ed2670104647decbee913d6",
+      "stageFiles": [
+        "samplerate.dll"
+      ],
+      "version": "0.2.2"
+    },
+    {
+      "bytes": 684875,
+      "file": "libsndfile-libsndfile-1.2.2.tar.gz",
+      "license": "LGPL-2.1-or-later",
+      "originalUrl": "https://github.com/libsndfile/libsndfile/archive/1.2.2.tar.gz",
+      "owner": "libsndfile",
+      "portVersion": 2,
+      "proposedDownloadUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/libsndfile-libsndfile-1.2.2.tar.gz",
+      "recipePath": "vcpkg-9e593bb18ea69cc5095e012465dcd675a822ed0d/ports/libsndfile/portfile.cmake",
+      "recipeSha512": "fb8b4d367240a8ac9d55be6f053cb19419890691c56a8552d1600d666257992b6e8e41a413a444c9f2d6c5d71406013222c92a3bfa67228944a26475444240a1",
+      "role": "runtime",
+      "sha256": "ffe12ef8add3eaca876f04087734e6e8e029350082f3251f565fa9da55b52121",
+      "sha512": "fb8b4d367240a8ac9d55be6f053cb19419890691c56a8552d1600d666257992b6e8e41a413a444c9f2d6c5d71406013222c92a3bfa67228944a26475444240a1",
+      "stageFiles": [
+        "sndfile.dll"
+      ],
+      "version": "1.2.2"
+    },
+    {
+      "bytes": 1234573,
+      "file": "xiph-vorbis-v1.3.7.tar.gz",
+      "license": "BSD-3-Clause",
+      "originalUrl": "https://github.com/xiph/vorbis/archive/v1.3.7.tar.gz",
+      "owner": "libvorbis",
+      "portVersion": 4,
+      "proposedDownloadUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/xiph-vorbis-v1.3.7.tar.gz",
+      "recipePath": "vcpkg-9e593bb18ea69cc5095e012465dcd675a822ed0d/ports/libvorbis/portfile.cmake",
+      "recipeSha512": "bfb6f5dbfd49ed38b2b08b3667c06d02e68f649068a050f21a3cc7e1e56b27afd546aaa3199c4f6448f03f6e66a82f9a9dc2241c826d3d1d4acbd38339b9e9fb",
+      "role": "runtime",
+      "sha256": "270c76933d0934e42c5ee0a54a36280e2d87af1de3cc3e584806357e237afd13",
+      "sha512": "bfb6f5dbfd49ed38b2b08b3667c06d02e68f649068a050f21a3cc7e1e56b27afd546aaa3199c4f6448f03f6e66a82f9a9dc2241c826d3d1d4acbd38339b9e9fb",
+      "stageFiles": [
+        "vorbis.dll",
+        "vorbisenc.dll",
+        "vorbisfile.dll"
+      ],
+      "version": "1.3.7"
+    },
+    {
+      "bytes": 1524133,
+      "file": "lame-3.100.tar.gz",
+      "license": "LGPL-2.0-only",
+      "originalUrl": "https://downloads.sourceforge.net/project/lame/lame/3.100/lame-3.100.tar.gz",
+      "owner": "mp3lame",
+      "portVersion": 17,
+      "proposedDownloadUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/lame-3.100.tar.gz",
+      "recipePath": "vcpkg-9e593bb18ea69cc5095e012465dcd675a822ed0d/ports/mp3lame/portfile.cmake",
+      "recipeSha512": "0844b9eadb4aacf8000444621451277de365041cc1d97b7f7a589da0b7a23899310afd4e4d81114b9912aa97832621d20588034715573d417b2923948c08634b",
+      "role": "runtime",
+      "sha256": "ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e",
+      "sha512": "0844b9eadb4aacf8000444621451277de365041cc1d97b7f7a589da0b7a23899310afd4e4d81114b9912aa97832621d20588034715573d417b2923948c08634b",
+      "stageFiles": [
+        "libmp3lame.dll"
+      ],
+      "version": "3.100"
+    },
+    {
+      "bytes": 1122088,
+      "file": "mpg123-1.33.4.tar.bz2",
+      "license": "LGPL-2.1-or-later",
+      "originalUrl": "https://downloads.sourceforge.net/project/mpg123/mpg123/1.33.4/mpg123-1.33.4.tar.bz2",
+      "owner": "mpg123",
+      "portVersion": 0,
+      "proposedDownloadUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/mpg123-1.33.4.tar.bz2",
+      "recipePath": "vcpkg-9e593bb18ea69cc5095e012465dcd675a822ed0d/ports/mpg123/portfile.cmake",
+      "recipeSha512": "9b7aa93b692132da7eb8dcfef12ce91bf66bf8475af50e9c57d7b80225f96c0e74264e518e558371af1f4cf6d2afda5b3dfc844949fd747db7ac7c44d0e9f6ad",
+      "role": "runtime",
+      "sha256": "3ae8c9ff80a97bfc0e22e89fbcd74687eca4fc1db315b12607f27f01cb5a47d9",
+      "sha512": "9b7aa93b692132da7eb8dcfef12ce91bf66bf8475af50e9c57d7b80225f96c0e74264e518e558371af1f4cf6d2afda5b3dfc844949fd747db7ac7c44d0e9f6ad",
+      "stageFiles": [
+        "mpg123.dll"
+      ],
+      "version": "1.33.4"
+    },
+    {
+      "bytes": 4183352,
+      "file": "xiph-opus-v1.5.2.tar.gz",
+      "license": "BSD-3-Clause",
+      "originalUrl": "https://github.com/xiph/opus/archive/v1.5.2.tar.gz",
+      "owner": "opus",
+      "portVersion": 1,
+      "proposedDownloadUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/xiph-opus-v1.5.2.tar.gz",
+      "recipePath": "vcpkg-9e593bb18ea69cc5095e012465dcd675a822ed0d/ports/opus/portfile.cmake",
+      "recipeSha512": "4ffefd9c035671024f9720c5129bfe395dea04f0d6b730041c2804e89b1db6e4d19633ad1ae58855afc355034233537361e707f26dc53adac916554830038fab",
+      "role": "runtime",
+      "sha256": "9480e329e989f70d69886ded470c7f8cfe6c0667cc4196d4837ac9e668fb7404",
+      "sha512": "4ffefd9c035671024f9720c5129bfe395dea04f0d6b730041c2804e89b1db6e4d19633ad1ae58855afc355034233537361e707f26dc53adac916554830038fab",
+      "stageFiles": [
+        "opus.dll"
+      ],
+      "version": "1.5.2"
+    },
+    {
+      "bytes": 1463329,
+      "file": "PortAudio-portaudio-147dd722548358763a8b649b3e4b41dfffbcfbb6.tar.gz",
+      "license": "MIT",
+      "originalUrl": "https://github.com/PortAudio/portaudio/archive/147dd722548358763a8b649b3e4b41dfffbcfbb6.tar.gz",
+      "owner": "portaudio",
+      "portVersion": 9,
+      "proposedDownloadUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/PortAudio-portaudio-147dd722548358763a8b649b3e4b41dfffbcfbb6.tar.gz",
+      "recipePath": "vcpkg-9e593bb18ea69cc5095e012465dcd675a822ed0d/ports/portaudio/portfile.cmake",
+      "recipeSha512": "0f56e5f5b004f51915f29771b8fc1fe886f1fef5d65ab5ea1db43f43c49917476b9eec14b36aa54d3e9fb4d8bdf61e68c79624d00b7e548d4c493395a758233a",
+      "role": "runtime",
+      "sha256": "95457b809ce60d4d4790f84bb692e271f644e59d8adf96feb988c89ab52a506a",
+      "sha512": "0f56e5f5b004f51915f29771b8fc1fe886f1fef5d65ab5ea1db43f43c49917476b9eec14b36aa54d3e9fb4d8bdf61e68c79624d00b7e548d4c493395a758233a",
+      "stageFiles": [
+        "portaudio.dll"
+      ],
+      "version": "19.7"
+    },
+    {
+      "bytes": 66987512,
+      "commit": "ef55f427f2c8b410d34f8a7681020a3000cf6866",
+      "file": "qtbase-ef55f427f2c8b410d34f8a7681020a3000cf6866-raw-git.tar.gz",
+      "owner": "qtbase",
+      "proposedDownloadUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/qtbase-ef55f427f2c8b410d34f8a7681020a3000cf6866-raw-git.tar.gz",
+      "role": "runtime",
+      "sha256": "7fa40cb6053479cf9f8316cbc9717f2bc1ded670e5e50df5a27a68fc566b2268",
+      "sha512": "a6c1ff52b6470fcb8db534b88d53120eb3e91993befd71a475fc9fbfffddbaeb2d5a0747c6934e6d02ecbe5ae52de3d1c7f50c0a7d2668cd55514072b2db3744",
+      "stageFiles": [
+        "qt6core.dll",
+        "qt6gui.dll",
+        "qt6widgets.dll",
+        "qt6xml.dll",
+        "platforms/qwindows.dll"
+      ],
+      "tree": "e414f40795dfc79c4a13e0c03ce37b2145ed33be",
+      "unexpandedGitlinks": {},
+      "version": "6.11.2"
+    },
+    {
+      "bytes": 2615150,
+      "commit": "17ca512f903f935282ebeca496aac5d11ba4199a",
+      "file": "qtsvg-17ca512f903f935282ebeca496aac5d11ba4199a-raw-git.tar.gz",
+      "owner": "qtsvg",
+      "proposedDownloadUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/qtsvg-17ca512f903f935282ebeca496aac5d11ba4199a-raw-git.tar.gz",
+      "role": "runtime",
+      "sha256": "a30d3290e510ff0db60b0dcb5886cb35c3cf00ff8ae91f23a15df17be0469aa7",
+      "sha512": "3abb585e7e3aff5a908d3263ea884c659cdd789b6915b7893799adc60c4b17c8abf8a0730ad742476ecd2332ea1b914580aee0849fb397b15f44efb9743f2602",
+      "stageFiles": [
+        "qt6svg.dll",
+        "imageformats/qsvg.dll",
+        "iconengines/qsvgicon.dll"
+      ],
+      "tree": "bc11fdd8ad0c6e5b7987048ccd3ba4a987b7d94a",
+      "unexpandedGitlinks": {},
+      "version": "6.11.2"
+    },
+    {
+      "bytes": 12015655,
+      "commit": "8026c0462f19e9549501718152523ea223a19fd3",
+      "file": "qttools-8026c0462f19e9549501718152523ea223a19fd3-raw-git.tar.gz",
+      "owner": "qttools",
+      "proposedDownloadUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/qttools-8026c0462f19e9549501718152523ea223a19fd3-raw-git.tar.gz",
+      "role": "build-only",
+      "sha256": "a23aef9204f588cb08d63a6d9aca57a68bcc2fd7263d65aefe2dbda157d5828a",
+      "sha512": "90d74fe9ab99b5cbcef1ba9673dbe6327b533ccfd3da8961b21d725a223009eee9e9f67f43bf4cdbada0fadd3bae2e33283d682013829309203775d8e8a62779",
+      "stageFiles": [],
+      "tree": "a9bc7ac60841db184a1070996ab6f667e4f3e8ac",
+      "unexpandedGitlinks": {
+        "src/assistant/qlitehtml": "3fe5821dad98747d6e41c9ed54b86c3d0eee9daf"
+      },
+      "version": "6.11.2"
+    },
+    {
+      "bytes": 49935,
+      "commit": "1c46ef34a28d4637b43fb6d5ebb31d38c05f4bd8",
+      "file": "ringbuffer-1c46ef34a28d4637b43fb6d5ebb31d38c05f4bd8.tar.gz",
+      "modulePath": "src/3rdparty/ringbuffer",
+      "originalUrl": "https://github.com/JohannesLorenz/ringbuffer.git",
+      "owner": "ringbuffer",
+      "proposedDownloadUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/ringbuffer-1c46ef34a28d4637b43fb6d5ebb31d38c05f4bd8.tar.gz",
+      "role": "compiled-in-core",
+      "sha256": "fd5b75dc7a9507dd2579a36475758ef75d1ad6c767b4ff99e5b0a6619c020917",
+      "sha512": "4b15be03e441efe442536c885cfb08e13190bc6715c91938b6f96a50d390a09b0ba822392fb17417476ecd73bba0a321e005d1082ba217d9677f4c56dd1c0328",
+      "stageFiles": [
+        "beatsprig.exe"
+      ],
+      "tree": "c8d37acc62f35c3b0aa1ce7ecbf7299a1def7c47"
+    },
+    {
+      "bytes": 5334507,
+      "commit": "9e593bb18ea69cc5095e012465dcd675a822ed0d",
+      "file": "vcpkg-9e593bb.tar.gz",
+      "owner": "vcpkg",
+      "proposedDownloadUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/vcpkg-9e593bb.tar.gz",
+      "role": "build-recipes",
+      "sha256": "e9255b62719c659f224fcc639b1bf4a6226e4996ad3fb006e18e1533cad77725",
+      "sha512": "1df9b0cbfa8edcf52a8e48f56d3f5e8df737dd2d5ecf2e4bcc9b5ec1a3380552d65e30c4fe4936f7db418ba419662dabdfaf5ae2d4ad5f1d51c209e97e57cacb",
+      "stageFiles": [],
+      "tree": "13d05701a9a798f511a849c9721c7b8af75f2db9"
+    },
+    {
+      "bytes": 1566911,
+      "file": "madler-zlib-v1.3.2.tar.gz",
+      "license": "Zlib",
+      "originalUrl": "https://github.com/madler/zlib/archive/v1.3.2.tar.gz",
+      "owner": "zlib",
+      "portVersion": 1,
+      "proposedDownloadUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/madler-zlib-v1.3.2.tar.gz",
+      "recipePath": "vcpkg-9e593bb18ea69cc5095e012465dcd675a822ed0d/ports/zlib/portfile.cmake",
+      "recipeSha512": "16fea4df307a68cf0035858abe2fd550250618a97590e202037acd18a666f57afc10f8836cbbd472d54a0e76539d0e558cb26f059d53de52ff90634bbf4f47d4",
+      "role": "retained-build-dependency; no separately staged zlib DLL",
+      "sha256": "b99a0b86c0ba9360ec7e78c4f1e43b1cbdf1e6936c8fa0f6835c0cd694a495a1",
+      "sha512": "16fea4df307a68cf0035858abe2fd550250618a97590e202037acd18a666f57afc10f8836cbbd472d54a0e76539d0e558cb26f059d53de52ff90634bbf4f47d4",
+      "stageFiles": [],
+      "version": "1.3.2"
+    }
+  ],
+  "correspondingSourceComplete": false,
+  "deliveryStatus": "prepared-unpublished",
+  "product": "BeatSprig",
+  "proposedTag": "beatsprig-native-source-1.0.1",
+  "qtBinaryInputs": [
+    {
+      "bytes": 39618573,
+      "file": "qtbase-Windows-Windows_11_24H2-MSVC2022-Windows-Windows_11_24H2-X86_64.7z",
+      "sha256": "FD984B7264361B4DD3FD2A417702CA1258E4086268F2EE6A69B9A393D9C3F6BB"
+    },
+    {
+      "bytes": 684353,
+      "file": "qtsvg-Windows-Windows_11_24H2-MSVC2022-Windows-Windows_11_24H2-X86_64.7z",
+      "sha256": "417F44499C835B2303F3FF78043179BB23442F33D5D2816FBF7E8DBF275B1C89"
+    },
+    {
+      "bytes": 27033907,
+      "file": "qttools-Windows-Windows_11_24H2-MSVC2022-Windows-Windows_11_24H2-X86_64.7z",
+      "sha256": "5F2B387A1F8055102B1388FF4EA743124ED6389D442F75C659728BB5C2A56946"
+    }
+  ],
+  "qtRuntimeAttributionIds": [
+    "aglfn",
+    "blake2",
+    "d3d12memoryallocator",
+    "doubleconversion",
+    "easing",
+    "emoji-segmenter",
+    "freetype",
+    "freetype-bdf",
+    "freetype-pcf",
+    "freetype-zlib",
+    "grayraster",
+    "harfbuzz-ng",
+    "icc-srgb-color-profile",
+    "libpng",
+    "md4",
+    "md4c",
+    "md5",
+    "opengl-headers",
+    "pcre2",
+    "pcre2-sljit",
+    "rfc6234",
+    "rhi-miniengine-d3d12-mipmap",
+    "sha1",
+    "sha3_endian",
+    "sha3_keccak",
+    "siphash",
+    "smooth-scaling-algorithm",
+    "tika-mimetypes",
+    "tinycbor",
+    "tlexpected",
+    "unicode-character-database",
+    "unicode-cldr",
+    "vulkan-xml-spec",
+    "vulkanmemoryallocator",
+    "webgradients",
+    "wintab",
+    "xserverhelper",
+    "xsvg",
+    "zlib"
+  ],
+  "repository": "https://github.com/hashfunction/beatquay",
+  "schemaVersion": 1,
+  "version": "1.0.1"
+}

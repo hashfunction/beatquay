@@ -523,10 +523,10 @@ function Invoke-BeatQuayConsumerTempoEdit($State) {
 
 function Select-BeatQuayConsumerCombo($State,$Window,[string]$Label,[string]$Value) {
  $labelControl=Find-BeatQuayConsumerControl $Window $State.process.Id 'Text' $Label
- $label=$labelControl.snapshot
+ $labelSnapshot=$labelControl.snapshot
  $combos=@($Window.items|Where-Object {$s=$_.snapshot;$s.available -and $s.type -ceq 'ComboBox' -and $s.visible -and $s.enabled -and
-   $s.process_id -eq $State.process.Id -and $s.x -ge ($label.x+$label.width-4) -and
-   [Math]::Abs(($s.y+$s.height/2)-($label.y+$label.height/2)) -lt [Math]::Max($s.height,$label.height)/2})
+   $s.process_id -eq $State.process.Id -and $s.x -ge ($labelSnapshot.x+$labelSnapshot.width-4) -and
+   [Math]::Abs(($s.y+$s.height/2)-($labelSnapshot.y+$labelSnapshot.height/2)) -lt [Math]::Max($s.height,$labelSnapshot.height)/2})
  if($combos.Count -ne 1){throw "Missing unambiguous native combo adjacent to $Label"}
  Invoke-BeatQuayConsumerClick $State $Window $combos[0]
  # The normal Qt popup exposes its actual named list option; select that observed row.

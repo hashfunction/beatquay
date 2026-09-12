@@ -83,11 +83,23 @@ foreach ($archive in $lock.qt.archives) {
     $qtNoticeArguments += @('--module',[string]$archive)
 }
 Invoke-Checked python $qtNoticeArguments
+Invoke-Checked python @('-m','unittest','discover','-s','tests/scripted','-p','test_qt_notices.py','-v')
+Invoke-Checked python @('-m','unittest','discover','-s','tests/scripted','-p','test_native_source.py','-v')
+Invoke-Checked python @('tests/scripted/test_license_resource.py','-v')
+Invoke-Checked python @('distribution/native_source.py','collect','--source',"$(Get-Location)",
+    '--evidence',"$(Get-Location)/build-evidence",'--downloads',"$(Get-Location)/.ci-vcpkg/downloads",
+    '--source-commit',$sourceCommit,'--output',(Join-Path $noticeRoot 'native'))
 if (@(Get-ChildItem -LiteralPath (Join-Path $noticeRoot 'vcpkg') -Recurse -File).Count -eq 0 -or
     @(Get-ChildItem -LiteralPath (Join-Path $noticeRoot 'qt') -Recurse -File).Count -eq 0) {
     throw 'Actual Qt and vcpkg dependency notice collections must both be nonempty.'
 }
 $powerShell=(Get-Process -Id $PID).Path
+Copy-Item -LiteralPath build/ms-runtime-selection.json -Destination build-evidence/ms-runtime-selection.json
+Invoke-Checked python @('-m','unittest','discover','-s','cmake/msix','-p','test_ms_runtime_origins.py','-v')
+Invoke-Checked $powerShell @('-NoLogo','-NoProfile','-File','cmake/msix/test_ms_runtime_collection.ps1')
+Invoke-Checked $powerShell @('-NoLogo','-NoProfile','-File','cmake/msix/collect-ms-runtime-origins.ps1',
+    '-Selection','build-evidence/ms-runtime-selection.json','-Stage','stage','-SourceCommit',$sourceCommit,
+    '-Output','build-evidence/ms-runtime-origins.json')
 Invoke-Checked $powerShell @('-NoLogo','-NoProfile','-File','cmake/msix/test_api_set_resolution.ps1')
 Invoke-Checked python @('cmake/msix/test_pe_import_collection.py','--powershell',$powerShell,'-v')
 Invoke-Checked $powerShell @('-NoLogo','-NoProfile','-File','cmake/msix/collect-pe-imports.ps1','-Stage','stage','-Output','build-evidence/pe-imports.json')

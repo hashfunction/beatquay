@@ -65,6 +65,8 @@ INCLUDE(GenQrc)
 ADD_GEN_QRC(LMMS_RCC_OUT lmms.qrc
 	"${CMAKE_SOURCE_DIR}/doc/AUTHORS"
 	"${CMAKE_SOURCE_DIR}/LICENSE.txt"
+	"${CMAKE_SOURCE_DIR}/distribution/native-source/COMBINED-LICENSE.md"
+	"${CMAKE_SOURCE_DIR}/distribution/native-source/GPL-3.0.txt"
 	"${CONTRIBUTORS}"
 	"${CMAKE_SOURCE_DIR}/data/branding/beatquay-256.png"
 	"${CMAKE_SOURCE_DIR}/data/branding/beatquay.svg"

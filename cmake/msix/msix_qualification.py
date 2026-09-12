@@ -24,6 +24,10 @@ from urllib.parse import unquote
 import xml.etree.ElementTree as ET
 import zipfile
 import zlib
+import ms_runtime_origins
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'distribution'))
+import native_source
 
 
 APPX_NS = "http://schemas.microsoft.com/appx/manifest/foundation/windows10"
@@ -80,6 +84,9 @@ SOURCE_FILES = (
     "cmake/msix/qualify-msix-install.ps1", "cmake/msix/first-run.ps1",
     "cmake/msix/consumer-workflow.ps1", "cmake/msix/consumer-display.ps1",
     "cmake/msix/consumer_files.py", "tests/scripted/starter_render.py",
+    "cmake/msix/collect-ms-runtime-origins.ps1", "cmake/msix/ms_runtime_origins.py",
+    "distribution/native_source.py", "distribution/collect_qt_notices.py", "distribution/qualify-candidate.ps1",
+    "cmake/msix/qualify-msix.ps1", "src/CMakeLists.txt", "cmake/modules/GenQrc.cmake", "cmake/scripts/GenQrc.cmake",
     "data/branding/CMakeLists.txt", "data/branding/README.md", "data/branding/generate.py",
     "data/branding/beatquay.svg", "data/branding/beatquay.ico",
     "cmake/modules/BeatQuayIdentity.cmake", "cmake/modules/BeatQuayRuntime.cmake",
@@ -92,6 +99,7 @@ EVIDENCE_FILES = (
     "stage-inventory.json", "vcpkg-installed-status.txt", "qt-downloads.json",
     "dependency-downloads.json", "candidate-inputs.json", "configure-flags.txt", "submodules.txt",
     "render-smoke.json", "starter-render.json", "result.json", "pe-imports.json",
+    "ms-runtime-selection.json", "ms-runtime-origins.json",
 )
 PACKAGE_METADATA = {"[Content_Types].xml", "AppxBlockMap.xml", "AppxMetadata/CodeIntegrity.cat"}
 PACKAGE_INPUT_RECORD = "build-evidence/package-input.json"
@@ -215,6 +223,8 @@ def file_record(path):
 def source_inputs(source_root, artwork):
     source_root, artwork = Path(source_root), Path(artwork)
     result = {name: file_record(source_root / name) for name in SOURCE_FILES}
+    for folder in ('distribution/native-source', 'distribution/qt-notices'):
+        result.update({folder + '/' + name: value for name, value in inventory_tree(source_root / folder).items()})
     try:
         artwork_relative = artwork.resolve(strict=True).relative_to(source_root.resolve(strict=True)).as_posix()
     except (OSError, ValueError) as error:
@@ -345,6 +355,10 @@ def create_input_inventory(release, source_root, source_commit, evidence_root, a
     if _inventory_rows(evidence_root / "stage-inventory.json") != files:
         raise ValueError("Same-run stage inventory differs from actual stage")
     pe = _validate_pe_imports(release, evidence_root / "pe-imports.json", files)
+    native_source.verify_evidence(source_root, evidence_root, source_commit)
+    microsoft = ms_runtime_origins.verify(evidence_root, files, source_commit, file_record)
+    runtime_owners = native_source.stage_owners(
+        native_source.load_release(Path(source_root) / 'distribution/native-source/source-release.json'), files, microsoft['files'])
     result = _load_json(evidence_root / "result.json", "native result")
     required_true = ("built", "tests_passed", "lifecycle_repeat_passed", "installed_stage", "native_render_smoke_passed", "native_render_error_exit_passed", "native_installed_starter_renders_passed")
     if result.get("source_commit") != source_commit or any(result.get(name) is not True for name in required_true):
@@ -361,6 +375,9 @@ def create_input_inventory(release, source_root, source_commit, evidence_root, a
             qt="Exact Qt binary downloads and source-pinned module notice manifests/files are bound as evidence",
             vcpkg="Pinned vcpkg input, installed status, downloads and copied copyright files are bound",
             imports="Every staged PE is recorded; all three instrument DLLs import beatsprig.exe",
+            microsoft="Each exact CMake-selected release SDK/redist original is independently reread and matched to its staged DLL",
+            nativeSource="Original notices, prepared 17-archive manifest, actual vcpkg downloads and immutable module pins are bound; public delivery remains unverified",
+            nativeRuntimeOwners=runtime_owners,
             inventoryIsLicenseClearance=False,
             correspondingSourceComplete=False,
         ),
@@ -668,6 +685,10 @@ def stage_release(release, artwork, stage, source_commit, inventory, evidence_ro
         license_sources = {
             "licenses/BeatSprig/LICENSE.txt": Path(source_root) / "LICENSE.txt",
             "licenses/BeatSprig/AUTHORS.txt": Path(source_root) / "doc/AUTHORS",
+            "licenses/BeatSprig/COMBINED-LICENSE.md": Path(source_root) / "distribution/native-source/COMBINED-LICENSE.md",
+            "licenses/BeatSprig/GPL-3.0.txt": Path(source_root) / "distribution/native-source/GPL-3.0.txt",
+            "licenses/Microsoft/ms-runtime-origins.json": Path(evidence_root) / "ms-runtime-origins.json",
+            "licenses/Microsoft/ms-runtime-selection.json": Path(evidence_root) / "ms-runtime-selection.json",
             "licenses/pipeline/PIPELINE-MIT.txt": Path(source_root) / "cmake/msix/PIPELINE-MIT.txt",
             "licenses/pipeline/RETICLEQUAY-MIT.txt": Path(source_root) / "cmake/msix/RETICLEQUAY-MIT.txt",
             "licenses/templates/CC0-1.0.txt": Path(source_root) / "data/projects/templates/CC0-1.0.txt",
