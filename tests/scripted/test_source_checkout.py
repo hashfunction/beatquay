@@ -41,9 +41,11 @@ class SourceCheckoutTest(unittest.TestCase):
         self.assertEqual((self.work / "CMakeLists.txt").read_bytes(), b"# Owned checkout fixture\n")
         (self.work / "build-evidence").mkdir()
         # Run the exact production commit/status/evidence/rejection statements,
-        # outside the Windows-only host guard and before dependency bootstrap.
+        # outside the Windows-only host guard and before machine preparation.
         script = (SOURCE / "distribution/qualify-candidate.ps1").read_text(encoding="utf-8")
-        preflight = script.split("$sourceCommit=", 1)[1].split("$lock =", 1)[0]
+        preparation = ". (Join-Path $PSScriptRoot '../cmake/msix/runner-shell.ps1')"
+        self.assertEqual(script.count(preparation), 1, "Production preparation boundary changed")
+        preflight = script.split("$sourceCommit=", 1)[1].split(preparation, 1)[0]
         # Preserve the production script/helper topology outside the checkout
         # under test, so exercising preflight does not dirty that checkout.
         harness = self.root / "harness"

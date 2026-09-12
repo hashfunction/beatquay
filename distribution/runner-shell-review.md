@@ -146,3 +146,26 @@ The production verifier replay of the unchanged original failed before this
 data correction and passed afterward. Missing or changed threading registrations
 still fail. The original receipt remains `prepared=false`, with `uninstall=null`;
 no successful uninstall or Windows lifecycle is claimed from this correction.
+
+## Source fixture boundary after the first successful preparation
+
+Run 34704212492, attempt 1, public source
+`55bcdfbc89bab96bca884ab17c899add84d33a98`, retained the original 55,950-byte
+preparation receipt, SHA-256
+`9eaf3e509abc76f43ed264ffb4a628eef70726d8a0d08b8b4f5aa435316d36e5`.
+Both original observations matched; the fixed MSI uninstall exited 0 and the
+post-uninstall product, overlay registry and DLL inventories were empty.
+The receipt records `prepared=true` and no error. This proves only disposable
+runner preparation, not the application build or installed workflow.
+
+The subsequent source-checkout fixture failed before native compilation. Its
+extracted read-only preflight ended at `$lock =`, so adding machine preparation
+above that statement accidentally included the runner helper and uninstall
+entry point in the synthetic Git harness. The fixture now ends at the exact
+single production runner-helper import. It still executes all original commit,
+run/attempt, Git status, evidence and refusal statements with the actual binding
+helper. Production preparation and qualification code are unchanged.
+
+The actual PowerShell-backed Git fixture reproduced the same missing-helper
+failure locally before this correction; all four cases passed afterward.
+The separate actual runner preparation lifecycle/refusal suite also passed.
