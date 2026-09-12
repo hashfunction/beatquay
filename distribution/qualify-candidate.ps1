@@ -16,6 +16,11 @@ $sourceStatusExit=$LASTEXITCODE
 Set-Content -LiteralPath build-evidence/source-status-before-build.txt -Value $sourceStatus -Encoding utf8
 Set-Content -LiteralPath build-evidence/source-status-exit-code.txt -Value $sourceStatusExit -Encoding utf8
 if ($sourceStatusExit -ne 0 -or $sourceStatus.Count) { throw 'Source checkout must be clean before native build and package evidence collection.' }
+. (Join-Path $PSScriptRoot '../cmake/msix/runner-shell.ps1')
+Invoke-Checked (Get-Process -Id $PID).Path @('-NoLogo','-NoProfile','-File','cmake/msix/test_runner_shell.ps1')
+# Exact image-owned TortoiseSVN only. Original bytes/registry/exit remain in the
+# same-run metadata; the product loaded-module policy is unchanged.
+Start-BeatSprigShellPreparation (Join-Path (Get-Location) 'build-evidence/runner-shell-preparation.json')
 $lock = Get-Content distribution/candidate-inputs.json -Raw | ConvertFrom-Json
 Invoke-Checked python @('tests/scripted/test_source_checkout.py','-v')
 if ((git -C .ci-vcpkg rev-parse HEAD) -ne $lock.vcpkg.commit) { throw 'vcpkg revision mismatch.' }

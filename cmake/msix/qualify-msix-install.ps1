@@ -18,6 +18,7 @@ Set-StrictMode -Version Latest
 . (Join-Path $PSScriptRoot 'first-run.ps1')
 . (Join-Path $PSScriptRoot 'consumer-workflow.ps1')
 . (Join-Path $PSScriptRoot 'qualification-bindings.ps1')
+. (Join-Path $PSScriptRoot 'runner-shell.ps1')
 
 function Invoke-BeatQuayQualificationCore([Collections.IDictionary]$Operations) {
     $required = @(
@@ -31,11 +32,14 @@ function Invoke-BeatQuayQualificationCore([Collections.IDictionary]$Operations) 
     }
     $primaryError = $null
     $cleanupErrors = [Collections.Generic.List[string]]::new()
+    $completedOperations = [Collections.Generic.List[string]]::new()
+    $completedCleanup = [Collections.Generic.List[string]]::new()
     try {
         foreach ($name in @('Preflight','PrepareSignedCopy','Install','ActivateAndVerify','ConsumerWorkflow','CloseCleanly','UninstallAndVerify')) {
             # Native tools such as SignTool emit stdout. Keep it in the host
             # log without turning this function's structured result into an array.
             & $Operations[$name] | Out-Host
+            $completedOperations.Add($name)
         }
     } catch {
         $primaryError = $_.Exception.Message
@@ -43,6 +47,7 @@ function Invoke-BeatQuayQualificationCore([Collections.IDictionary]$Operations) 
         foreach ($name in @('StopOwnedProcess','RemoveOwnedPackage','RemoveTrustedCertificate','RemovePersonalCertificate','RemoveOwnedProfile','RemoveOwnedWorkingDirectory','RestoreDisplay','RemoveTemporaryFiles')) {
             try {
                 & $Operations[$name] | Out-Host
+                $completedCleanup.Add($name)
             } catch {
                 $cleanupErrors.Add("${name}: $($_.Exception.Message)")
             }
@@ -52,6 +57,8 @@ function Invoke-BeatQuayQualificationCore([Collections.IDictionary]$Operations) 
         installation_qualification_passed = (-not $primaryError -and $cleanupErrors.Count -eq 0)
         primary_error = $primaryError
         cleanup_errors = @($cleanupErrors)
+        completed_operations = @($completedOperations)
+        completed_cleanup = @($completedCleanup)
     }
 }
 
@@ -427,6 +434,8 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
         displayOriginalMode=$null; displayDevice=$null; displayRestoreRequired=$false; displayEvidence=$null
         cleanClose = $false; uninstallVerified = $false
         identityMode=$Mode;runBinding=$null;helperBindings=$null;installedIdentityVerified=$false
+        runnerShell=[ordered]@{preflight=$null;before_activation=$null}
+        startedAtUtc=[DateTime]::UtcNow.ToString('o')
     }
     $expectedIdentity = Get-BeatQuayPackageIdentity $Mode
 
@@ -460,6 +469,9 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
         $state.helperBindings=Get-BeatQuayQualificationHelperBindings (Join-Path $PSScriptRoot '../..') $state.record.sourceInputs
         $state.unsignedPackageSha256 = (Get-FileHash -LiteralPath $state.package -Algorithm SHA256).Hash.ToLowerInvariant()
         if ($state.unsignedPackageSha256 -ne ([string]$state.record.containerVerification.package.sha256).ToLowerInvariant()) { throw 'Unsigned package hash differs from verified package record.' }
+        $shellReceipt=Join-Path $PSScriptRoot '../../build-evidence/runner-shell-preparation.json'
+        Assert-FileMatchesRecord $shellReceipt $state.record.evidenceInputs.'runner-shell-preparation.json' 'Original runner shell preparation'|Out-Null
+        $state.runnerShell.preflight=Assert-BeatSprigShellAbsentBeforeLaunch $shellReceipt $state.identityMode
         $sdkVersion = [regex]::Escape([string]$state.record.makeAppx.sdkVersion)
         if ([string]$state.record.makeAppx.sdkVersion -cne '10.0.26100.0') { throw 'Only Windows SDK 10.0.26100.0 is qualified.' }
         Assert-FileMatchesRecord $state.record.makeAppx.path $state.record.makeAppx 'MakeAppx tool' | Out-Null
@@ -545,6 +557,9 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
             (Join-Path $PSScriptRoot 'verify_record.py'),'--record',$RecordPath,'--package',$state.package,
             '--source-commit',$env:GITHUB_SHA,'--installed-root',$state.installed.InstallLocation,'--identity-mode',$state.identityMode)
         $state.installedIdentityVerified=$true
+        $shellReceipt=Join-Path $PSScriptRoot '../../build-evidence/runner-shell-preparation.json'
+        Assert-FileMatchesRecord $shellReceipt $state.record.evidenceInputs.'runner-shell-preparation.json' 'Original runner shell preparation'|Out-Null
+        $state.runnerShell.before_activation=Assert-BeatSprigShellAbsentBeforeLaunch $shellReceipt $state.identityMode
         Add-BeatQuayActivationTypes
         if(Test-Path -LiteralPath $state.profile.path){throw 'Profile appeared before owned activation; preserving it'}
         $state.profile.absent_before_activation=$true
@@ -702,10 +717,12 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
     $evidence = [ordered]@{
         schema_version = 1
         generated_at_utc = [DateTime]::UtcNow.ToString('o')
+        qualification_started_at_utc = $state.startedAtUtc
         source_commit = if ($state.record) { [string]$state.record.sourceCommit } else { $null }
         workflow_run_id = if ($state.runBinding) { $state.runBinding.workflow_run_id } else { $null }
         workflow_run_attempt = if ($state.runBinding) { $state.runBinding.workflow_run_attempt } else { $null }
         helper_bindings = $state.helperBindings
+        runner_shell = $state.runnerShell
         identity_mode = $state.identityMode
         qualification_identity_only = $state.identityMode -ceq 'qualification'
         installed_identity_verified = $state.installedIdentityVerified
@@ -748,6 +765,8 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
         public_release = $false
         primary_error = $result.primary_error
         cleanup_errors = @($result.cleanup_errors)
+        completed_operations = if($result.PSObject.Properties['completed_operations']){@($result.completed_operations)}else{@()}
+        completed_cleanup = if($result.PSObject.Properties['completed_cleanup']){@($result.completed_cleanup)}else{@()}
         evidence_errors = @($evidenceErrors)
     }
     try {

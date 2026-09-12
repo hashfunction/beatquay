@@ -40,7 +40,7 @@ try{
     }
     $inputs=$expected|ConvertTo-Json -Depth 4|ConvertFrom-Json
     $bound=Get-BeatQuayQualificationHelperBindings $fixture $inputs
-    if($bound.Count -ne 10){throw 'Incomplete actual helper binding'}
+    if($bound.Count -ne 12){throw 'Incomplete actual helper binding'}
     foreach($name in $expected.Keys){
         $path=Join-Path $fixture $name;$original=[IO.File]::ReadAllBytes($path);[IO.File]::WriteAllText($path,'changed')
         Must-Refuse {Get-BeatQuayQualificationHelperBindings $fixture $inputs}
@@ -49,7 +49,7 @@ try{
     $inputs.PSObject.Properties.Remove('cmake/msix/consumer_files.py')
     Must-Refuse {Get-BeatQuayQualificationHelperBindings $fixture $inputs}
 }finally{Remove-Item -LiteralPath $fixture -Recurse -Force}
-Write-Output 'PASS fixed identities, cross-mode/run/typed-state refusals, exact Store registration, two lifecycle order/failure, and all 10 real helper file bindings.'
+Write-Output 'PASS fixed identities, cross-mode/run/typed-state refusals, exact Store registration, two lifecycle order/failure, and all 12 real helper file bindings.'
 
 # Execute the real ActivateAndVerify closure up to the native broker boundary.
 # The external installed verifier is controlled; no installation/UI is simulated
@@ -61,28 +61,41 @@ function Invoke-CheckedNative([string]$Program,[string[]]$Arguments) {
     if(-not $script:verifierReturns){throw 'Independent installed verifier refused'}
 }
 function Add-BeatQuayActivationTypes {throw 'Stopped before native broker'}
+function Assert-FileMatchesRecord([string]$Path,$Expected,[string]$Label){
+    if([IO.Path]::GetFileName($Path) -cne 'runner-shell-preparation.json' -or $Label -cne 'Original runner shell preparation' -or
+       $Expected.bytes -ne 1 -or $Expected.sha256 -cne ('b'*64)){throw 'Wrong original package-bound runner preparation route'}
+}
+function Assert-BeatSprigShellAbsentBeforeLaunch([string]$ReceiptPath,[string]$Mode){
+    if($Mode -cne $script:receiptMode){throw 'Wrong fresh launch mode'}
+    $script:shellChecked=$true
+    if(-not $script:shellAbsent){throw 'Original runner overlay still present'}
+    return @{absent=$true;identity_mode=$Mode}
+}
 function Invoke-BeatQuayQualificationCore([Collections.IDictionary]$Operations) {
     $state=$Operations.Preflight.Module.SessionState.PSVariable.GetValue('state')
     $state.output=$script:receiptDirectory;$state.package=Join-Path $state.output 'original.msix'
     [IO.File]::WriteAllText($state.package,'original unsigned fixture')
     $state.unsignedPackageSha256=(Get-FileHash $state.package -Algorithm SHA256).Hash.ToLowerInvariant()
     $state.python='fixture-python';$state.installed=[pscustomobject]@{InstallLocation='owned-installed-root';PackageFullName='fixture'}
+    $state.record=[pscustomobject]@{sourceCommit=$identityCommit;evidenceInputs=[pscustomobject]@{'runner-shell-preparation.json'=@{bytes=1;sha256='b'*64}}}
     $primary=$null
     try{& $Operations.ActivateAndVerify|Out-Null}catch{$primary=$_.Exception.Message}
     return [pscustomobject]@{installation_qualification_passed=$false;primary_error=$primary;cleanup_errors=@()}
 }
 foreach($script:receiptMode in @('qualification','store')){
-    foreach($script:verifierReturns in @($false,$true)){
+    foreach($script:verifierReturns in @($false,$true)){foreach($script:shellAbsent in @($false,$true)){
+        $script:shellChecked=$false
         $script:receiptDirectory=Join-Path $parent ('beatsprig-installed-flag-'+[guid]::NewGuid().ToString('N'))
         New-Item -ItemType Directory $script:receiptDirectory|Out-Null
         try{
             Must-Refuse {Invoke-BeatQuayInstallQualification unused unused unused $script:receiptDirectory -Mode $script:receiptMode}
             $receipt=Get-Content (Join-Path $script:receiptDirectory 'installation-qualification.json') -Raw|ConvertFrom-Json
-            $expectedError=if($script:verifierReturns){'Stopped before native broker'}else{'Independent installed verifier refused'}
+            $expectedError=if(-not $script:verifierReturns){'Independent installed verifier refused'}elseif(-not $script:shellAbsent){'Original runner overlay still present'}else{'Stopped before native broker'}
             if($receipt.primary_error -cne $expectedError -or $receipt.installed_identity_verified -ne $script:verifierReturns -or
+               $script:shellChecked -ne $script:verifierReturns -or
                $receipt.store_identity_used -ne ($script:verifierReturns -and $script:receiptMode -ceq 'store') -or
                $receipt.installation_qualification_passed -or $receipt.process_identity_ownership_established){throw 'Installed verification timing falsely claimed broker/UI acceptance'}
         }finally{Remove-Item -LiteralPath $script:receiptDirectory -Recurse -Force}
-    }
+    }}
 }
-Write-Output 'PASS four actual installed-verification receipt boundaries: before verifier return, after return, both fixed modes, never broker/UI acceptance.'
+Write-Output 'PASS eight actual installed-verifier/runner-absence boundaries in both modes; a remaining overlay never reaches native broker initialization.'

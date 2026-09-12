@@ -1,0 +1,64 @@
+{
+  "actualConsumerAcceptance": true,
+  "actualInstallationQualificationPassed": false,
+  "originalFiles": {
+    "msix-install/consumer-workflow/01-evening-pulse-project.png": {
+      "bytes": 53305,
+      "fixture": "msix-install/consumer-workflow/01-evening-pulse-project.png",
+      "sha256": "b4217ff6a58753915414910391e413770b46013942c3b190ff57a8394e6fe748"
+    },
+    "msix-install/consumer-workflow/02-export-project.png": {
+      "bytes": 62668,
+      "fixture": "msix-install/consumer-workflow/02-export-project.png",
+      "sha256": "86c6cb585d43acb6f769766e3a4ec9486cc9596df11b6620e82b78581efaadad"
+    },
+    "msix-install/consumer-workflow/03-export-completed.png": {
+      "bytes": 55491,
+      "fixture": "msix-install/consumer-workflow/03-export-completed.png",
+      "sha256": "e31e584756202cc2b85dd217972a262ff0c3e1a79128445ce8249ebec0277291"
+    },
+    "msix-install/consumer-workflow/Evening Pulse Reopened.mmp": {
+      "bytes": 19064,
+      "fixture": "msix-install/consumer-workflow/Evening Pulse Reopened.mmp",
+      "sha256": "98df100120e09fbf245e003e0d5a8a4b12197681054bf0edd7c0a4b422c1f347"
+    },
+    "msix-install/consumer-workflow/Evening Pulse.mmp": {
+      "bytes": 19064,
+      "fixture": "msix-install/consumer-workflow/Evening Pulse.mmp",
+      "sha256": "98df100120e09fbf245e003e0d5a8a4b12197681054bf0edd7c0a4b422c1f347"
+    },
+    "msix-install/consumer-workflow/consumer-workflow.json": {
+      "bytes": 998581,
+      "fixture": "msix-install/consumer-workflow/consumer-workflow.json.gz",
+      "sha256": "c1343cfb9c68fad8513d8a7e20b30f021e0cdffe80f8f9f6421cdf165db677d6"
+    },
+    "msix-install/installation-qualification.json": {
+      "bytes": 1100867,
+      "fixture": "msix-install/installation-qualification.json.gz",
+      "sha256": "cf30942f21b7b55f4e9998c88f41a9fd203853b879a617482b1cedd8e8da26ba"
+    },
+    "msix-install/loaded-modules.json": {
+      "bytes": 30266,
+      "fixture": "msix-install/loaded-modules.json.gz",
+      "sha256": "db00989f25d5f58aee698138e48e8166168e42f8a49cfba751751b99e18e0a46"
+    },
+    "msix-install/qualification-window.png": {
+      "bytes": 39101,
+      "fixture": "msix-install/qualification-window.png",
+      "sha256": "e77f2f4d49a569749c213fe06b1587ba55db8dbe8cafb5e011d6503d80ad8bd1"
+    },
+    "msix-install/window-observation.json": {
+      "bytes": 26955,
+      "fixture": "msix-install/window-observation.json.gz",
+      "sha256": "0173b04ff57929ea6824da94131dcce3f5f7445c7873fcb2340239a0f01598ac"
+    },
+    "msix-package-record.json": {
+      "bytes": 374632,
+      "fixture": "msix-package-record.json.gz",
+      "sha256": "9370283727ab9cb4b3ba5a78f57c4ebdb11308fea127c8644c14b6aca3afd611"
+    }
+  },
+  "reason": "Post-workflow loaded-module origin rejection; normal close did not run.",
+  "runId": "34696012333",
+  "sourceCommit": "8593ff44a149ce9538958ddef790a946363b8e9c"
+}

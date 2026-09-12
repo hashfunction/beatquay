@@ -1,0 +1,210 @@
+{
+  "allPublicSourceAssetsVerified": true,
+  "anonymous": true,
+  "applicationSourceCommit": "ca996c5811415ec4a1272114715a53e2dec85afd",
+  "applicationSourceTree": "5a8f492dc5fdf15bac7db31d640a8f1add097547",
+  "correspondingSourceComplete": false,
+  "credentialsSent": false,
+  "finalBinaryBindingVerified": false,
+  "mode": "public",
+  "releaseId": 387570510,
+  "releaseUrl": "https://github.com/hashfunction/beatquay/releases/tag/beatsprig-native-source-1.0.1",
+  "schemaVersion": 1,
+  "tag": "beatsprig-native-source-1.0.1",
+  "tlsCertificateVerification": true,
+  "verifiedAssets": [
+    {
+      "assetId": 559265617,
+      "bytes": 4310712,
+      "githubDigest": "sha256:5630c24cdeb33b131612f7eb4b1a9934234754f9f388ff8617458d0be6f239a1",
+      "name": "fftw-3.3.11.tar.gz",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/fftw-3.3.11.tar.gz",
+      "sha256": "5630c24cdeb33b131612f7eb4b1a9934234754f9f388ff8617458d0be6f239a1",
+      "sha512": "ca1bf80490dc6955a0ab49b1af05d6658c2ecc0968b3bde5b4af22271e47d30cd38f6f8347e8e6124091b6a17717447942bee95f94ca29574ba71c4d167af351"
+    },
+    {
+      "assetId": 559265614,
+      "bytes": 77777,
+      "githubDigest": "sha256:fb9535bb3141fcf85ae1f65e44192fe974987d068905800379a208cb6d89c334",
+      "name": "hiir-4a9a1e67fa6f8ce7688e1c0c8a2b017cecd206a3.tar.gz",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/hiir-4a9a1e67fa6f8ce7688e1c0c8a2b017cecd206a3.tar.gz",
+      "sha256": "fb9535bb3141fcf85ae1f65e44192fe974987d068905800379a208cb6d89c334",
+      "sha512": "d54b546c780fcc7c19258062da14015406aab779ae106f3290aefad8fc9eec2de43c0dadf4d03d8d6df07756c6df41ecf7618b0f2ab79713999cc413347f2b34"
+    },
+    {
+      "assetId": 559265616,
+      "bytes": 974901,
+      "githubDigest": "sha256:aea54ed186ad07a34750399cb27fc216a2b62d0ffcd6dc2e3064a3518c3146f8",
+      "name": "xiph-flac-1.5.0.tar.gz",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/xiph-flac-1.5.0.tar.gz",
+      "sha256": "aea54ed186ad07a34750399cb27fc216a2b62d0ffcd6dc2e3064a3518c3146f8",
+      "sha512": "c8e119462205cfd8bbe22b0aff112625d3e51ca11de97e4de06a46fb43a0768d7ec9c245b299b09b7aa4d811c6fc7b57856eaa1c217e82cca9b3ad1c0e545cbe"
+    },
+    {
+      "assetId": 559265615,
+      "bytes": 254178,
+      "githubDigest": "sha256:95b643da661155d79db9de2fca55daed3a8d491039829def246aacb3d9201c81",
+      "name": "xiph-ogg-v1.3.6.tar.gz",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/xiph-ogg-v1.3.6.tar.gz",
+      "sha256": "95b643da661155d79db9de2fca55daed3a8d491039829def246aacb3d9201c81",
+      "sha512": "c247e1da8b12f8b33272fafb6d7c171a1a2687c3632977439fa60b96ccc2ad751d88a2931bb3e18e1ddf2eea2e82cdd0aab087b2ec5393a9228c703476fa0167"
+    },
+    {
+      "assetId": 559265619,
+      "bytes": 3954784,
+      "githubDigest": "sha256:16e881487f184250deb4fcb60432d7556ab12cb58caea71ef23960aec6c0405a",
+      "name": "libsndfile-libsamplerate-0.2.2.tar.gz",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/libsndfile-libsamplerate-0.2.2.tar.gz",
+      "sha256": "16e881487f184250deb4fcb60432d7556ab12cb58caea71ef23960aec6c0405a",
+      "sha512": "37e0fd604907caf978659466289315befd66eec16c21a94e0b6106de18ffe803fbf2e7f3a8fb0430b33c0b784ecd6d4eaf3b9a862ed2670104647decbee913d6"
+    },
+    {
+      "assetId": 559265648,
+      "bytes": 684875,
+      "githubDigest": "sha256:ffe12ef8add3eaca876f04087734e6e8e029350082f3251f565fa9da55b52121",
+      "name": "libsndfile-libsndfile-1.2.2.tar.gz",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/libsndfile-libsndfile-1.2.2.tar.gz",
+      "sha256": "ffe12ef8add3eaca876f04087734e6e8e029350082f3251f565fa9da55b52121",
+      "sha512": "fb8b4d367240a8ac9d55be6f053cb19419890691c56a8552d1600d666257992b6e8e41a413a444c9f2d6c5d71406013222c92a3bfa67228944a26475444240a1"
+    },
+    {
+      "assetId": 559265650,
+      "bytes": 1234573,
+      "githubDigest": "sha256:270c76933d0934e42c5ee0a54a36280e2d87af1de3cc3e584806357e237afd13",
+      "name": "xiph-vorbis-v1.3.7.tar.gz",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/xiph-vorbis-v1.3.7.tar.gz",
+      "sha256": "270c76933d0934e42c5ee0a54a36280e2d87af1de3cc3e584806357e237afd13",
+      "sha512": "bfb6f5dbfd49ed38b2b08b3667c06d02e68f649068a050f21a3cc7e1e56b27afd546aaa3199c4f6448f03f6e66a82f9a9dc2241c826d3d1d4acbd38339b9e9fb"
+    },
+    {
+      "assetId": 559265658,
+      "bytes": 1524133,
+      "githubDigest": "sha256:ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e",
+      "name": "lame-3.100.tar.gz",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/lame-3.100.tar.gz",
+      "sha256": "ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e",
+      "sha512": "0844b9eadb4aacf8000444621451277de365041cc1d97b7f7a589da0b7a23899310afd4e4d81114b9912aa97832621d20588034715573d417b2923948c08634b"
+    },
+    {
+      "assetId": 559265664,
+      "bytes": 1122088,
+      "githubDigest": "sha256:3ae8c9ff80a97bfc0e22e89fbcd74687eca4fc1db315b12607f27f01cb5a47d9",
+      "name": "mpg123-1.33.4.tar.bz2",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/mpg123-1.33.4.tar.bz2",
+      "sha256": "3ae8c9ff80a97bfc0e22e89fbcd74687eca4fc1db315b12607f27f01cb5a47d9",
+      "sha512": "9b7aa93b692132da7eb8dcfef12ce91bf66bf8475af50e9c57d7b80225f96c0e74264e518e558371af1f4cf6d2afda5b3dfc844949fd747db7ac7c44d0e9f6ad"
+    },
+    {
+      "assetId": 559265670,
+      "bytes": 4183352,
+      "githubDigest": "sha256:9480e329e989f70d69886ded470c7f8cfe6c0667cc4196d4837ac9e668fb7404",
+      "name": "xiph-opus-v1.5.2.tar.gz",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/xiph-opus-v1.5.2.tar.gz",
+      "sha256": "9480e329e989f70d69886ded470c7f8cfe6c0667cc4196d4837ac9e668fb7404",
+      "sha512": "4ffefd9c035671024f9720c5129bfe395dea04f0d6b730041c2804e89b1db6e4d19633ad1ae58855afc355034233537361e707f26dc53adac916554830038fab"
+    },
+    {
+      "assetId": 559265678,
+      "bytes": 1463329,
+      "githubDigest": "sha256:95457b809ce60d4d4790f84bb692e271f644e59d8adf96feb988c89ab52a506a",
+      "name": "PortAudio-portaudio-147dd722548358763a8b649b3e4b41dfffbcfbb6.tar.gz",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/PortAudio-portaudio-147dd722548358763a8b649b3e4b41dfffbcfbb6.tar.gz",
+      "sha256": "95457b809ce60d4d4790f84bb692e271f644e59d8adf96feb988c89ab52a506a",
+      "sha512": "0f56e5f5b004f51915f29771b8fc1fe886f1fef5d65ab5ea1db43f43c49917476b9eec14b36aa54d3e9fb4d8bdf61e68c79624d00b7e548d4c493395a758233a"
+    },
+    {
+      "assetId": 559265684,
+      "bytes": 66987512,
+      "githubDigest": "sha256:7fa40cb6053479cf9f8316cbc9717f2bc1ded670e5e50df5a27a68fc566b2268",
+      "name": "qtbase-ef55f427f2c8b410d34f8a7681020a3000cf6866-raw-git.tar.gz",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/qtbase-ef55f427f2c8b410d34f8a7681020a3000cf6866-raw-git.tar.gz",
+      "sha256": "7fa40cb6053479cf9f8316cbc9717f2bc1ded670e5e50df5a27a68fc566b2268",
+      "sha512": "a6c1ff52b6470fcb8db534b88d53120eb3e91993befd71a475fc9fbfffddbaeb2d5a0747c6934e6d02ecbe5ae52de3d1c7f50c0a7d2668cd55514072b2db3744"
+    },
+    {
+      "assetId": 559265698,
+      "bytes": 2615150,
+      "githubDigest": "sha256:a30d3290e510ff0db60b0dcb5886cb35c3cf00ff8ae91f23a15df17be0469aa7",
+      "name": "qtsvg-17ca512f903f935282ebeca496aac5d11ba4199a-raw-git.tar.gz",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/qtsvg-17ca512f903f935282ebeca496aac5d11ba4199a-raw-git.tar.gz",
+      "sha256": "a30d3290e510ff0db60b0dcb5886cb35c3cf00ff8ae91f23a15df17be0469aa7",
+      "sha512": "3abb585e7e3aff5a908d3263ea884c659cdd789b6915b7893799adc60c4b17c8abf8a0730ad742476ecd2332ea1b914580aee0849fb397b15f44efb9743f2602"
+    },
+    {
+      "assetId": 559265719,
+      "bytes": 12015655,
+      "githubDigest": "sha256:a23aef9204f588cb08d63a6d9aca57a68bcc2fd7263d65aefe2dbda157d5828a",
+      "name": "qttools-8026c0462f19e9549501718152523ea223a19fd3-raw-git.tar.gz",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/qttools-8026c0462f19e9549501718152523ea223a19fd3-raw-git.tar.gz",
+      "sha256": "a23aef9204f588cb08d63a6d9aca57a68bcc2fd7263d65aefe2dbda157d5828a",
+      "sha512": "90d74fe9ab99b5cbcef1ba9673dbe6327b533ccfd3da8961b21d725a223009eee9e9f67f43bf4cdbada0fadd3bae2e33283d682013829309203775d8e8a62779"
+    },
+    {
+      "assetId": 559265731,
+      "bytes": 49935,
+      "githubDigest": "sha256:fd5b75dc7a9507dd2579a36475758ef75d1ad6c767b4ff99e5b0a6619c020917",
+      "name": "ringbuffer-1c46ef34a28d4637b43fb6d5ebb31d38c05f4bd8.tar.gz",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/ringbuffer-1c46ef34a28d4637b43fb6d5ebb31d38c05f4bd8.tar.gz",
+      "sha256": "fd5b75dc7a9507dd2579a36475758ef75d1ad6c767b4ff99e5b0a6619c020917",
+      "sha512": "4b15be03e441efe442536c885cfb08e13190bc6715c91938b6f96a50d390a09b0ba822392fb17417476ecd73bba0a321e005d1082ba217d9677f4c56dd1c0328"
+    },
+    {
+      "assetId": 559265743,
+      "bytes": 5334507,
+      "githubDigest": "sha256:e9255b62719c659f224fcc639b1bf4a6226e4996ad3fb006e18e1533cad77725",
+      "name": "vcpkg-9e593bb.tar.gz",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/vcpkg-9e593bb.tar.gz",
+      "sha256": "e9255b62719c659f224fcc639b1bf4a6226e4996ad3fb006e18e1533cad77725",
+      "sha512": "1df9b0cbfa8edcf52a8e48f56d3f5e8df737dd2d5ecf2e4bcc9b5ec1a3380552d65e30c4fe4936f7db418ba419662dabdfaf5ae2d4ad5f1d51c209e97e57cacb"
+    },
+    {
+      "assetId": 559265754,
+      "bytes": 1566911,
+      "githubDigest": "sha256:b99a0b86c0ba9360ec7e78c4f1e43b1cbdf1e6936c8fa0f6835c0cd694a495a1",
+      "name": "madler-zlib-v1.3.2.tar.gz",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/madler-zlib-v1.3.2.tar.gz",
+      "sha256": "b99a0b86c0ba9360ec7e78c4f1e43b1cbdf1e6936c8fa0f6835c0cd694a495a1",
+      "sha512": "16fea4df307a68cf0035858abe2fd550250618a97590e202037acd18a666f57afc10f8836cbbd472d54a0e76539d0e558cb26f059d53de52ff90634bbf4f47d4"
+    },
+    {
+      "assetId": 559265812,
+      "bytes": 453104,
+      "githubDigest": "sha256:84d05d04bfb1604f189011e853f2571f9e6debffff353acf2e7d8ec98526bc0e",
+      "name": "BeatSprig-1.0.1-original-notices.tar.gz",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/BeatSprig-1.0.1-original-notices.tar.gz",
+      "sha256": "84d05d04bfb1604f189011e853f2571f9e6debffff353acf2e7d8ec98526bc0e",
+      "sha512": "8abf3ae48506b861acf0ad3562b822a2d44db42cc29142dddd664781bf21ee7860a8dceef992cc6d87f20afa0c6728d1dc8b05b72d71f367f5c27308c8a1ce9c"
+    },
+    {
+      "assetId": 559265818,
+      "bytes": 6367,
+      "githubDigest": "sha256:cff78f6c51920e0f26170b1746f1d9e9678688c9796f48f63da2352e34b96487",
+      "name": "SOURCE.md",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/SOURCE.md",
+      "sha256": "cff78f6c51920e0f26170b1746f1d9e9678688c9796f48f63da2352e34b96487",
+      "sha512": "182df6549382bb635be8214d4faa92358e16f0634dbd05848f763f6c9ac75ad7fa77efa6213c219a8cf508882277bbd5cd80612c31be1711ca46bbf4ad819509"
+    },
+    {
+      "assetId": 559265850,
+      "bytes": 137031,
+      "githubDigest": "sha256:8d097bbdc23fee50c6fb34484ca2c5c0e682d00917b566f5523b0aeaebcb6c39",
+      "name": "source-delivery-inputs.json",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/source-delivery-inputs.json",
+      "sha256": "8d097bbdc23fee50c6fb34484ca2c5c0e682d00917b566f5523b0aeaebcb6c39",
+      "sha512": "7b7ae34af116ea529b97491813f64f16ba49ab3f3dd53bd6e0ba935fab173adeadb31a08c05746090c2a0755f11b46207a5c36cc9c5d8b67445b166c7b77c054"
+    },
+    {
+      "assetId": 559265853,
+      "bytes": 17736,
+      "githubDigest": "sha256:38537badf5e029ed8a934b21e6e2e9c53c8a61e89a6441a124889265c7f2fd5f",
+      "name": "source-release.json",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/source-release.json",
+      "sha256": "38537badf5e029ed8a934b21e6e2e9c53c8a61e89a6441a124889265c7f2fd5f",
+      "sha512": "2324d1ae998b338defa84feee240a71415d1a3f92f5e189ea9e5cbe0808a04b75704d5940e7ad83f831f1c1b35856731af9b6e1d6903b331d818d9f480a0c15c"
+    }
+  ],
+  "verifiedAtUtc": "2026-09-12T12:56:47.724601+00:00",
+  "verifiedSourceArchiveBytes": 108354372,
+  "verifiedSourceArchiveCount": 17,
+  "windowsQualificationClaimed": false
+}

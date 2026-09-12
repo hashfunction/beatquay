@@ -75,7 +75,7 @@ def inspect_starter_wave(path, bars, tempo):
         rms = math.sqrt(sum(value * value for value in samples) / len(samples))
         if peak < 100 or rms <= 10: raise ValueError("Starter render is silent or too quiet")
         if peak >= 32767: raise ValueError("Starter render clips PCM16")
-    return {"frames": frames, "channels": channels, "sample_rate": rate, "duration_seconds": duration,
+    return {"frames": frames, "channels": channels, "sample_rate": rate, "sample_width_bytes": 2, "duration_seconds": duration,
             "peak_pcm16": peak, "rms_pcm16": rms, "bytes": path.stat().st_size, "sha256": sha256(path)}
 
 def run(source, stage, work, evidence, report):

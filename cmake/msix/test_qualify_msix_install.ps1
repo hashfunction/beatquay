@@ -32,6 +32,8 @@ function New-FakeOperations([string]$PrimaryFailure, [string[]]$CleanupFailures,
 
 $result = Invoke-BeatQuayQualificationCore -Operations (New-FakeOperations '' @())
 Assert-True $result.installation_qualification_passed 'success path must pass'
+Assert-True (($result.completed_operations -join ',') -ceq 'Preflight,PrepareSignedCopy,Install,ActivateAndVerify,ConsumerWorkflow,CloseCleanly,UninstallAndVerify') 'completed receipt includes only returned primary operations in order'
+Assert-True (($result.completed_cleanup -join ',') -ceq 'StopOwnedProcess,RemoveOwnedPackage,RemoveTrustedCertificate,RemovePersonalCertificate,RemoveOwnedProfile,RemoveOwnedWorkingDirectory,RestoreDisplay,RemoveTemporaryFiles') 'completed receipt includes every returned cleanup operation in order'
 Assert-True (-not $result.primary_error) 'success path must have no primary error'
 Assert-True ($result.cleanup_errors.Count -eq 0) 'success path must have no cleanup errors'
 Assert-True (($global:BeatQuayQualificationTestCalls -join ',') -eq 'Preflight,PrepareSignedCopy,Install,ActivateAndVerify,ConsumerWorkflow,CloseCleanly,UninstallAndVerify,StopOwnedProcess,RemoveOwnedPackage,RemoveTrustedCertificate,RemovePersonalCertificate,RemoveOwnedProfile,RemoveOwnedWorkingDirectory,RestoreDisplay,RemoveTemporaryFiles') 'all qualification and cleanup steps must run in order'
@@ -39,6 +41,8 @@ Assert-True (($global:BeatQuayQualificationTestCalls -join ',') -eq 'Preflight,P
 $result = Invoke-BeatQuayQualificationCore -Operations (New-FakeOperations 'ActivateAndVerify' @('RemoveOwnedPackage','RemovePersonalCertificate'))
 Assert-True (-not $result.installation_qualification_passed) 'primary and cleanup failure must fail'
 Assert-True ($result.primary_error -eq 'primary:ActivateAndVerify') 'primary failure must be retained exactly'
+Assert-True (($result.completed_operations -join ',') -ceq 'Preflight,PrepareSignedCopy,Install') 'a throwing primary callback cannot be marked completed'
+Assert-True (($result.completed_cleanup -join ',') -ceq 'StopOwnedProcess,RemoveTrustedCertificate,RemoveOwnedProfile,RemoveOwnedWorkingDirectory,RestoreDisplay,RemoveTemporaryFiles') 'throwing cleanup callbacks cannot be marked completed'
 Assert-True ($result.cleanup_errors.Count -eq 2) 'all cleanup failures must be retained'
 Assert-True (($result.cleanup_errors -join '|') -match 'RemoveOwnedPackage.*RemovePersonalCertificate') 'cleanup failures must identify their operations'
 Assert-True (-not ($global:BeatQuayQualificationTestCalls -contains 'CloseCleanly')) 'later primary operations must not run after failure'

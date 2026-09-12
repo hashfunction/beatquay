@@ -1,0 +1,1988 @@
+{
+  "additionalAssets": [
+    {
+      "bytes": 453104,
+      "name": "BeatSprig-1.0.1-original-notices.tar.gz",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/BeatSprig-1.0.1-original-notices.tar.gz",
+      "sha256": "84d05d04bfb1604f189011e853f2571f9e6debffff353acf2e7d8ec98526bc0e",
+      "sha512": "8abf3ae48506b861acf0ad3562b822a2d44db42cc29142dddd664781bf21ee7860a8dceef992cc6d87f20afa0c6728d1dc8b05b72d71f367f5c27308c8a1ce9c"
+    },
+    {
+      "bytes": 6367,
+      "name": "SOURCE.md",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/SOURCE.md",
+      "sha256": "cff78f6c51920e0f26170b1746f1d9e9678688c9796f48f63da2352e34b96487",
+      "sha512": "182df6549382bb635be8214d4faa92358e16f0634dbd05848f763f6c9ac75ad7fa77efa6213c219a8cf508882277bbd5cd80612c31be1711ca46bbf4ad819509"
+    },
+    {
+      "bytes": 17736,
+      "name": "source-release.json",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/source-release.json",
+      "sha256": "38537badf5e029ed8a934b21e6e2e9c53c8a61e89a6441a124889265c7f2fd5f",
+      "sha512": "2324d1ae998b338defa84feee240a71415d1a3f92f5e189ea9e5cbe0808a04b75704d5940e7ad83f831f1c1b35856731af9b6e1d6903b331d818d9f480a0c15c"
+    }
+  ],
+  "applicationSourceCommit": "ca996c5811415ec4a1272114715a53e2dec85afd",
+  "applicationSourceTree": "5a8f492dc5fdf15bac7db31d640a8f1add097547",
+  "applicationSourceUrl": "https://github.com/hashfunction/beatquay/tree/ca996c5811415ec4a1272114715a53e2dec85afd",
+  "correspondingSourceComplete": false,
+  "finalBinaryBindingVerified": false,
+  "immutableApplicationArchiveUrl": "https://github.com/hashfunction/beatquay/archive/ca996c5811415ec4a1272114715a53e2dec85afd.tar.gz",
+  "originalNoticeMembers": {
+    "licenses/BeatSprig/AUTHORS.txt": {
+      "bytes": 1553,
+      "gitBlob": "22afa69f33f039e9988f8d5b7cca1e693790ace0",
+      "gitPath": "doc/AUTHORS",
+      "sha256": "ea144becb10138b0d3d09bbae448b4b600e1578c06f9ef06f4068546444e9924",
+      "sha512": "d499c4781924274d1271fa82300375aee1544e4c2b2cafd3099b3d2c8934162156621f61b16f66a7ec9968b1911d7c508e8200df88ac32209c653b5f542d2202"
+    },
+    "licenses/BeatSprig/COMBINED-LICENSE.md": {
+      "bytes": 3454,
+      "gitBlob": "c5a96c973c44e451092d640f4f1e24fa2ff289b2",
+      "gitPath": "distribution/native-source/COMBINED-LICENSE.md",
+      "sha256": "4c41236a71ebc3219c61fa9c3b6e59472f29015a6f4e5761087454c76c1db4b5",
+      "sha512": "02f3cabab082338302d83560363d97560db8db06234605d56e522468620ef8d2519f584f5c929bdd612fa7a5b8a99a011bbf3ff8f22e9b15840e6b2c72b64a1f"
+    },
+    "licenses/BeatSprig/GPL-3.0.txt": {
+      "bytes": 35147,
+      "gitBlob": "94a9ed024d3859793618152ea559a168bbcbb5e2",
+      "gitPath": "distribution/native-source/GPL-3.0.txt",
+      "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "sha512": "7633623b66b5e686bb94dd96a7cdb5a7e5ee00e87004fab416a5610d59c62badaf512a2e26e34e2455b7ed6b76690d2cd47464836d7d85d78b51d50f7e933d5c"
+    },
+    "licenses/BeatSprig/LICENSE.txt": {
+      "bytes": 17987,
+      "gitBlob": "d511905c1647a1e311e8b20d5930a37a9c2531cd",
+      "gitPath": "LICENSE.txt",
+      "sha256": "ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6",
+      "sha512": "5b322abf6a5a82894113c0dfe549725b140006197a920dfdf1a3ed615730e1de0a947cceea5ff9357cdd42334f8f53a1ab66072fca9ea966be85340a56d4649c"
+    },
+    "licenses/BeatSprig/UPSTREAM_README.md": {
+      "bytes": 3208,
+      "gitBlob": "c5fb50726e0ad3667bc2e587864484d35fb107c5",
+      "gitPath": "doc/UPSTREAM_README.md",
+      "sha256": "c59167012422cf8a23c54b9bc4bed2889d61e74b5b5ff4eb8f87bca3718da28c",
+      "sha512": "5fe3fbea8471987a9e5d3007445a0f6169b5d6bd930b500c59ad2aac817856813205d8e5300d7e0cb8e80c8ac11f5e0ad00c25ae11d0eeffe7f21fdc8c51edaf"
+    },
+    "licenses/dependencies/native/COMBINED-LICENSE.md": {
+      "bytes": 3454,
+      "gitBlob": "c5a96c973c44e451092d640f4f1e24fa2ff289b2",
+      "gitPath": "distribution/native-source/COMBINED-LICENSE.md",
+      "sha256": "4c41236a71ebc3219c61fa9c3b6e59472f29015a6f4e5761087454c76c1db4b5",
+      "sha512": "02f3cabab082338302d83560363d97560db8db06234605d56e522468620ef8d2519f584f5c929bdd612fa7a5b8a99a011bbf3ff8f22e9b15840e6b2c72b64a1f"
+    },
+    "licenses/dependencies/native/GPL-3.0.txt": {
+      "bytes": 35147,
+      "gitBlob": "94a9ed024d3859793618152ea559a168bbcbb5e2",
+      "gitPath": "distribution/native-source/GPL-3.0.txt",
+      "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "sha512": "7633623b66b5e686bb94dd96a7cdb5a7e5ee00e87004fab416a5610d59c62badaf512a2e26e34e2455b7ed6b76690d2cd47464836d7d85d78b51d50f7e933d5c"
+    },
+    "licenses/dependencies/native/SOURCE.md": {
+      "bytes": 6367,
+      "gitBlob": "309ee6fa8dc7534170f7bfb14562556be852236a",
+      "gitPath": "distribution/native-source/SOURCE.md",
+      "sha256": "cff78f6c51920e0f26170b1746f1d9e9678688c9796f48f63da2352e34b96487",
+      "sha512": "182df6549382bb635be8214d4faa92358e16f0634dbd05848f763f6c9ac75ad7fa77efa6213c219a8cf508882277bbd5cd80612c31be1711ca46bbf4ad819509"
+    },
+    "licenses/dependencies/native/notice-manifest.json": {
+      "bytes": 14873,
+      "gitBlob": "ade48b7900a783167fb6d339d8576b2ee9917691",
+      "gitPath": "distribution/native-source/notice-manifest.json",
+      "sha256": "1b7d4f0f3c7e40c6d418b14896918915c3774e18d802ef2cba61ca4938b29994",
+      "sha512": "6b0c9e69e3f14ffe70f237841fddba981fbe485fe4fb57b653afe87cc2e70aea7d687eee3465c83b1095b04ef1a8b4febcf183b3fb48d7df1f075bb373ab624f"
+    },
+    "licenses/dependencies/native/notices/app-submodules/hiir/README.md": {
+      "bytes": 425,
+      "gitBlob": "65b513e14d8594cd3a1fb51f02728bbdb3e07063",
+      "gitPath": "distribution/native-source/notices/app-submodules/hiir/README.md",
+      "sha256": "d89cef040fc633948edeccdafa111c1a4f9c40f6e7c65cedc04cb35487d5d69e",
+      "sha512": "469dd65c2ceaa784c86e10cf726acd5f27368c6fae4889bb31c97866cc36bc5c63253ea383a9fd34ce4a2582637292dd59b04e6e73eee2038a252bc58dde2dc8"
+    },
+    "licenses/dependencies/native/notices/app-submodules/hiir/license.txt": {
+      "bytes": 500,
+      "gitBlob": "1c93089b82d0f7ad6c6a27e9245718d72c86fa3f",
+      "gitPath": "distribution/native-source/notices/app-submodules/hiir/license.txt",
+      "sha256": "a7dea6b02c25b101ca92d21fb23a0a752e02b62cdc52c965bdb50b223c49e881",
+      "sha512": "76ed37170d86fc41ab0e8182ba569c90f9244721479a0cdb7b795d4b11c20d50a26631a0ade26f0342f41fada9bca662687c4aa293a0901c2a4cadb6cd0aa2a8"
+    },
+    "licenses/dependencies/native/notices/app-submodules/hiir/readme.txt": {
+      "bytes": 15469,
+      "gitBlob": "8088a1e0855f783f5397434d91b915e3cfae0321",
+      "gitPath": "distribution/native-source/notices/app-submodules/hiir/readme.txt",
+      "sha256": "d3cac13336aff24b6238dda5ad547fe8f3bc5586a1e173a5b0979fe904883449",
+      "sha512": "94cfd8215a4b953d2ca13ddd754cf38634e9c4a2a85ab0bf16ed5038656ddc8a75191c0c55eda0e75dd20e100fe050ef791199cc17cc6da36aa3a7b4ff7e9b7f"
+    },
+    "licenses/dependencies/native/notices/app-submodules/ringbuffer/LICENSE.txt": {
+      "bytes": 35147,
+      "gitBlob": "94a9ed024d3859793618152ea559a168bbcbb5e2",
+      "gitPath": "distribution/native-source/notices/app-submodules/ringbuffer/LICENSE.txt",
+      "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "sha512": "7633623b66b5e686bb94dd96a7cdb5a7e5ee00e87004fab416a5610d59c62badaf512a2e26e34e2455b7ed6b76690d2cd47464836d7d85d78b51d50f7e933d5c"
+    },
+    "licenses/dependencies/native/notices/app-submodules/ringbuffer/README.md": {
+      "bytes": 1433,
+      "gitBlob": "4f86f56ad9215bcb4c38728a3baba4d25b5a2e6c",
+      "gitPath": "distribution/native-source/notices/app-submodules/ringbuffer/README.md",
+      "sha256": "16e063273b21041c9c011a7807e12e38e3cf1d83ad5fae55b258fd5a2a72e8a0",
+      "sha512": "645d5255070d4d9a22e2070d5e32cbf905bf18726ac752ff325effb7a80255414fb361c588ffdcd1bcd1c07b1c3f7815f977eadf328187ee26a69cfb5c9a0e3f"
+    },
+    "licenses/dependencies/native/notices/app-submodules/ringbuffer/src/lib/ringbuffer.cpp": {
+      "bytes": 4473,
+      "gitBlob": "5ce46032fc44e761ddaf4f8a134a130374f4497a",
+      "gitPath": "distribution/native-source/notices/app-submodules/ringbuffer/src/lib/ringbuffer.cpp",
+      "sha256": "f5642ee7889b4b23e26b15c9e28009f88c4809052eaa4e81cb7ef0506e50d6ba",
+      "sha512": "f389ba6bd924b53f1012996db07caa09fa2a36ee58b433ddf3e666ae605c263afe7c34ae0570136a35475c162e5a4085498d4aaff90a25c4e19a5a61b05e946c"
+    },
+    "licenses/dependencies/native/notices/app/include/ControlLayout.h": {
+      "bytes": 5315,
+      "gitBlob": "af56af6304925afedf76125c149ef72e709c8080",
+      "gitPath": "distribution/native-source/notices/app/include/ControlLayout.h",
+      "sha256": "51156fc13f4b6fac7bd2838f33787a92cb45250ce40218c4b944512d31724763",
+      "sha512": "a184036c894ed1a235f5a578bbbc5fd81a5d2e08dabe066ec1548cfdea7bee22cb5fa56a6a7eb15fde66eb4d30ef3fd6bfc6ed926f904b2fe03c34b5a24b83cc"
+    },
+    "licenses/dependencies/native/notices/app/include/ladspa.h": {
+      "bytes": 27593,
+      "gitBlob": "5c30a8a4b5c081c820b603ce2a6f071d5aefb274",
+      "gitPath": "distribution/native-source/notices/app/include/ladspa.h",
+      "sha256": "c72ceb7383f159a944bfe80b1b155795857026aea1155dbe4ecf1664354320ad",
+      "sha512": "052eacfa7c81e6608e8d65e40abb5214e7dd02a856c5e72b520e837b4b3f824c163d35166d73446522ea34ffd62fdbb78d745e83ede426ba7acc826145f4eef2"
+    },
+    "licenses/dependencies/native/notices/app/src/gui/ControlLayout.cpp": {
+      "bytes": 9124,
+      "gitBlob": "ed2855ecf21717799e89c9599fa425455e7b0057",
+      "gitPath": "distribution/native-source/notices/app/src/gui/ControlLayout.cpp",
+      "sha256": "e278c4f82b72bfdbaeab003d5fd9ba6066250a9f4cdf1b9d47a902ef7871cfe4",
+      "sha512": "dfe5992c60380e893cdd4847065ce6819d72aa0ca6e2590a28cae3541f245a9bd38ec6fbb14817f4347452b9af1ba86d80f28a7d83c0cc8b9aa44908b3a94851"
+    },
+    "licenses/dependencies/native/notices/vcpkg/fftw3/AUTHORS": {
+      "bytes": 585,
+      "gitBlob": "ade9e58db41deb8679dbe305983e02e483420d5e",
+      "gitPath": "distribution/native-source/notices/vcpkg/fftw3/AUTHORS",
+      "sha256": "14e1b1c6a7d84613c85a4c457b4167fb4927ce239ec45123e85ba5eefca4e7bb",
+      "sha512": "0ae919df67143746367ebb2639e94858268ccba87ce3a2c89835d7535251c3622834cfd00038fabc79ffc57b3534838032bdf201b63cedf05e01800c795180cc"
+    },
+    "licenses/dependencies/native/notices/vcpkg/fftw3/COPYING": {
+      "bytes": 18002,
+      "gitBlob": "623b6258a134210f0b0ada106fdaab7f0370d9c5",
+      "gitPath": "distribution/native-source/notices/vcpkg/fftw3/COPYING",
+      "sha256": "231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c",
+      "sha512": "cb0a4f39c66d8d6bf668b2e989fc7741b5da50a48cf69921556e87c8d2ab648d23189628e5a26d7b86b9db47c8593e0e4bc6e9881ec03ca8d2ed62d8bd761e84"
+    },
+    "licenses/dependencies/native/notices/vcpkg/fftw3/COPYRIGHT": {
+      "bytes": 844,
+      "gitBlob": "089500b670db50c2182332685558e45d6064440a",
+      "gitPath": "distribution/native-source/notices/vcpkg/fftw3/COPYRIGHT",
+      "sha256": "8a74b35d541d93fdf58a22a3d3baa48ae3edbf6d715edfeb6457c21968ae43ac",
+      "sha512": "01e7dd62d7c7e04c6919bc4aa3995d66d6773f1ef7845a70bb969fa43494cd7699ca6bf6454563b90b64d2db939f76d5a27555f1f1ae120dfb1cdb3e4c5edbb4"
+    },
+    "licenses/dependencies/native/notices/vcpkg/fftw3/README": {
+      "bytes": 2122,
+      "gitBlob": "51babd1e3700410242a09f0715df545324523b53",
+      "gitPath": "distribution/native-source/notices/vcpkg/fftw3/README",
+      "sha256": "df4827c109d49740d8d2e440ad98f3f33c143e35ca019e69456db5e66e62b6f8",
+      "sha512": "5ce88086192c8acdde0e781db4d0187d93a456aebd78239572a26d856cb0fae400c8bf4f203d0679fbf6304ef86eacf84a0961af9e54157a14a15eee707b0ed1"
+    },
+    "licenses/dependencies/native/notices/vcpkg/fftw3/README-perfcnt.md": {
+      "bytes": 3787,
+      "gitBlob": "46d82397f44cc1e45bf17a163b6765dba60d4154",
+      "gitPath": "distribution/native-source/notices/vcpkg/fftw3/README-perfcnt.md",
+      "sha256": "97e06b9efba2612d53ad952095ec49f20248ea8ffd2951afe7272b6357110eb4",
+      "sha512": "feb1e126013c79fb7435859047ee1b943781c1c2197fc42b5706c41abab050c6b5961d9035126d6aad13a4356227862769392369a42a4d10eaf81533d257ffe3"
+    },
+    "licenses/dependencies/native/notices/vcpkg/libflac/AUTHORS": {
+      "bytes": 2354,
+      "gitBlob": "7bbc4e3050bc477967304b36e97f1eefebefed53",
+      "gitPath": "distribution/native-source/notices/vcpkg/libflac/AUTHORS",
+      "sha256": "89d44b9c876a8a5cbfc886348a151abd74eeb49e4b690b0cfe96d44a9afe8118",
+      "sha512": "55cea132aa8ce9b6590aded2321ae46ad143e36a0d3bcb363623e87d770c16ac59f595de7a73cadc540a1893894c787639c510e395c0f419c9aa364896d48103"
+    },
+    "licenses/dependencies/native/notices/vcpkg/libflac/COPYING.FDL": {
+      "bytes": 22954,
+      "gitBlob": "384f01bf154d897c9b077d2936d724401e5ad8cb",
+      "gitPath": "distribution/native-source/notices/vcpkg/libflac/COPYING.FDL",
+      "sha256": "c5d2b95c2538d2e41d8eedd9ecc750cd5fee085c7bb2bc3e2f95f4e59cc0b10d",
+      "sha512": "8f9567fdcc620872f31d7e523255252d4f1199dfb6542f6e3d074dabbb25429a49e104bda5afddbd08cb1f5a36bb6545959d1497926ded0f9f73d234d29b011f"
+    },
+    "licenses/dependencies/native/notices/vcpkg/libflac/COPYING.GPL": {
+      "bytes": 18092,
+      "gitBlob": "d159169d1050894d3ea3b98e1c965c4058208fe1",
+      "gitPath": "distribution/native-source/notices/vcpkg/libflac/COPYING.GPL",
+      "sha256": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+      "sha512": "aee80b1f9f7f4a8a00dcf6e6ce6c41988dcaedc4de19d9d04460cbfb05d99829ffe8f9d038468eabbfba4d65b38e8dbef5ecf5eb8a1b891d9839cda6c48ee957"
+    },
+    "licenses/dependencies/native/notices/vcpkg/libflac/COPYING.LGPL": {
+      "bytes": 26436,
+      "gitBlob": "5ab7695ab8cabe0c5c8a814bb0ab1e8066578fbb",
+      "gitPath": "distribution/native-source/notices/vcpkg/libflac/COPYING.LGPL",
+      "sha256": "5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a",
+      "sha512": "c929152d51e8db633124dc8ec3272b8f76172c4820a587ebba0fcdb0c2ffa5eb90bc795696a2a8a863521b347822856b0e44d576649a3e85af21c17f28a7e437"
+    },
+    "licenses/dependencies/native/notices/vcpkg/libflac/COPYING.Xiph": {
+      "bytes": 1509,
+      "gitBlob": "f42f48b3fa0be2435c65491f7dbf4680aa68d1a0",
+      "gitPath": "distribution/native-source/notices/vcpkg/libflac/COPYING.Xiph",
+      "sha256": "7866ee98760fc1f0156b4fe6bf530257e02be487ab3fd94e2b63799dd32d6b2c",
+      "sha512": "e5311935b5067e499cc4b4e42623f720b6795a9a45031bcaa1e8f758fc3ad5118f8698e4cf20bcd24322433b840e8da98e528ba7ff82dd01a7f98d93e566efd3"
+    },
+    "licenses/dependencies/native/notices/vcpkg/libflac/README.md": {
+      "bytes": 9870,
+      "gitBlob": "2fb982d6244fbab51376588f22436101367a8c4e",
+      "gitPath": "distribution/native-source/notices/vcpkg/libflac/README.md",
+      "sha256": "60f6958863c656e55017928edfda20ec26f60b06d673a68cc0030fd24f27f544",
+      "sha512": "6ac593084f4463238cff4997f966944704a3a0581f1c92388c2153835fa9afba0f87b8ff220ce5928c47146910eb53a3c1953fe0e919ecb75915d152f05aadbf"
+    },
+    "licenses/dependencies/native/notices/vcpkg/libogg/AUTHORS": {
+      "bytes": 198,
+      "gitBlob": "a0023f2c15b76b7462a8268433ae86e14e1a565f",
+      "gitPath": "distribution/native-source/notices/vcpkg/libogg/AUTHORS",
+      "sha256": "6fcb33d0cdd60b5054e7df820916388b590427514288c2bab01c626bb8ae9506",
+      "sha512": "49a394c4a6b25854b0cce3abfe97b452a5efd1931f9c767154662dde01ec9e6b63d3aac42dc0e30bbbb69442c644e554df49a782cada14910e4841be7fea4543"
+    },
+    "licenses/dependencies/native/notices/vcpkg/libogg/COPYING": {
+      "bytes": 1466,
+      "gitBlob": "6111c6c5a6b95057e43d36b7c217b073bf5f9b22",
+      "gitPath": "distribution/native-source/notices/vcpkg/libogg/COPYING",
+      "sha256": "d2ab5758336489da61c12cc5bb757da5339c4ae9001f9bb0562b4370249af814",
+      "sha512": "72ef021b0b0417c31213d6854cd9e359d4bb8af95d011285f55bbbdf2fa7363b4700be54647949ac85c5bc3d53dd6426e4f47e2656601dd9a6838be0413821e4"
+    },
+    "licenses/dependencies/native/notices/vcpkg/libogg/README.md": {
+      "bytes": 4584,
+      "gitBlob": "0101cb14dc1a6e0726be9a73fe944ba8e605bbd5",
+      "gitPath": "distribution/native-source/notices/vcpkg/libogg/README.md",
+      "sha256": "59e6e1581cef12a1028a7b0f8bfb55b763dcde97620b82fb1eaca800941b62ba",
+      "sha512": "c127b4513046e5bdca25cbc9814ac19ba9f6c8e7f476d8b3f2d9a743993d509cb2c085018e02f9bd6e31cd03c7f7f2835ba3b43453493f18872b3853955b8774"
+    },
+    "licenses/dependencies/native/notices/vcpkg/libsamplerate/AUTHORS": {
+      "bytes": 326,
+      "gitBlob": "a6ca75e6134dd8fa58a9c76a52dbcc7e45742357",
+      "gitPath": "distribution/native-source/notices/vcpkg/libsamplerate/AUTHORS",
+      "sha256": "1407129d9cf9ee8444e0a397577fa384c945646d74beb3c66aab626024418230",
+      "sha512": "71e65f81fab14143b5b52394d69ae72b7ac9cffd9defac226593d3307265b87f18afe2b75c5422141976d3e99efd9022465a2b742e1317fe7dc0c0a0f0007385"
+    },
+    "licenses/dependencies/native/notices/vcpkg/libsamplerate/COPYING": {
+      "bytes": 1334,
+      "gitBlob": "9f82626e6371ceeb76f8d2c9968748ec1584e10f",
+      "gitPath": "distribution/native-source/notices/vcpkg/libsamplerate/COPYING",
+      "sha256": "2c1f76ce2effdddb425018405d5690c0b1ab4e6976e35296b0a6db65c5e1a55d",
+      "sha512": "99c6f7f393ade1ab274769b4b0647ebe35e3c8843dc975b20fca212e87055a5226dee7efb31af768132900fe986c4a87cf1f59c2fb65f9875d7c53e2a41d9f70"
+    },
+    "licenses/dependencies/native/notices/vcpkg/libsamplerate/README.md": {
+      "bytes": 2496,
+      "gitBlob": "d6a6b8be7111ceb25f54b371807f293ddabc1c2a",
+      "gitPath": "distribution/native-source/notices/vcpkg/libsamplerate/README.md",
+      "sha256": "9541335f7b04a302fd908f51fdce851ebe1f146e2d37124eb37550bdd7ae847c",
+      "sha512": "3cd89816e32241ae719aa5ddea707011b4d148befd21c78547434940b4c76afd158f8ef6cfa170e9b9d05e354b7577868ce262455e2f4c6ac07093eacf60d4ed"
+    },
+    "licenses/dependencies/native/notices/vcpkg/libsndfile/AUTHORS": {
+      "bytes": 11603,
+      "gitBlob": "9ef64da318a77f17bf87d52afb681282b3bc25e1",
+      "gitPath": "distribution/native-source/notices/vcpkg/libsndfile/AUTHORS",
+      "sha256": "373fb9abaa154db5da8ab692853da32ced8977b817a713913953c63e50eb4499",
+      "sha512": "e8c624d1bd357630b0abe804f9ad305cff39606da7263f73e0480598094d8a54c226ad6df3221726d542fd4cde8dcd3c2cc2b0139b34566fabde9716adfddf41"
+    },
+    "licenses/dependencies/native/notices/vcpkg/libsndfile/COPYING": {
+      "bytes": 26518,
+      "gitBlob": "c396169eea80f1b63a8029b12a61cee06154761e",
+      "gitPath": "distribution/native-source/notices/vcpkg/libsndfile/COPYING",
+      "sha256": "ad01ea5cd2755f6048383c8d54c88459cd6fcb17757c5c8892f8c5ea060f6140",
+      "sha512": "12cbe89764030aa8bb2785a8ed81d398fc74cbcfac59e5283da2f6a03c598ef04f66b6854d12ac89f6935ba00071dc4a851450ef6c237cca0b59e7fdbc80502f"
+    },
+    "licenses/dependencies/native/notices/vcpkg/libsndfile/README": {
+      "bytes": 2013,
+      "gitBlob": "cb580f141a891a02fca91cdbb3e780fae5635401",
+      "gitPath": "distribution/native-source/notices/vcpkg/libsndfile/README",
+      "sha256": "1f279a0475740356655768d80a8f19f305927fc47e0d273207103a187f9588fa",
+      "sha512": "d0f5b1b6fe4c3d23fe3bb8c686e0e85e3b1f066be7ce46cdf448b1478a70994dcd676d6c01c651528680072c528087d3467c9250b6de77fbeb3219d78a56709f"
+    },
+    "licenses/dependencies/native/notices/vcpkg/libsndfile/README.md": {
+      "bytes": 12988,
+      "gitBlob": "f14afcd6a38d4cba433c5e91b5772141290b528b",
+      "gitPath": "distribution/native-source/notices/vcpkg/libsndfile/README.md",
+      "sha256": "8e2d7d35ff9c31958acf70475ecdc2254d1446eb4409946a0f3c89ae8dac2576",
+      "sha512": "6eedadc4d8c82c50431dc85c3cc7934c6866a720863d745e4b22ffa62dd0ccb00a3286db9a7109e6c00ca384aeeba115bfe58ecaa0e9ff1e75cade7914fb9447"
+    },
+    "licenses/dependencies/native/notices/vcpkg/libvorbis/AUTHORS": {
+      "bytes": 65,
+      "gitBlob": "0da10363c0cbaa09350bda3f3a6a6bf762cf536e",
+      "gitPath": "distribution/native-source/notices/vcpkg/libvorbis/AUTHORS",
+      "sha256": "f5cab9f16035f770f50299f85cf2938c06dc3a9a30425961067788102ec896d3",
+      "sha512": "4a76fb9a151c8ee290081c4499af1e19689742ead4397c7c2069bb9f5dc4bb817e0d84249907eade505de0ac53db4a321873a2da6c1a45817082879011399f25"
+    },
+    "licenses/dependencies/native/notices/vcpkg/libvorbis/COPYING": {
+      "bytes": 1470,
+      "gitBlob": "fb456a87bdfafe2cab7de982e8ce11204933ec5c",
+      "gitPath": "distribution/native-source/notices/vcpkg/libvorbis/COPYING",
+      "sha256": "ec1815db59fcd302846df949d7424876cb2e2dc5ed1606c5fb0b36787b1cf43a",
+      "sha512": "02aac8c792d6cad646c6a3c9dfec967807673028013cbeae1d5fd0a71214c8b349126520ef48ca26830c1a281e3220bcead0785dfef89437252aa8626271df90"
+    },
+    "licenses/dependencies/native/notices/vcpkg/libvorbis/README.md": {
+      "bytes": 4786,
+      "gitBlob": "30c88d391d928b2fccca9690fcaee05299aa4e44",
+      "gitPath": "distribution/native-source/notices/vcpkg/libvorbis/README.md",
+      "sha256": "d408e3a8d5eeb70e4dec13fffefbd21c4d4c0b584ae3d6fe4245ef7673a2a739",
+      "sha512": "26aaebde3c70f96f7bb2ed174ef07bb4d42378d17d04102b43879adeefaf476007091ab7bbbe31541062b0d758c7fe3400f54defd745519cc291b543e52ec748"
+    },
+    "licenses/dependencies/native/notices/vcpkg/mp3lame/COPYING": {
+      "bytes": 25284,
+      "gitBlob": "f5030495bf6ed4609db75324b1b6e94f97790d6a",
+      "gitPath": "distribution/native-source/notices/vcpkg/mp3lame/COPYING",
+      "sha256": "bfe4a52dc4645385f356a8e83cc54216a293e3b6f1cb4f79f5fc0277abf937fd",
+      "sha512": "5a8c5f4fc81fa2810a6901bcbd03a42d33330d54dfb29309c3033b3c9d33d28a73800342da5347b19903f2163493ec5ece3bb6b859cc85d3db721566b43e9741"
+    },
+    "licenses/dependencies/native/notices/vcpkg/mp3lame/LICENSE": {
+      "bytes": 487,
+      "gitBlob": "430a6a0e66bef7afd80de03966791c241d00e137",
+      "gitPath": "distribution/native-source/notices/vcpkg/mp3lame/LICENSE",
+      "sha256": "7a40cbd8818c57e5285e83c772a459a996d1662c824a879836b97b473c07cae4",
+      "sha512": "ac5149f9f141fab3ed6cc7f997d7700224d63d75e7403a2f61e124e360fd16543c0ea5dd6af92b1c809bf8e89c96d4e92d4a78020ea700ee402f5af6560b956a"
+    },
+    "licenses/dependencies/native/notices/vcpkg/mp3lame/README": {
+      "bytes": 1715,
+      "gitBlob": "77c6c47ae2b739d460e82526fab1744dfb145c44",
+      "gitPath": "distribution/native-source/notices/vcpkg/mp3lame/README",
+      "sha256": "687ad59451fddafba33340222a5c5820a99b62249d69b25a3667b396bd623d10",
+      "sha512": "5651155444eaf6315a1f52920fc0e2538570da627b23c44771d7d74e1a5e66f69b55f01f5f290e039960dc9a0bc5b3625e2e6074bc55545ffe1fcac27f532015"
+    },
+    "licenses/dependencies/native/notices/vcpkg/mp3lame/README.WINGTK": {
+      "bytes": 2264,
+      "gitBlob": "826f15532b5921409dd18852f323721993e8db84",
+      "gitPath": "distribution/native-source/notices/vcpkg/mp3lame/README.WINGTK",
+      "sha256": "f6057d28d64f09baf11ce0128bfccba947c750388d9c0385a5155f83902d3833",
+      "sha512": "f43cd06f15d44e780d03a18fc2605dbbaf170566a44e366d4acb5a89eef09783e10a74b7ba98303eac56cf76b66f2e5996f1002d76a64816711479cd7a2c9d90"
+    },
+    "licenses/dependencies/native/notices/vcpkg/mpg123/AUTHORS": {
+      "bytes": 9370,
+      "gitBlob": "a01dfb068fa356f8e45acfcf44a3366ae066e670",
+      "gitPath": "distribution/native-source/notices/vcpkg/mpg123/AUTHORS",
+      "sha256": "fb18c9abae864a20f691e949e4c7871c79f5f0861b3a3dcaf5881c3c02cf5cc2",
+      "sha512": "8e8f99ca6347a8faea41ee4f2b73d9e456e684d1f52187f042828fd752cd75f902b46533b06fc19f2eddd326d4825922d4cb3af226ae956aee8f25283751eb09"
+    },
+    "licenses/dependencies/native/notices/vcpkg/mpg123/COPYING": {
+      "bytes": 40718,
+      "gitBlob": "14e14f01cfc70ab24e95ad6be4fd7d6bbc1126de",
+      "gitPath": "distribution/native-source/notices/vcpkg/mpg123/COPYING",
+      "sha256": "c22482728a634a8dfdb4ff72a96d4c1ed64cd8f3e79335c401751ac591609366",
+      "sha512": "f560a65c53743effee12a90f7ab6a14b848e21ece4d4d05d5f910779191b81fca16d2c0c0a66e3c61cc6e353be2392e76a70530a9949e6d5aac06f2c55cf0646"
+    },
+    "licenses/dependencies/native/notices/vcpkg/mpg123/README": {
+      "bytes": 11992,
+      "gitBlob": "416dc2295e3328eb2e4f976ab8e27299e2a3fbc6",
+      "gitPath": "distribution/native-source/notices/vcpkg/mpg123/README",
+      "sha256": "2460fe239649aa87cedc83a1014548852d1c4b6292d2cbecc7d7ed4796c49b40",
+      "sha512": "ee648fed573c6c06b073897f0a54b952cf82001108437405fc9c7c94d6cd2c165f32cafd31bcb25c26c97a46f63a37d2e4f1a6dbf85f0bb0c360117b1d3053ee"
+    },
+    "licenses/dependencies/native/notices/vcpkg/opus/AUTHORS": {
+      "bytes": 239,
+      "gitBlob": "b3d22a20c908ed21d42ceac81ec2255b0d7f55dc",
+      "gitPath": "distribution/native-source/notices/vcpkg/opus/AUTHORS",
+      "sha256": "f9fd849e652219ce98e008303370b352d37663d0ffb27b8dc514ad93c9c7438b",
+      "sha512": "a667e7e4dd0f2af2be024011e91fcffdda02e57e98508d4990a453427baaf1a4094f3bcfc54e154f5f179b059ceb0f858a8d06718e745497ba151600af984d51"
+    },
+    "licenses/dependencies/native/notices/vcpkg/opus/COPYING": {
+      "bytes": 1945,
+      "gitBlob": "75711467a3eb220f35f72afdb55a4734ee5cdb47",
+      "gitPath": "distribution/native-source/notices/vcpkg/opus/COPYING",
+      "sha256": "01e1167d54a096d123cf6dfbbeb19587278845c6481d2d66d545669846079551",
+      "sha512": "65b39658827a8a186de5a639d2a734b0f5b6453fd2c3b4f75ffa2fff5010a9cf0b0fbb0c300f35d6a33a7a30f04a0ce483bae96e3547178f58a730d3f8ca4a3b"
+    },
+    "licenses/dependencies/native/notices/vcpkg/opus/LICENSE_PLEASE_READ.txt": {
+      "bytes": 703,
+      "gitBlob": "bc88efa6cb05789a6a6e697577ae6d8e5532e5df",
+      "gitPath": "distribution/native-source/notices/vcpkg/opus/LICENSE_PLEASE_READ.txt",
+      "sha256": "7efb4989e0cd1b256229bdf2f09300c5d14e35db0e7476bfb87fac243498273d",
+      "sha512": "530f6bcc4c95e560d6e186750d1c8b89bc5cea6961cdfb4f10631aaa9ef46e00c0e1a7bbf8379f4f93d696445a1ec4be8a919276592667f5eec0dd73e61fa1be"
+    },
+    "licenses/dependencies/native/notices/vcpkg/opus/README": {
+      "bytes": 7198,
+      "gitBlob": "bcf2376db8df856ae58e0988c78c63fb58af0858",
+      "gitPath": "distribution/native-source/notices/vcpkg/opus/README",
+      "sha256": "9bdf02594da8c33af8b7bdb7a2ac98f6fdc6abc71d5fb198e7b186286a681dca",
+      "sha512": "d90fec358367460c7831ab5a24b440f2354c1687459f01d74d928c6c5133d1089e324b0e3f73ca3c56707a76557024f7ca309812e8612c51fc9b44e19b557bf9"
+    },
+    "licenses/dependencies/native/notices/vcpkg/opus/README.draft": {
+      "bytes": 2179,
+      "gitBlob": "9c31bd023da5cc82c5da2b25c2bf515d7bcbf2f8",
+      "gitPath": "distribution/native-source/notices/vcpkg/opus/README.draft",
+      "sha256": "f5ea655ec63c4bd4f063ea7304eea59331de8926095c8b3e750648b2e5722cfe",
+      "sha512": "64c43312020a72b253560a0cfde2acf16baac966bc6e2274e7e823d491b6d6830b06b0dc61ff97bd504f6911825c11aa6f02eebf9ac5fa598e378276a1ff9a27"
+    },
+    "licenses/dependencies/native/notices/vcpkg/portaudio/LICENSE.txt": {
+      "bytes": 3524,
+      "gitBlob": "e0ac4e8a0c0188cece03c15e956b800f34e1c449",
+      "gitPath": "distribution/native-source/notices/vcpkg/portaudio/LICENSE.txt",
+      "sha256": "ec52a1952d701f94e5135719a47376da4ee0b4a0201f1cafb49f61db6480ac3d",
+      "sha512": "b2ff2b9f8c13ff7268a6d4adf2f77529e983f4eb5dc1aaae24b8d8242e03bf56aa6dcca4253359cad60502e21b43f11a8c51ef950e48b33c988d5c5680f28612"
+    },
+    "licenses/dependencies/native/notices/vcpkg/portaudio/README.configure.txt": {
+      "bytes": 842,
+      "gitBlob": "6417d65a447906395e660542af3b6ac7abcc4bf1",
+      "gitPath": "distribution/native-source/notices/vcpkg/portaudio/README.configure.txt",
+      "sha256": "be814b0a74187db9292e8fc46b2e5ba739f23e39b743db5001626f550fd0fec3",
+      "sha512": "eca942905040b754b35e8dfd9d15974e85500a22c61377c6eda2a32dd3ba05f4015cd867a2b39ef21f1051fa80549c204bac8730c7d4e9be06efccb12ecfdf0f"
+    },
+    "licenses/dependencies/native/notices/vcpkg/portaudio/README.md": {
+      "bytes": 2894,
+      "gitBlob": "bf48975f507ca3dc7f8e16b0bbcb4ebb159e30e2",
+      "gitPath": "distribution/native-source/notices/vcpkg/portaudio/README.md",
+      "sha256": "6c7646a721fef968b57bfd0997202b325731df918e0662d202c9661bdb95f4ee",
+      "sha512": "4be15155a708a780ddd0918b165a18fb6fc0b0920c81a128dd7aa20420c80c5e2b59ac445b71f065878898b0f6a73e698742a9355c870d9db097f09571e70932"
+    },
+    "licenses/dependencies/native/notices/vcpkg/zlib/LICENSE": {
+      "bytes": 1002,
+      "gitBlob": "b7a69d058e616651eae27b3f90c0b7fd36c099b2",
+      "gitPath": "distribution/native-source/notices/vcpkg/zlib/LICENSE",
+      "sha256": "e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2",
+      "sha512": "98fdcd0e962849a7d132c964745a8ff3b902ffc50d80c7af72378e848bc94228ad7a569f9d8a5b7c5484478709932a2c0988dba613e19a35cb208ad56a987f5f"
+    },
+    "licenses/dependencies/native/notices/vcpkg/zlib/README": {
+      "bytes": 5291,
+      "gitBlob": "2b1e6f36fe3e6f392e727b44190e9016bf0bd8ea",
+      "gitPath": "distribution/native-source/notices/vcpkg/zlib/README",
+      "sha256": "4026d921213bb2e311d8d42b44ef53361c102d5d45ae32f93f8e52eaee8d068f",
+      "sha512": "80795325e6ff78f7f33be1e56da69229926ffefc111f28473faecd8871b3d419d30f0aa7759b6a097fc814430a14518783e0ed38997435bc73fb2446bdd1e17b"
+    },
+    "licenses/dependencies/native/notices/vcpkg/zlib/README-cmake.md": {
+      "bytes": 2831,
+      "gitBlob": "5f2764158e4e42d0e1b48f538b51b07aae5bc9a1",
+      "gitPath": "distribution/native-source/notices/vcpkg/zlib/README-cmake.md",
+      "sha256": "9bb3ec62b1f839cc6febcc6211de9809f68917141a650ad973b3297849c57749",
+      "sha512": "0d70b3e4ffa247733712be526ab026e0cc27782a7f3178859d390322c3315bcb5c352b9ac70ecc565bbbe5c9488e32a401cbea2c88aefacf1068a03070fc65f1"
+    },
+    "licenses/dependencies/native/source-release.json": {
+      "bytes": 17736,
+      "gitBlob": "b0608ecb1fb80d8fe482544f57afc235355ec99f",
+      "gitPath": "distribution/native-source/source-release.json",
+      "sha256": "38537badf5e029ed8a934b21e6e2e9c53c8a61e89a6441a124889265c7f2fd5f",
+      "sha512": "2324d1ae998b338defa84feee240a71415d1a3f92f5e189ea9e5cbe0808a04b75704d5940e7ad83f831f1c1b35856731af9b6e1d6903b331d818d9f480a0c15c"
+    },
+    "licenses/dependencies/qt/manifest.json": {
+      "bytes": 48477,
+      "gitBlob": "a738c353324dfbd17cee9695d9f645fa67817070",
+      "gitPath": "distribution/qt-notices/6.11.2/manifest.json",
+      "sha256": "aca0be36fe340b7b7be9c31412649a9c85a076606122c7c21c30b16379d2524f",
+      "sha512": "f92326e98de7c9a00b89a7cbc7ae36fb437b2f5d0dca8f6d44794d3a8c0db0b8ddc71ce1e708a1879e450d7eedf474ba2923ded88dbc404f6526ca2503faf98d"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/AFL-2.1.txt": {
+      "bytes": 8948,
+      "gitBlob": "011d6d489bca75a655649e477efb3cb06e1c8007",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/AFL-2.1.txt",
+      "sha256": "93bb4f7417aa775bab9026cc3d0af28aeb64451fc5a8ec651876785edd8eaf9b",
+      "sha512": "82ae1392daeaf3704043f897950163ceefecb20c2b11379d87f545ed68ef9bb9454199d53c2d1b497bef6821dd63739bdae4ca4341a33d0ffa9ee2720727225b"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/Apache-2.0.txt": {
+      "bytes": 10398,
+      "gitBlob": "136d90045663ab0acaeff2a3ecf0013c968de8c9",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/Apache-2.0.txt",
+      "sha256": "e3ba223bb1423f0aad8c3dfce0fe3148db48926d41e6fbc3afbbf5ff9e1c89cb",
+      "sha512": "f2216bcd3d052627afd372c3890942ecb87fb3ec54887eef2309f74a1ebf3621f021bd7be8bf3e883cec8f725493e9b92fe17e5cbca3c33ff3fff7bf0961d778"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/BSD-2-Clause.txt": {
+      "bytes": 1276,
+      "gitBlob": "7e7fb71e0fce53ef1661277c5b4503c6e049a615",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/BSD-2-Clause.txt",
+      "sha256": "8fda146749ca071ac9cdce2e24d25444676ea48d1f9dccc2b7c15c054b717db8",
+      "sha512": "28bf1bb326574f2d05d0f4cae36992d6ee62b0e8928753f6b22fd6dd12aacfbbccc6d8050dfb4047012755e77dcdae85444227b803fc59f6be12b8ac4e585f4b"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/BSD-3-Clause.txt": {
+      "bytes": 1469,
+      "gitBlob": "b91bbd89468099ae5c3028f176783976ca538187",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/BSD-3-Clause.txt",
+      "sha256": "9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce",
+      "sha512": "1baebc9749f9e34fe3ce3dfcf423e323a0837d570440c3dd6b0a9b7dad8f435fbd4355d586ae145377e005a5404b9c22114108c6287bb790e2c484fc4179a988"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/BSD-4-Clause.txt": {
+      "bytes": 1672,
+      "gitBlob": "965aab0ef12f482d55d215fbf8d10595cf2a9618",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/BSD-4-Clause.txt",
+      "sha256": "83faa0d205c316ce3efeafee465b6a165914fb29595968c08dc6437021b7b6fd",
+      "sha512": "11cf7083a3c7d10ba33f89fdf6036abcfb70877968ac5cba4466c7d2cedbc9d840e2fca8bc3768f8fe2f4252a51ffa4463fac13416f81b2a69ed7cb8b67007e8"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/BSL-1.0.txt": {
+      "bytes": 1340,
+      "gitBlob": "9cc4741747a0f8d7e107a74cae898a69ad25fd21",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/BSL-1.0.txt",
+      "sha256": "3abd6471b9a9a08d65ce771143f8e278bb4c1aeb10c1c2d476935a6b049653f5",
+      "sha512": "70929596d86eb5759cad8c7d81d79de04fd39fb6dda5fa10530c3e13c376203dcad23bf829a6dc6496b7398ef2252fe504275cb052ada20974da18aca9acc149"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/Bitstream-Vera.txt": {
+      "bytes": 8816,
+      "gitBlob": "df52c1709bea171104d41bf084313ea434858423",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/Bitstream-Vera.txt",
+      "sha256": "7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93",
+      "sha512": "0d0f5ffb10ee4b32829cf6bb066fb1f50902c131b93caa3978e25a3956d5396c824f3fe7d9b89b5204d3d9024a3de169e0327912fb65366a2d2d7a8c56790127"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/CC0-1.0.txt": {
+      "bytes": 7048,
+      "gitBlob": "0e259d42c996742e9e3cba14c677129b2c1b6311",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/CC0-1.0.txt",
+      "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "sha512": "1eb4436f8d58766cbe99db97e5e8c0db8a706376afd291c337de1ba7a6b066d3791dc85ad034bdd54ea336bed6e6e8e7a037d8b04b2773c9c7517b9d9921d1fa"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/FTL.txt": {
+      "bytes": 6743,
+      "gitBlob": "c406d150fa57aaf7a5b950b6cf302daeba1d0bb9",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/FTL.txt",
+      "sha256": "08c135755dd589039470f1fdbb400daaabaaa50d0b366d19cebff4d22986baa1",
+      "sha512": "79cd79fc98d77624baa1cbf45f2f3705a14cd70fc5a29b6119803b371015ae2dff66de02fdf74ae19ce4736a166ef560c894ac81273336176fdcd9a2e3003139"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/GFDL-1.3-no-invariants-only.txt": {
+      "bytes": 22955,
+      "gitBlob": "857214dd84593e0bacaac0211d76de0b69f2fa18",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/GFDL-1.3-no-invariants-only.txt",
+      "sha256": "110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4",
+      "sha512": "22d46818d3998ad841f537af4de7c50440dd918099fb6c5d4ab324cd71dc03066bfe1b67210a5efde77abd1d97b88da3c3dbfc39a24ae7248ee2d64e7f0fe6bb"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/GPL-2.0-only.txt": {
+      "bytes": 18092,
+      "gitBlob": "d159169d1050894d3ea3b98e1c965c4058208fe1",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/GPL-2.0-only.txt",
+      "sha256": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+      "sha512": "aee80b1f9f7f4a8a00dcf6e6ce6c41988dcaedc4de19d9d04460cbfb05d99829ffe8f9d038468eabbfba4d65b38e8dbef5ecf5eb8a1b891d9839cda6c48ee957"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/GPL-2.0-or-later.txt": {
+      "bytes": 18092,
+      "gitBlob": "d159169d1050894d3ea3b98e1c965c4058208fe1",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/GPL-2.0-or-later.txt",
+      "sha256": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+      "sha512": "aee80b1f9f7f4a8a00dcf6e6ce6c41988dcaedc4de19d9d04460cbfb05d99829ffe8f9d038468eabbfba4d65b38e8dbef5ecf5eb8a1b891d9839cda6c48ee957"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/GPL-3.0-only.txt": {
+      "bytes": 35147,
+      "gitBlob": "94a9ed024d3859793618152ea559a168bbcbb5e2",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/GPL-3.0-only.txt",
+      "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "sha512": "7633623b66b5e686bb94dd96a7cdb5a7e5ee00e87004fab416a5610d59c62badaf512a2e26e34e2455b7ed6b76690d2cd47464836d7d85d78b51d50f7e933d5c"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/HPND.txt": {
+      "bytes": 1188,
+      "gitBlob": "e54a695e16e145af42c1d514edc2652596427115",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/HPND.txt",
+      "sha256": "67ac968431270291f5e9cd3ed76705e1169f57082ee102093b2543b28cef63cf",
+      "sha512": "d46c78acda761108fbe682807dd0d30213b51147a01ab1f429d5ddd16443edca25914af9567438ecc783a8f427bcc5104e557560fa253036140590573dc3f74b"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/IJG.txt": {
+      "bytes": 1815,
+      "gitBlob": "eec5341d1c4e9ded532479684d061ffe3f6915b2",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/IJG.txt",
+      "sha256": "1cb448f5e2e6d3aca60943f4eee1a04675628dc0266a074a42bc1560ebc28d61",
+      "sha512": "54453ef712fc9b55dc04c2236658492287f03f8a0c07e8d3df9438087186393f493ac303b5bfb967b1cfdc1f37da0dfd171ea7e1accddeea31eb24f302d9924b"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/IPL-1.0.txt": {
+      "bytes": 11789,
+      "gitBlob": "b779b1402a4a7c33310aa3c908f53bff5c004be4",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/IPL-1.0.txt",
+      "sha256": "d5328e672fb1bff47ee18e890784541453380081cf3771bb7b3c06fc19c7d503",
+      "sha512": "5646dc797bacd0bee99de8bc6eb404c2dd8853e099bbbbd8cdc61d21d4ae11a94f26b084cfef4a142d8ae05e6bc9b4df989bdd9666df23826142c263295ebe7d"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/Imlib2.txt": {
+      "bytes": 1986,
+      "gitBlob": "b8430d80a3fcf6f8facb955e2fb0b1b769615794",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/Imlib2.txt",
+      "sha256": "8846f2baba1a7f4c36f7ca19a923a000d8a21afa37cf0fe006f6ce88a6058a89",
+      "sha512": "70cddef0b3ecc2ba7653f3592f8c4ed6439d8da3995bce23a3703e8f9ead0189f2a242af28b626401224faba4167de1c6fca0447e4443f7ea15fd3d22e4bcee0"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/LGPL-2.1-or-later.txt": {
+      "bytes": 25906,
+      "gitBlob": "04bb156e77d5714dc2ee29bd0a37f16532ec741c",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/LGPL-2.1-or-later.txt",
+      "sha256": "1ccf09bf2f598308df4bed9cd8e9657dc5cd0973d2800318f2e241486e2edf3f",
+      "sha512": "98e6c6f3f1a5164faf3008f4d583bb69cb079f939c4d20bda599e73f535f76944aaf56f9c15385a80d951e62dab751e55794cf002e769fa3d6c9a3ca24b01867"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/LGPL-3.0-only.txt": {
+      "bytes": 7651,
+      "gitBlob": "65c5ca88a67c30becee01c5a8816d964b03862f9",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/LGPL-3.0-only.txt",
+      "sha256": "da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768",
+      "sha512": "da6bcf3b76076d488f9a728debc7297b1bed6d94eb9cc44b15344c9b663a240c34434cc5511181f2a9b0e810b22449f5b13d793b7f225336f810367153bc8fd1"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/Libpng.txt": {
+      "bytes": 4120,
+      "gitBlob": "81c1c4dd534fdd23ea97bdcfc7dcdc9cd46f3576",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/Libpng.txt",
+      "sha256": "58fe669792f9b4e0740bf75ecfe90b5326128bb2ce7e27e1c342abd9db4d8ea6",
+      "sha512": "8a6afc311b4a105deededfe9e62a5e7a54c3881843add5a48867c0337ec2e7994996259930e913e4f8cab84586fd2f35e4b127a3da1b262b5b5b8a15711167f0"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/LicenseRef-BSD-3-Clause-with-PCRE2-Binary-Like-Packages-Exception.txt": {
+      "bytes": 1852,
+      "gitBlob": "9f4ae05fa5c02955713964a0f88a6bb67ad03be5",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/LicenseRef-BSD-3-Clause-with-PCRE2-Binary-Like-Packages-Exception.txt",
+      "sha256": "0526625fcc746a42d3f19a0ab357d3dc8479fdbe3bfd168825498f50215c7a63",
+      "sha512": "b60d57e961513a9a96041ff55fbaca57cf17f03fe9d88652f283b2418e2fc7c55b815b106d0ddf7e653996ecb4b56486d4603fc057b9cac5b6ee978fa6718b66"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/LicenseRef-ICC-License.txt": {
+      "bytes": 463,
+      "gitBlob": "e25b1d39f1ee489362fe15dae6b01b9522735dc7",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/LicenseRef-ICC-License.txt",
+      "sha256": "9e34ff47b3a44814e183342e7e198d127a6740e29d20e8381fba7688dafc79dd",
+      "sha512": "975dc1fe9e7f1906d0aabf697c5fffb7088707a2ed1155c23b040bb0d3db784eb49673b9a2ee4ba372abeb8846573fa746eef464ff3512222d1f91ee34d10302"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/LicenseRef-Lcs-Telegraphics.txt": {
+      "bytes": 139,
+      "gitBlob": "6c03ad2aff71b8e39a282376bbd20179f5befbc5",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/LicenseRef-Lcs-Telegraphics.txt",
+      "sha256": "c10225ebbd5191bfdd761b0d7752c785f2453ab665d6c454473fb12d254668aa",
+      "sha512": "8856a82b89dd00d6282f2f1bd8b2d8f38278841588f2036e75fed4e35108611735f019e77d464d8fc692a3c7ca0d3bdd5d807dae2166984fa87e2ced552f19a1"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/LicenseRef-Qt-Commercial.txt": {
+      "bytes": 462,
+      "gitBlob": "825b1f358b1f42d762112defbf0a193c9d968488",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/LicenseRef-Qt-Commercial.txt",
+      "sha256": "9b1f50aae6267f9d5e0ceb6775ee86450262c25ec7c0573e151fe5d3f18a4700",
+      "sha512": "ba87f17dc9a8ccf303848a9a9b956e5ee0f35d267c688a7ad7a61bfb0d73ef9e1f8e019ecbc9518ca09a7411eb4429bc46ef8744b02d4cc57a357d193a7ea736"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/LicenseRef-SHA1-Public-Domain.txt": {
+      "bytes": 144,
+      "gitBlob": "2ebbf9a78ad592c705e5b6e22e20cfb8f1d11abf",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/LicenseRef-SHA1-Public-Domain.txt",
+      "sha256": "65d86b8ec6b1cd8b8f6e64fd8710274ba00d6a3c520e00dfdcd1c3d2071f3305",
+      "sha512": "2123f56365c274a9c27cefae92bce57eb5d25b52df253bb707b8e37e9decf25195398d9939614f20c291a456a605e3cb9dda29df5f70d7d4ca01459365052df8"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/Linux-syscall-note.txt": {
+      "bytes": 624,
+      "gitBlob": "82054e66953e0ebf83c4a61bfc1deaaddf755c80",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/Linux-syscall-note.txt",
+      "sha256": "3f9e477523febab58de8b716ccfbcf02e6ef1c8e7728953905e8558637abe2a9",
+      "sha512": "629007fa5589fc031df0825339e184b04fc5202237c526392839c8c57bac6e53beadfeee59621dbd14622812ac7b13e9073f120f8272db849b22f36bbd2297d6"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/MIT-Khronos-old.txt": {
+      "bytes": 1306,
+      "gitBlob": "06d18a567301e6e35d4a7c5fa7b443cb1ac66ea9",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/MIT-Khronos-old.txt",
+      "sha256": "3c58021633974f9ed3c3d445a374240a5244fd039628f4d7f6f3e674bc8e6694",
+      "sha512": "f6449ab861624ac32af7bac5852e42850d3a2391528c7b7b2c6ad98063183ed2ed36e404d5ac5d2be079a0cfdf06d6415041ccaf76dfcdcf60b8b10d2f13d885"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/MIT-open-group.txt": {
+      "bytes": 897,
+      "gitBlob": "8b6789ae03ca8e0791f422c4ba656faf2b1f0221",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/MIT-open-group.txt",
+      "sha256": "c55d2ab72d8a4f9e9cd8fbd1379268e575e8cfa16874affa5899b75a6d754514",
+      "sha512": "5fbb5c4c4ebd4cc4da09e07c3db529add97df0d905ef9d49a88756c0936ceb17e84e8ebec8f2b855c55fa2440866cb63b632dafa5d557fb86426727392076d56"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/MIT.txt": {
+      "bytes": 1111,
+      "gitBlob": "bc65af3cbd380a2b5e6b3f37d359d3c51ff0fa71",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/MIT.txt",
+      "sha256": "d040359701c01996a017d5c515678929cd1b0625e64cb86db44025fbb6cdf1fc",
+      "sha512": "c097f41194fe361d346da3458082bfa406b7392bc3f53afb0deacf957544fbd1dbdeeb6704ed8fccb42909c70a5e5d3285c43dd9ff73e05c1074764e9f05a27d"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/MPL-2.0.txt": {
+      "bytes": 16726,
+      "gitBlob": "d0a1fa1482eea82e19510e7920cbe3a03e41f691",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/MPL-2.0.txt",
+      "sha256": "3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04",
+      "sha512": "239dbc27d68e0a03e92c68fb746602d8183084c9624a533fe92a991b8a4658d5154c901ff64826992eabcf89a5b52cb32f9cf29fd25a42bef2b5d3932010d806"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/Qt-GPL-exception-1.0.txt": {
+      "bytes": 965,
+      "gitBlob": "d0322bf0e4e1d484d35cc6a1d96fa2b65b9d579b",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/Qt-GPL-exception-1.0.txt",
+      "sha256": "40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2",
+      "sha512": "60564f2316e2572dcfb399901d65dd9710246fd009c8860313eda1533b0463205313f594bfa6015258aebad56aba462328557547ed100089121930855002c306"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/SPL-1.0.txt": {
+      "bytes": 23547,
+      "gitBlob": "55c5da3447a1e689bafe435dda2768f968f41f2e",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/SPL-1.0.txt",
+      "sha256": "f58f2f30909982445f97f1a61667261920a7caeab21ef5bea1b740f5b144d141",
+      "sha512": "72bae9dd0442b3b824f932b642ea2b71d7c493721995946a13e9e2326c2f826e1be19c13bf5b12ed057485e4e14d2185bfffa51d7a1e71d58a87db0e517808b3"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/Unicode-3.0.txt": {
+      "bytes": 1995,
+      "gitBlob": "739715c45cf49d00f3b3832cb353f8ffd385eb22",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/Unicode-3.0.txt",
+      "sha256": "80bb6294022d8764adb36a9d65ebb6bd94efb1865918a71e31e6c247607d7634",
+      "sha512": "b5017557491d35bfa1d0285491be9b7583eb8ed00bc5953d1c61c140a34674a9139bc8847fa12afcace828259a6166c81ead558aeedf5d2adbde2fe2ae7a7f2d"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/X11.txt": {
+      "bytes": 1338,
+      "gitBlob": "e1cd1e01e60d42aa148a95f0fe318cc1a17480f6",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/X11.txt",
+      "sha256": "e2936c6509784b4f0ec27bac74182393866fad9422b29a70e085ff14aba87193",
+      "sha512": "bd94c1196c8faa50fecd626f5cf094d5833aad72cddbebe6a8f76e759389d5c3181a30a86867385509943bd00d5d7e3f42bf08f236abfb7097999ea39974d884"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/Xerox.txt": {
+      "bytes": 965,
+      "gitBlob": "481d3b1493661f7f04e6792c6099c2bada95279b",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/Xerox.txt",
+      "sha256": "b6bc52205d01e10cf43dbb7b8aec06dcaa3b21d1486e7c9c0bec329ee8244d8d",
+      "sha512": "6e90fdc409b7cd7f15cda373a6f65e363d2a6b12460e08f76bdcbf8a2c7d64adaec64180afacd6418bb1b1e4d7e7d881182d4beb6c7f4c2f3e8cbcf0441c19d3"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/Zlib.txt": {
+      "bytes": 1465,
+      "gitBlob": "9c57e18006ec54be5d52d0bd4ff04cd5432c975f",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/Zlib.txt",
+      "sha256": "d7e3139972874dc8abdbbfce27ec1e6f942b28279dd7d27453630a8b4610e080",
+      "sha512": "d246f0cf85121a02c08ba2a806d747a17080d593fa94e06d47dde1d0cc8292a2e1abccd42a109443746e05655d86026bdc7ab6ad152eba53f4f5c1bad246672c"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/blessing.txt": {
+      "bytes": 244,
+      "gitBlob": "7a1b711a6b86f81b9b3943340f9f47c5a612f2f0",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/blessing.txt",
+      "sha256": "592db1199aab67aafe4515db9808b420db122083807c5329b2f061951e79acbe",
+      "sha512": "86960f4dfd372a7f52aa48e739931c5aabbc35bf52fcca497410217792e7945b200e0a29f0e11ed35e753e0638ab6cac63f2f9062172861a9f52ce1b202a174f"
+    },
+    "licenses/dependencies/qt/qtbase/LICENSES/libpng-2.0.txt": {
+      "bytes": 5345,
+      "gitBlob": "25f298f0fcfd8757bbd9a6386d8fcb2d644cfce9",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/LICENSES/libpng-2.0.txt",
+      "sha256": "7317e078e2d3b5d7ba5a6159e650945153262b44b76f6700f8e9edb261c5143e",
+      "sha512": "0dd69739630027da7a5329ecc5e518cc102421fddb9ca794c62413645f33044e9122282a086fcfe3a0d871c1e9e8a86211e0cdfa41b41cfd46f70d560be15ee5"
+    },
+    "licenses/dependencies/qt/qtbase/REUSE.toml": {
+      "bytes": 5291,
+      "gitBlob": "af88a01e5c40ee5cc91f75f355880e5f8d62819e",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/REUSE.toml",
+      "sha256": "56a2d79d2e56893411d04becd342312b3c1c1ff67096aaed5639ff3d0fb0d490",
+      "sha512": "501ec5ed77400b6c4c01e7c204dd5398ac89ad50b9318d25fa4b344d520c19a60598c204bf2d53f273a4bd13e1a560d0a31dba742b9d619cfd1845800d294f0f"
+    },
+    "licenses/dependencies/qt/qtbase/cmake/3rdparty/extra-cmake-modules/COPYING-CMAKE-SCRIPTS": {
+      "bytes": 1327,
+      "gitBlob": "4b417765f3a834ce6b0a216f6b6c0fe2d3f0bed5",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/cmake/3rdparty/extra-cmake-modules/COPYING-CMAKE-SCRIPTS",
+      "sha256": "46cde7dc11e64c78d650b4851b88f6704b4665ff60f22a1caf68ceb15e217e5b",
+      "sha512": "5a517690e12e636ea080dd97d3c9624f854ea138a36bc72a56799f41761b82a9d9533b32891b6866daf251165633531c3437bec5cc3f0787982838cdde14224c"
+    },
+    "licenses/dependencies/qt/qtbase/cmake/3rdparty/extra-cmake-modules/qt_attribution.json": {
+      "bytes": 479,
+      "gitBlob": "687045b07da277e98dd2037ac7df313b5152b406",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/cmake/3rdparty/extra-cmake-modules/qt_attribution.json",
+      "sha256": "f34f498d6c63a78a882b352fa38c9dd076a59b1696cd6a6f921151a61f2a02e0",
+      "sha512": "84fba723a98af024f7760acdf888846c707e70a939f77ac59d388feed44e104518fac5f97e718c1b8844741b50625001b438f91391abfdc88e3b6107c9bd5a08"
+    },
+    "licenses/dependencies/qt/qtbase/cmake/3rdparty/kwin/COPYING-CMAKE-SCRIPTS": {
+      "bytes": 1327,
+      "gitBlob": "4b417765f3a834ce6b0a216f6b6c0fe2d3f0bed5",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/cmake/3rdparty/kwin/COPYING-CMAKE-SCRIPTS",
+      "sha256": "46cde7dc11e64c78d650b4851b88f6704b4665ff60f22a1caf68ceb15e217e5b",
+      "sha512": "5a517690e12e636ea080dd97d3c9624f854ea138a36bc72a56799f41761b82a9d9533b32891b6866daf251165633531c3437bec5cc3f0787982838cdde14224c"
+    },
+    "licenses/dependencies/qt/qtbase/cmake/3rdparty/kwin/qt_attribution.json": {
+      "bytes": 663,
+      "gitBlob": "b1554af856712b2cee5b82d92c0241b18305046a",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/cmake/3rdparty/kwin/qt_attribution.json",
+      "sha256": "bf3a3c09e99f1c9fab7553ebc4a7548b71dc23fcfdbe6e5df0fa0e7847c2efc3",
+      "sha512": "612b402cc6411f7eb068083757f7eb90be9e34afa48cddfa2322a547c562ce4b127ac7dcf1cae02b10817fe864f5e3946e1a3642503c5199b25d66699546df6d"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/D3D12MemoryAllocator/LICENSE.txt": {
+      "bytes": 1099,
+      "gitBlob": "bc2ab4dc052999618a986602ea9e74dca5806226",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/D3D12MemoryAllocator/LICENSE.txt",
+      "sha256": "1b3941c52b26d42c510afbdf205a8b96a6d64f5a7b8ebff0287979fd91dfd52f",
+      "sha512": "5fd90266d9f03619d81b9388a09787adacc11a6e5edf33d7e16b667f978ed432c5f1b86de038f53f9ab2e81f21d47b9f1ba2ba893dfdfe94002c326e9b3269fb"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/D3D12MemoryAllocator/qt_attribution.json": {
+      "bytes": 727,
+      "gitBlob": "48cd78e74963c10adb1cc20c0c1561fb693c2334",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/D3D12MemoryAllocator/qt_attribution.json",
+      "sha256": "182d7e5ed90dc592b01a50635c85f4039ca6f25f88ec4700b08faf6f07fda09e",
+      "sha512": "8ffdb66fb5a69bb00c027485973ca0947f5660cc57fb5b7b0dcb3185c945951dd0601da1d26f8e8f6315c0dcf8962d93e838f74d24e58a31ea8d1101f8f21573"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/VulkanMemoryAllocator/LICENSE.txt": {
+      "bytes": 1099,
+      "gitBlob": "67b0d01dcc324988001b825f3e89b0d01e8cb6f1",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/VulkanMemoryAllocator/LICENSE.txt",
+      "sha256": "846d97c8b74ccaa92b9ad031140a04363b3b3985f318094552f297b8bda1c68e",
+      "sha512": "00818c010d5d6e35fb372adbec76d3fe402c6588e16feeadba7b041b04238b4b26f0d9f471efd98c9c6bb5500926731212210c06e5ecb31072eb0a086ca19b8c"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/VulkanMemoryAllocator/qt_attribution.json": {
+      "bytes": 699,
+      "gitBlob": "1dadd5845a84a72fa6e9654db66b9d3572bdb547",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/VulkanMemoryAllocator/qt_attribution.json",
+      "sha256": "833626a9e955bdae274f076786ca2cc7c8b50f9e382dff566db89ec69f8178cf",
+      "sha512": "fc6453833f9b10fa987daa50b7adc7efd44ea6b614dc1839e06b3c5d480e5cc051341ccdc94780def698a0ed9f1f998e93f37b727385c9d57a9971cbe5438471"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/android/LICENSE": {
+      "bytes": 525,
+      "gitBlob": "c026b6b79a3fec99ed59fc737f8513de3865f145",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/android/LICENSE",
+      "sha256": "4a51cf7f724f51bedb5fa4f9583a2762f1db8d05e43a577e2487c7aab2fdce18",
+      "sha512": "909defd7779f0fa693847b4213d457d2040aec5dffbdab4fdd288935651fb24112e2ccf2dd9016f735e2dc9f7d61b96f5e136775e46cbdbf9c4ccb794202f065"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/android/qt_attribution.json": {
+      "bytes": 373,
+      "gitBlob": "9660cb17c79bdb9f80e98674f42b697eaf10a763",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/android/qt_attribution.json",
+      "sha256": "120710d661892ceb44a94556c56998795372334674c79710947282e8279ef415",
+      "sha512": "1132640ff5f27b6fabf3f0c109d261b48f65274d144c33631086063d228254b4848343a22af01581c7564361085816ff7ef33c349395a96a6601c2507a3bd971"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/blake2/COPYING": {
+      "bytes": 17914,
+      "gitBlob": "4133656d1ef98e70b04c05db69e7bc59347f1fa9",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/blake2/COPYING",
+      "sha256": "4103f471877ed0bae500752c5fcd7ecca409d4a4a8dc2ad40437daba60f1a2bc",
+      "sha512": "d7c4c0fe1c1429e84830f3bb14e75fd50f83c0bb81ef532734a9f049d51b06aea2530beda84cc7b71dc439d121c2ad904564a931a456b64a6d40ecf3ca85f4a6"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/blake2/qt_attribution.json": {
+      "bytes": 926,
+      "gitBlob": "8b14922f2e6bd4e9eb51d1f587d17a53332154ad",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/blake2/qt_attribution.json",
+      "sha256": "bab552307bdd03ed9a4cf7f8f1397c3d18d4dbee19ee576033284104785245be",
+      "sha512": "a0525ebe1f3a9f3e564973f1fe0bf9f93cc254111ba54a8e7ac56863f263459456509eaef7314698727bdc6d70f69a14a89fe09a9f3b9634c9c82fb6aa882b9f"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/double-conversion/LICENSE": {
+      "bytes": 1527,
+      "gitBlob": "933718a9ef9dae4cb4afa56e490211760d8a949f",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/double-conversion/LICENSE",
+      "sha256": "4af93c12062c58058378de2397dc1c92bbff9ddfb1d583a01c84127557ce97ca",
+      "sha512": "22b612b445083efb61b199810a1c1ae99bcac073156fab9cbb47d91d5b5450fe2d5f8290ee0d78a09f7e2346bda4a4d5082d3ab954e2a2e21ecb638cb10e4a7f"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/double-conversion/qt_attribution.json": {
+      "bytes": 771,
+      "gitBlob": "468a309d6f16c4a3a3de976b0c04812f6670346e",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/double-conversion/qt_attribution.json",
+      "sha256": "4d9c7505a7c12e4e6b57bbee63af926c861abb5515cdf802b8f3491e321146fe",
+      "sha512": "1eb9c60ce2cc0dbcda9534a51aea20021d3bb461418d3d900b76408f8cc0ff7f891e61ce29145d76e7b307b6d4ac098bb9e98d9de1bc0e4fb613d981e4e99230"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/easing/LICENSE": {
+      "bytes": 1505,
+      "gitBlob": "5dc85c4712b3b1db970e09ca67f5af461680345e",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/easing/LICENSE",
+      "sha256": "92fac99458f1754b73edf50f9c9983e0efaa06ad96e2afd5e538c79f45b4b191",
+      "sha512": "ee6cc019618533faed7794e5141aab1e08c3c9ae96a1da9e3f2a2d3f885cb6ac5cb82425c246602592661168498d28939fa480180608277248a056a777d1e52c"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/easing/qt_attribution.json": {
+      "bytes": 471,
+      "gitBlob": "154d7a06038e13d3e1dae7b67240900339763b13",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/easing/qt_attribution.json",
+      "sha256": "77d67a1db5882bb0b9a1278b014885bee45a4c059d1da9f835b6da5bc4b9c93d",
+      "sha512": "c14ede8d515fc6c6f495a3fa0389aee03c17d10ae4454a9fb2dc5b4b2514e3d9e51df366cb6c6550faf602916731b88b107fd86a51d28d5d26a76ea65e5aab2f"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/emoji-segmenter/qt_attribution.json": {
+      "bytes": 682,
+      "gitBlob": "91dca1f4620a6258ff82f8695c26bdd053f8fa45",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/emoji-segmenter/qt_attribution.json",
+      "sha256": "9a980fc0f9e478d2a7e9a571d4cd234c259aaf8e2ea3fb60a0a7cf02cc3c3700",
+      "sha512": "046159062d6e4638fb86f5b8e2ce91945c34f44879d770dc3bfee82bede322092e8a0ffc13e7886190ed78aeca53b94f851a78a6b31fe983e62ff263925a5f44"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/forkfd/LICENSE": {
+      "bytes": 1148,
+      "gitBlob": "36ab6129518a7536a4fd5b10c536f30426c0cb02",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/forkfd/LICENSE",
+      "sha256": "d0d683ae18e78fbef90eb41168fb781920da2d12bf80704490f0882915c18ae0",
+      "sha512": "66ff65365e4669f31703e93ac0817dbef18fa9932ffe1a086ee7cedf62d32e9074a569aaddfadee0b7a1ce5014d319f6711f460bf9cfa3d1062bfd75fa496415"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/forkfd/qt_attribution.json": {
+      "bytes": 493,
+      "gitBlob": "6ba54c18cb66c63e66e9a8342f18d616f3e21fc1",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/forkfd/qt_attribution.json",
+      "sha256": "525fd890017a3966f542da42a9ff0ca2a0d71bc45f80a4871de3e0bd0f612612",
+      "sha512": "0abb81913d0a3d2ad8a67bdde105f73fbcf5ae240d5343bd2509d5ecf622ea3c7092c4fc7201a2aa3bd8e54986e1e1069844366c8310e079112c96a29e137591"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/freetype/BDF-LICENSE.txt": {
+      "bytes": 2305,
+      "gitBlob": "6fb375cf8bafbc336c72126ff692411bc5b1c476",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/freetype/BDF-LICENSE.txt",
+      "sha256": "e4e792f29e66750f2e410fd7b50a567652c180f6ee15e1a4dfa0bb5cde524537",
+      "sha512": "e7dfbae61a2252abd5578774de37ff9c74532430702d4a956636ed952578f5db79fcce587d33414569c86bf800c03548f14e09133592ceb7d7027e28ea0562e7"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/freetype/LICENSE.txt": {
+      "bytes": 26234,
+      "gitBlob": "824f5c61290dec89f70df254990cb2a9e40fd6a9",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/freetype/LICENSE.txt",
+      "sha256": "bf543cdda11864477b8d2ca2aa9afc2aaa8f9133461b4d962ed6ec73646256a1",
+      "sha512": "2275bb199cc46b66511c26a5a796ae10704018ab75391605602c00b296d353b3117e873715e2ac7010d6690bd87a5cdc344a2997a051b51226747cc9c98f7ec6"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/freetype/PCF-LICENSE.txt": {
+      "bytes": 2218,
+      "gitBlob": "2668007a5c0223011084b23179d7d3275b5a013c",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/freetype/PCF-LICENSE.txt",
+      "sha256": "6938597bfdeca0db191a8f9ede52eaf2482c2c71a0094c084747a1235f9958fe",
+      "sha512": "b1e76896851a7017a54295412f443bc1fca3e6cf2d64f71c4444c8b4b4b6d8efc5fb2ac9505f50527b1fe043db7b0807bccf7500e58a5ff63e0588a55aeb6ed5"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/freetype/ZLIB-LICENSE.txt": {
+      "bytes": 962,
+      "gitBlob": "abbdfcc017787ab9737b2a649fad72cbd4dc5f63",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/freetype/ZLIB-LICENSE.txt",
+      "sha256": "2b1f5d615382a151af3eb71462ad17d89e2efee8fa7664058d35d3d9237ebb19",
+      "sha512": "16be422fea56e7e55d5cf102d69490d7bd27f9ce5e858026507fa0381589345cb14ac32fd08388eb296330bb5b892674fd6146a13b84ffe3d28f0c47e688dffd"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/freetype/qt_attribution.json": {
+      "bytes": 5328,
+      "gitBlob": "427ecb1f7db74bca1bde87962f5f12348342441d",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/freetype/qt_attribution.json",
+      "sha256": "628b68bf60eb3bc1616342bc3545b63be2392e78bbebbc4c19f49675dd2ac8a7",
+      "sha512": "bce05b53bd4087de05870ba0f2f64c37b1992d0e39d05e5b8fd30cef2f67d157172887815c6d36648268d08a8283a7e94cef82e9492867b15a35f0abd79e872a"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/gradle/LICENSE": {
+      "bytes": 23645,
+      "gitBlob": "5ab898e679a59275347dbc57d5e9be3fa3875702",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/gradle/LICENSE",
+      "sha256": "cf234c4188d773406f640bf89be680d9288f40ff96901c70d643fcea96ad46df",
+      "sha512": "45d37c23edb7355b50a4014307801e1d48b3ad1fab7c316fcaf1c0ed9b02d49a8395f8d1c1e4d50e964fc5c2a69762a6e8c4ffed05bcd647fc3ea5614030555d"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/gradle/qt_attribution.json": {
+      "bytes": 581,
+      "gitBlob": "b37af5f829ab03f48450d1ab88b732d80b5a7758",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/gradle/qt_attribution.json",
+      "sha256": "0c8a9faae83c1df704d52a9c320c2e8c0309cda282bf95584bb62b00bb37567e",
+      "sha512": "42028d4884d2000963c612b017f681c70acba2a2bff362a56c28d09e2c4a907fd68dcf4ee58fea97ca09c82d990447237d6cb827c61dcc70b64988df40a47750"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/harfbuzz-ng/AUTHORS": {
+      "bytes": 201,
+      "gitBlob": "83c0c66f99e967fa669854f1837f656a705e6ba0",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/harfbuzz-ng/AUTHORS",
+      "sha256": "19bfe8f5ed100636cd24ab0c90a3f71c21d8b02d9ba00719447a0faab364d49f",
+      "sha512": "32a96aefd17234ec2acc29793bd9a5b93bc6b91a0a95ff1af551cd0d6666c727083cde7a7d536fe3399fb179991cf8f727ba563f9b978a09ed9ff993e355b5e1"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/harfbuzz-ng/COPYING": {
+      "bytes": 1971,
+      "gitBlob": "1dd917e9f2e72167de69e3b5dadbc4e7db417da1",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/harfbuzz-ng/COPYING",
+      "sha256": "ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64",
+      "sha512": "19a9d4098224ee39f15fefbe6199893897f9d29bed71321220be833fe8567c534e14eb5049699d13b32b5f15f06e5e686d3a52fad5875658b32800ed54a97866"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/harfbuzz-ng/qt_attribution.json": {
+      "bytes": 1646,
+      "gitBlob": "dbe5996a536ee137fc06ea187d0dbc2501748a87",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/harfbuzz-ng/qt_attribution.json",
+      "sha256": "15fb72e213bc590be310de8b453792a0b0a42cfd302b97387abf49252b9dd63f",
+      "sha512": "07aab3bf5984c18b557db1d114d2e48df59a97399880af36be76acdc14e03f5a9a84147a0ba1cbd3a7a7525cdacf375e5e37035ce587633e1659f9d59fff3ee5"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/icc/LICENSE.txt": {
+      "bytes": 463,
+      "gitBlob": "e25b1d39f1ee489362fe15dae6b01b9522735dc7",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/icc/LICENSE.txt",
+      "sha256": "9e34ff47b3a44814e183342e7e198d127a6740e29d20e8381fba7688dafc79dd",
+      "sha512": "975dc1fe9e7f1906d0aabf697c5fffb7088707a2ed1155c23b040bb0d3db784eb49673b9a2ee4ba372abeb8846573fa746eef464ff3512222d1f91ee34d10302"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/icc/qt_attribution.json": {
+      "bytes": 775,
+      "gitBlob": "b99b9ce12272d4a73318ce2a98ed1e80c34e459c",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/icc/qt_attribution.json",
+      "sha256": "509da9bd2b3f769c730aa4627b1080d65f39b0ecd4130111c9e1122e13cd35b5",
+      "sha512": "3c1b292886964f524825e33a3663d368004ddbf204df273778220a75a8c843783608c09f098b5b48fdc45a5a62f02d9faf86a013f9aafa8e083d3c88a9e57479"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/libjpeg/COPYRIGHT.txt": {
+      "bytes": 606,
+      "gitBlob": "5085059192a96782d65492b0a6964a7beac69a33",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/libjpeg/COPYRIGHT.txt",
+      "sha256": "e5b349c6a98d997a8d0f5fcfe5cc900b1f76bbc32743674c52a70981498748c0",
+      "sha512": "27c25b580e06865292c0c1371842ac6eabf7db48356a6bfc6f88df05b29468347a39f2a4ef7ba587b2843f53363b477aaac46341bcfd4f75799047f9301806bc"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/libjpeg/LICENSE": {
+      "bytes": 6077,
+      "gitBlob": "37a489b245eeb16c9ad8fae217b54f07ca00a65c",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/libjpeg/LICENSE",
+      "sha256": "ba6bceebcba0fdd35488477c2cca8c4632ce82c74dbfbc87d886ce6fc4433579",
+      "sha512": "2d45f1a32a865ed2e4a36d62353c9936c7da83a82fbf95494630a08e2a42533c4a34a4cc13198e18ae54005ea274e755c3b9d2193044f1549e13c2ac0263951b"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/libjpeg/ijg-license.txt": {
+      "bytes": 1815,
+      "gitBlob": "eec5341d1c4e9ded532479684d061ffe3f6915b2",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/libjpeg/ijg-license.txt",
+      "sha256": "1cb448f5e2e6d3aca60943f4eee1a04675628dc0266a074a42bc1560ebc28d61",
+      "sha512": "54453ef712fc9b55dc04c2236658492287f03f8a0c07e8d3df9438087186393f493ac303b5bfb967b1cfdc1f37da0dfd171ea7e1accddeea31eb24f302d9924b"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/libjpeg/qt_attribution.json": {
+      "bytes": 859,
+      "gitBlob": "82a65bcfd4bdb9a7dcc59496f554cadf0673b341",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/libjpeg/qt_attribution.json",
+      "sha256": "ed7cb7abdd9124f664acd26cf552ba821c8cf236c4cd34a6737f202215bd41bc",
+      "sha512": "e76aac914d101752e54395a18a16221029a26c6f720e0522c60e76ba96399c6a5ba115a6688356f31909350213dac054a7b90d7ee31b4dbc149c2ea9b605951c"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/libpng/LICENSE": {
+      "bytes": 5345,
+      "gitBlob": "1b765ae9f96abea77d3d9a88c543e3b5f4725813",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/libpng/LICENSE",
+      "sha256": "bdb0a645ea18c60507d0368379b1ac5474b92255fcc2d115e07486a7672ba526",
+      "sha512": "6ad87a12db6a012ec2874a960604d85c42fa6210737318d771fc73543bea17de4dcf98212aa41e3d309387341e416418f8e4376fbd7aa658b7d2887de641f943"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/libpng/qt_attribution.json": {
+      "bytes": 1763,
+      "gitBlob": "1c932936219bb83aa841c3d49459a1e28b7289d7",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/libpng/qt_attribution.json",
+      "sha256": "a43ff8e146c949f7cd14e00bd681f4957e27def06ecafec55ccc7231c451d3fa",
+      "sha512": "c7db1f4ab2e2b3f374f33cdd2c59b510f34343ee4928eb6c9ff8345b429b02f16bdbca2e1884acbfdbe092edf9338aead9c45a69b88d294824f624147289aea3"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/libpsl/PSL-LICENSE.txt": {
+      "bytes": 16726,
+      "gitBlob": "d0a1fa1482eea82e19510e7920cbe3a03e41f691",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/libpsl/PSL-LICENSE.txt",
+      "sha256": "3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04",
+      "sha512": "239dbc27d68e0a03e92c68fb746602d8183084c9624a533fe92a991b8a4658d5154c901ff64826992eabcf89a5b52cb32f9cf29fd25a42bef2b5d3932010d806"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/libpsl/qt_attribution.json": {
+      "bytes": 2458,
+      "gitBlob": "b283b66973bae9521b6c460885e3b724ae3668f7",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/libpsl/qt_attribution.json",
+      "sha256": "ae227b5f2cf40511fe1a84d4c752f4005917b7eeb44e7c4495b1403c27cc3647",
+      "sha512": "03830003348bbeffbfe04a32f2d4722ed9b930c0dac9b192f5a82b5c2bd5e333da135ec2f9e75afe494e04352440fc36ea5cfa7d8390ea068492ba9c3ba33a2b"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/libpsl/src/LICENSE.chromium": {
+      "bytes": 1664,
+      "gitBlob": "e29f4ffbe499f0af97f146a333eaa159ddffbb66",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/libpsl/src/LICENSE.chromium",
+      "sha256": "1d7f52747a9169751cdf2641a8299c0098e9ecdf9429296ffd55bdb14c9ed5b3",
+      "sha512": "a593c98a43c9cf1e91235da2f05368e28502128961939c95e5f4d4f7cc62ce4595376c3035e0af590737b3203c5aab97fcdf27d34865c39322067c15db04313f"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/md4/qt_attribution.json": {
+      "bytes": 574,
+      "gitBlob": "757c7996ab700adda4ededf6d2b02f1c3d8bbbf9",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/md4/qt_attribution.json",
+      "sha256": "34bda63a2fcc23c83f2e5364ccd394553b4baa505b1f79ded9cc2161c56a9b4c",
+      "sha512": "1e0b49011c423620be48ce6d9fa80c32cb7f7dfece942c62c4d0ff132f409e8a1d4140113a6a2d9ae049ef7dd60fa128783ddd58ab87d652d66b7f5f10198400"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/md4c/LICENSE.md": {
+      "bytes": 1096,
+      "gitBlob": "c80b3a95cedc65986c5afaa6d2b895fcbcc6177a",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/md4c/LICENSE.md",
+      "sha256": "d30937367d5413e7eaa218b1640b8946ff76fd34d97152f6979fd96169d5d0fc",
+      "sha512": "77887fef6646c62013b72f47ee95f1bcff67cf8bb5e2577d82c896f7d8af93784faff5ccef1dcab20f51d8977e6d2cdaa88d3cb43f23d6f7c6b214b83db731e3"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/md4c/qt_attribution.json": {
+      "bytes": 673,
+      "gitBlob": "5e78ab1d10e4ee13f996c6eb95772fcb8e29498c",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/md4c/qt_attribution.json",
+      "sha256": "7b2bc7be22e4be2a2984119ce3d0bfc210ddd0d8ef6193d66e8479d4c22af4ba",
+      "sha512": "44e8acd3a2eb984feefd45c55ad99c5f264d691c56471ba498d9c4fdabfb3154e2a7aabb9992bd18eee79ea7658afc653fbca6809532c6d08be05f6c98d1545f"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/md5/qt_attribution.json": {
+      "bytes": 446,
+      "gitBlob": "0c2f5feda8a32df8e058f7b5b272c8033e0180f2",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/md5/qt_attribution.json",
+      "sha256": "20b0f1b17ccd1bd5e8d763b1cdca4b095b8f0c037644b5ee18154536b7d8425e",
+      "sha512": "01aebce5441412ef6ccdbaaccebe38de6ef9971b7ccb758fe3d1486557839fa9cd90a7d16e3ef2fe0dbbf0b0498600acc6bd634a9ce31728fea5b6d8a3da7ebe"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/pcre2/AUTHORS.md": {
+      "bytes": 4013,
+      "gitBlob": "ced81e68adc54acdb15520b397556fee9e83d0c2",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/pcre2/AUTHORS.md",
+      "sha256": "66d9adef4d4bcb7c2dd99a499a89a52033375785edaa8a35ada0f2db7d05a1a4",
+      "sha512": "51f91be8b0c0cf554f24ac861d5aaf0b14bee5ba6156de8de2b675c461607520cf7660688e376c83ea2f17a1ef45414d45434ed116a7239db6fac2c1c065ddcf"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/pcre2/LICENCE.md": {
+      "bytes": 4011,
+      "gitBlob": "f6fba35db25ba5a4326fa2f4a86a536a24392b30",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/pcre2/LICENCE.md",
+      "sha256": "197d8a73ffee0d6b09adba2f9c677b5f5aede24edf89258a68e48248d010d811",
+      "sha512": "afbc88ac86b6ddd56db8b4aed1197a13c15ec9cbb4db5f4d4324af5940f08cdccf4797c65f93212275993ce9b674ec0e8731b48e2bf64edf79f13b783806e48b"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/pcre2/LICENSE-SLJIT": {
+      "bytes": 1444,
+      "gitBlob": "0aaecaaa28677aa1d3d69025ffab957131eca25d",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/pcre2/LICENSE-SLJIT",
+      "sha256": "5f216505c0f6ea3273caec89e766eef93cdeb7bbb0c429f9360116d7c938feeb",
+      "sha512": "e4cfb2cd66f82281047c6c4a7751041b6c365e4ab238bcb99b7d5b4384c0e805a67c8bb8ae7c768e49400d7d854b3ed5eb279d83845c3e38fcf2202ef3c5d414"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/pcre2/qt_attribution.json": {
+      "bytes": 1829,
+      "gitBlob": "0468bca1b3e031ea2a462586c7caf1fec211101f",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/pcre2/qt_attribution.json",
+      "sha256": "e009f73100ef4aed400257a095cdb25ee31980c4a290f1aca52d147cb3067abc",
+      "sha512": "4dd002099fce468204f1fc85e4425f3ab49433267614985793d19cf6ecc8a3af91117718bde44421b3f108ebe1353294fb9ae8216c43fb261d81ef72742520e7"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/pixman/LICENSE": {
+      "bytes": 1092,
+      "gitBlob": "3cb51484f10d1f1377fab8db4e7c1f6211fcdb31",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/pixman/LICENSE",
+      "sha256": "942c4f2a80394d3f53599b8382e9f27349b95c45d92b69b84f26d404f4dd74a5",
+      "sha512": "288b96bcf2e97fcc0c831b352a402865a2e03a965dab57ee7f6aa34c040327678d180da57ea91fbd0a78b0b1e7831488c53d3a6e04c45818541d9c2b7d683a94"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/pixman/qt_attribution.json": {
+      "bytes": 597,
+      "gitBlob": "2a273f068115b0350983fcfd4f4fe1fa26f783ac",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/pixman/qt_attribution.json",
+      "sha256": "f1dc159b63bf84a4c9c367e8ff79aa748b63f5fc622d5080c0a7ddd98ddc7ac7",
+      "sha512": "3989bc27f554e6fbd51cc400f04be4cea01186615ba281e270a21473098694d256999522453b5b5d1c012238084154ae17c71b16bd9eed13a3bc722103019489"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/rfc6234/LICENSE": {
+      "bytes": 1568,
+      "gitBlob": "7075960ee2352927c085b342778cad0921e41e59",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/rfc6234/LICENSE",
+      "sha256": "7ccebd514aaabc86192f957d773cebf06577c12fe9f25ecd419c6cac5da7a14c",
+      "sha512": "ccff30272ab35cacd1e1ab2dd5c216cb1122e04547c4beede3f992e031115094a18463fd00e73c510f4a9f9889b480bad877d6eb429238a80228a820124130d2"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/rfc6234/qt_attribution.json": {
+      "bytes": 660,
+      "gitBlob": "282590da0baca0829fdc75ebb2027a81b8cdb4e4",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/rfc6234/qt_attribution.json",
+      "sha256": "fa24413bdc5015fc7fc84297fa17d4c8a598f8f7c76b9495a6e6b26a77b4a324",
+      "sha512": "9afeb9b8dd9113312d5f86fc3144c0a3cbc7f7a01f5b3b55bcea120aed11d19abb41b11e7495887843dccad24c37a98bd2dfd8237a57292574548e641481ee06"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/sha1/qt_attribution.json": {
+      "bytes": 618,
+      "gitBlob": "04933a27005d467e8496a674c75252d1c6b07501",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/sha1/qt_attribution.json",
+      "sha256": "53cab2c771f7f7ffbf6a58ff759e5846b746e91d98dfe467d5145edf8cd7d306",
+      "sha512": "d71cef75c3be83d22157dff52c0201b36381044fe4f2fec7fa8782c1dc766d381373c6ec98b2fe4542d6328375ec32e5fd340db26bfe7b99b8622c5d648a65e4"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/sha3/BRG_ENDIAN_LICENSE": {
+      "bytes": 645,
+      "gitBlob": "175347c263695d49a36af6ff40d4893753ae0867",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/sha3/BRG_ENDIAN_LICENSE",
+      "sha256": "2fed6f252ca4a7e813811de3cd3cd08183edd4138bdee909410ef6eee394e82c",
+      "sha512": "bab7ebae35c8976b54f696101962d1631d435e38b77cc55451f511c15d11f4d50735dbce738e8aee15a75300510d548ed92753390c8f8f90718a51ce3757f97d"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/sha3/CC0_LICENSE": {
+      "bytes": 7013,
+      "gitBlob": "cff12c3d88965af8aff06e83420b546ea9b54f02",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/sha3/CC0_LICENSE",
+      "sha256": "1f2786e2c5befeb4dcba6638db6528bf96ef5d2cf24bc85ab5a81ef00abef59d",
+      "sha512": "15fb8d6008991c7dad0dd8ea0ad6cbd4086fe871ff9e6b491fb4b87e57ac057fa79f974aa87a584b3dda1d9b2f4d955925dab9c487f075b29180f6b1658196b2"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/sha3/qt_attribution.json": {
+      "bytes": 2322,
+      "gitBlob": "6c6a44e1b6b4c254cfc30dba6113174ec022d6e4",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/sha3/qt_attribution.json",
+      "sha256": "d904a6c21c150d9cac693c0806a469480306cb4e5879cc13c994fbadba71a56e",
+      "sha512": "ae4e4fa40e06ea5caed9cca3f65b337813491cf0e0ee68780edf1477e80ad140a10b900a3c291f2cc04e2d0cb5b1fb012187c15104a16aff8ed9621eeb0d4d03"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/siphash/qt_attribution.json": {
+      "bytes": 793,
+      "gitBlob": "1687742f03f9a605f3cf0f8c05060d9b4458563d",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/siphash/qt_attribution.json",
+      "sha256": "8614947dfc0ca1d21aad2f88b4400598262ab8c08aa87c4f7acc0c2de6e5619e",
+      "sha512": "50aca7c614b63b67b1514e7f5444d6651c1b30cf49dde2b5338f14aa6b67a9bb5cf12f662604d0bd8657ebdc5d157cbb9711f974f4ca082f0a1763f4311f9583"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/sqlite/qt_attribution.json": {
+      "bytes": 799,
+      "gitBlob": "5c48c3e979143643a83cc0ac763abb1bc90917bb",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/sqlite/qt_attribution.json",
+      "sha256": "fcba08e23508524b77ee22186a5ef2d35957979fe9e2a604d994c5e9604c8fb9",
+      "sha512": "55753e826fd5d00b6c116e6c29633395058fefddad3e6112cfec6b4f3722949612b5114561f54032774c3d4496579dc10ea734d676494577bb9875ded3519f78"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/tinycbor/LICENSE": {
+      "bytes": 1074,
+      "gitBlob": "4aad977ceb5eff86d2e86b6e22c6626e27c2e388",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/tinycbor/LICENSE",
+      "sha256": "3c6ba0b5bfa7830505301ffb336a17b0748e0d61c4d34216e9dc98f10e40395e",
+      "sha512": "83fe12fa18117a30917ea5cab30d4dc1d375753ced17eede8f2f26f704851a649e5d224e043f42a4f12f953816a34b8c6eaf425de52ab1d3511ef66e32f2ff19"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/tinycbor/qt_attribution.json": {
+      "bytes": 685,
+      "gitBlob": "04e566013f3a89bf8f861f8e8bfe8deb92dd2dc0",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/tinycbor/qt_attribution.json",
+      "sha256": "788408509fb7967042640f24ba78b263712e816d886303ba1733f49753d33863",
+      "sha512": "a9a3f74d6bd48c4d999c40af1fc8f422c57b1981508fc0d6c8c64b663b9cf61580f614d49221b6cafd7956585c4469e5e0751d374cb407f7c006b46f840bbc13"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wasm/DEJAVU-LICENSE": {
+      "bytes": 8816,
+      "gitBlob": "df52c1709bea171104d41bf084313ea434858423",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wasm/DEJAVU-LICENSE",
+      "sha256": "7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93",
+      "sha512": "0d0f5ffb10ee4b32829cf6bb066fb1f50902c131b93caa3978e25a3956d5396c824f3fe7d9b89b5204d3d9024a3de169e0327912fb65366a2d2d7a8c56790127"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wasm/qt_attribution.json": {
+      "bytes": 730,
+      "gitBlob": "4814d94cdf0b961528cd91c1deb85f0635ba30a6",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wasm/qt_attribution.json",
+      "sha256": "2019d37665bfb2ce7d4931d0bdf7427ea178919399cf37c0fef14a229144936b",
+      "sha512": "31e326ef995da1472d3d7937e4e22c0a6f0c366f28db3a14419563d06946eb7dbff0d82fd44dff18193783b556f6ca7a5b5f18b45f61be594fe4c04890930562"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wayland/protocols/MIT_LICENSE.txt": {
+      "bytes": 1055,
+      "gitBlob": "edc2e5fb5e0277fec3b5dd3d6065945f7519c380",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wayland/protocols/MIT_LICENSE.txt",
+      "sha256": "a8341b9c90ef447a77f55d550e6691e370d3ac15d60edb584def356e348ab828",
+      "sha512": "ce4cf78d6e252439675fab2bf5f8cb8cf351a9491e19b982560cf990d7bd250bfbb9cc5a9c028a2ef68e0f3fba5a06cab718293c3de6aa41fb2abe142c9f6fb7"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wayland/protocols/appmenu/LGPL-2.1-or-later.txt": {
+      "bytes": 25906,
+      "gitBlob": "04bb156e77d5714dc2ee29bd0a37f16532ec741c",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wayland/protocols/appmenu/LGPL-2.1-or-later.txt",
+      "sha256": "1ccf09bf2f598308df4bed9cd8e9657dc5cd0973d2800318f2e241486e2edf3f",
+      "sha512": "98e6c6f3f1a5164faf3008f4d583bb69cb079f939c4d20bda599e73f535f76944aaf56f9c15385a80d951e62dab751e55794cf002e769fa3d6c9a3ca24b01867"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wayland/protocols/appmenu/qt_attribution.json": {
+      "bytes": 629,
+      "gitBlob": "53f10b090d19c21d5fe407813d560a7e8d156ab7",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wayland/protocols/appmenu/qt_attribution.json",
+      "sha256": "b7200f7fdfd2223aaecbd9b2ec8e4145eebe4f0b376ffbcb3859154661fb1095",
+      "sha512": "97347cf7f2fc518966ee394d5a4939bcae342157229e7683a9982584c69f3809ffb97afe0ddbfe2e82e099407273f19502ea7d9ce0a1e682981402f25c5bd80c"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wayland/protocols/color-management/qt_attribution.json": {
+      "bytes": 885,
+      "gitBlob": "1001cc9b90d225311f3e978e3271577020caddd3",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wayland/protocols/color-management/qt_attribution.json",
+      "sha256": "6081490578a0a5ff17e450a3f9a05a36a3433de0832f1b2b497ca3c8ec1f9ba9",
+      "sha512": "795303a180a70015c5bfac4cbe73d1dc5bd91a88bcc831668b327e52e6edbde6307fb3f3e46912ee7616b79ccef0d569646a092fc04c33a78617617dfea695a1"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wayland/protocols/fractional-scale/qt_attribution.json": {
+      "bytes": 719,
+      "gitBlob": "653a8eb0c1514a66709572ec02353a2f0150620d",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wayland/protocols/fractional-scale/qt_attribution.json",
+      "sha256": "bf87b7dc5bf42e91c9d98ad2a109d197141aaebffe563ab247dd771e0b9b07c8",
+      "sha512": "08dca165a86a2e22b584f7cf1f7d7229be5b1b0304c8706925c0b728bea50ea48537c38842d5e5b677d7a6dc674c5407d532c425511fc0f702e637650b941136"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wayland/protocols/fullscreen-shell/qt_attribution.json": {
+      "bytes": 830,
+      "gitBlob": "07926f1642905771c54dba3eb3116bbf2fc80f62",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wayland/protocols/fullscreen-shell/qt_attribution.json",
+      "sha256": "24ebba6014034dcf2c9a23a5b1085dc9708eaa81c021dfe51ba3f6b51ba788a7",
+      "sha512": "7624a133d78b63b069d49a784504080ac6bce6cc3a6353598b781d9d4b7f5307350ac5df7085ee3695489e03bd39d4aa604bb7e3b48aa5f0c84557e0d4dd67b9"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wayland/protocols/linux-dmabuf/qt_attribution.json": {
+      "bytes": 791,
+      "gitBlob": "e93e2e790b1d32d500acd730f81e994ad7d9f029",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wayland/protocols/linux-dmabuf/qt_attribution.json",
+      "sha256": "64ea0d933ff0d0868e820b443c14feda5208f90bd02032cdc9a1b6881a05f446",
+      "sha512": "3cc779803b6a9f721e953197b6335a253a4c3b7dc06b27066713bd7a0ba896f4bc67b7fd84ddb115a351fd9c26d08cc92fca0cb6c99e3217e47d002966d99f5d"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wayland/protocols/pointer-gestures/qt_attribution.json": {
+      "bytes": 720,
+      "gitBlob": "9cd44450e740cc32144bd9740016644062fb3368",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wayland/protocols/pointer-gestures/qt_attribution.json",
+      "sha256": "3c85ce329ccb30c469aa3f3c71596eb915c9cccd645ac1192d94a8fe548556b7",
+      "sha512": "18f115368469205ab013887a4b43813a13e4808eef098afdcc7678e5a733a468b4c2a75d8f3f710402cc7c850acc42d78bfaf279f9181d85ca23a6c28bc48790"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wayland/protocols/pointer-warp/qt_attribution.json": {
+      "bytes": 764,
+      "gitBlob": "83cd73c357034cd07f74bf20160d8c547de88543",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wayland/protocols/pointer-warp/qt_attribution.json",
+      "sha256": "3eb309adae44fe120dab08dca8c4df57a34ac347ecf1764cafdd7542cd0a0a11",
+      "sha512": "301de2f6d57a5a82d74ea9c4886b0f06bb63f30feb8d0ba7077451bbfb9527581fd0405520a6af3f28ede3227457aeba9080b561fd27bb60b56aa1dbc078d125"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wayland/protocols/presentation-time/qt_attribution.json": {
+      "bytes": 742,
+      "gitBlob": "8d54400d3348e4a8069eb2055b90269dd682029a",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wayland/protocols/presentation-time/qt_attribution.json",
+      "sha256": "c3af7f51726c7584d5e8ad74a29813d66cac6a215a9675da7cfc9a42f15c2d0a",
+      "sha512": "a9173898ff61ce4a001cfdb43b2b6ef11431eb76e934779e97dd19d6dd291aa839781e951c81e34f4e552193cc16f7c4ffa13a78e81f45052a17d656e465154f"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wayland/protocols/scaler/qt_attribution.json": {
+      "bytes": 718,
+      "gitBlob": "4b1f7303b8aa240020e3a28de49348279a0bbc71",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wayland/protocols/scaler/qt_attribution.json",
+      "sha256": "8b7751412fc26d70f641d6bad9c6aadd406317cbf17359ffcc58651f58aa2fca",
+      "sha512": "b0d1d696f727bda30e5f34ec9400f7231762ddf74e027ad734d8fb51c97b1dfc28f20a7aa47d0328b98eda26b98d45b76e27cd68216f33e63dd98434d25b4725"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wayland/protocols/session-management/qt_attribution.json": {
+      "bytes": 856,
+      "gitBlob": "8539749f1124d15ff47c49b203ce4616b351c788",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wayland/protocols/session-management/qt_attribution.json",
+      "sha256": "509ab9b7a310628d00ced3a293f4f1e8e9146bde3555eeac483c5d00c07de431",
+      "sha512": "c79d37ca80bffda9cbf9c7e6906dad4de5264171b1a6d6e7c4d4a3c194e852900e729bd768fb2b27907b34587a95ea06cae98d9f89c27bd8eafeec0cf50d8bdf"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wayland/protocols/tablet/qt_attribution.json": {
+      "bytes": 726,
+      "gitBlob": "150eb2fbc4c3a052c081779d24f99606ff1ea7c1",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wayland/protocols/tablet/qt_attribution.json",
+      "sha256": "a46626dbac8fc1f57d5b34eb077425fc402fc0767b75ec06578e1465502883b5",
+      "sha512": "3b5051437a4e618cba1f3f57b4d6c0eec2a2c555132a42772a4cb1901a6c693ddbbd73d6894781c57d90b7a8efc785c46a33362ec2c4c21b9bc79a3f26ceb423"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wayland/protocols/text-input/v1/qt_attribution.json": {
+      "bytes": 836,
+      "gitBlob": "ea0d59237c259a4ae6d41b7ec6c4ea664a9aab6f",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wayland/protocols/text-input/v1/qt_attribution.json",
+      "sha256": "882ac88020f0ecaea6d991f7e8d292542c9422592ede0396c4d217f040ef6a54",
+      "sha512": "9fe46ed1327631ab7150b7cfe4f1650bc5c3866d338aae772ae0677cb89d94e909af01379dc097e9bfb2a4852afaa058f69223cf02fecadd8a7bcba975986715"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wayland/protocols/text-input/v2/HPND_LICENSE.txt": {
+      "bytes": 1095,
+      "gitBlob": "e7a4915da0a293b94e28e0ca2067da41a6455625",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wayland/protocols/text-input/v2/HPND_LICENSE.txt",
+      "sha256": "8172d52f3b7bba7d10af2f9134c63d0f699ba6b20a47e35f5ac45654c500bfd7",
+      "sha512": "6bb440ef3597cf547f143ae9639815ebe7513a634ee30b91489a8d48f0b809675e8a036cf469e144a33a45d3228f8447a1719f69ec4612124f0b9e1c579ffc64"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wayland/protocols/text-input/v2/qt_attribution.json": {
+      "bytes": 693,
+      "gitBlob": "f0be562662a3563b8a2669a55389b9f74b80a2d2",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wayland/protocols/text-input/v2/qt_attribution.json",
+      "sha256": "197d9edcc6fb17d7bc2b230f7061ce0d2ef90fa4291c86e87ae2817e8f2809fe",
+      "sha512": "d8f9789851906fca34f7a848a1e300ec1b924553a93e64d6519de64aced5328fa74d80a008a559131611ca0b6e48f5b7977626334da37849c904ea47453a357d"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wayland/protocols/text-input/v3/qt_attribution.json": {
+      "bytes": 927,
+      "gitBlob": "2a9226e3ea4ade700767c297e5b1ca29d9cf2c1c",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wayland/protocols/text-input/v3/qt_attribution.json",
+      "sha256": "476225d10cb5789d993c38335c6cc442fdc19a8d91f1ceb7a3ddb50414a8e68a",
+      "sha512": "2e9906bd16b065bf49a79b328870acb08c1ed0c852caefd26beca4dfdee90ac6e321db4f18e33769af76efd4f11850fc8d61feb755648bf6a10b1c39fb6f7678"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wayland/protocols/viewporter/qt_attribution.json": {
+      "bytes": 758,
+      "gitBlob": "fbdda2c029459afef0b3f04bf66a775db723b9c7",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wayland/protocols/viewporter/qt_attribution.json",
+      "sha256": "95139e441967bc289d174078f1ca0485363e8405bd8d06eb9946356c09c0a5e4",
+      "sha512": "e8cf9ed7360d43d00b0df6f4bc5e0f2609d2b61db5109ffa97a38ff9704852b24638be9ce46bb25376b6a6afaae7dc67385a8ea4a6b192cd16d0a17e5e3ebea4"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wayland/protocols/wayland/qt_attribution.json": {
+      "bytes": 794,
+      "gitBlob": "000ee0d4b2e6445234afc3620233967f6904aeb5",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wayland/protocols/wayland/qt_attribution.json",
+      "sha256": "d2b263d97853d72128987f55fb912fc197f488de003a8e4bbc53cae2549d0e6e",
+      "sha512": "d72c813673bf8f6f87611640d6740b97d27d2c1a0957d5f5d3570250d74769d228ef5f9799e441601534b8b3301fe4147b5a57cbc5c9c97d25a166dbf05baea7"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wayland/protocols/wl-eglstream/qt_attribution.json": {
+      "bytes": 786,
+      "gitBlob": "f11023f26817225ed8bbcfe88da625cd2aee8118",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wayland/protocols/wl-eglstream/qt_attribution.json",
+      "sha256": "2432510e17446887decd1fc58770aeeef060aff5331a8bfec7fb668555f3b347",
+      "sha512": "7679a321e698d8bcb812562f7d78eb7d1f063bd9d3c0d76165496201f2674879a693cda0101bc5d64a0518e9263a76d6bafdbacfbfb54682ba8ec870fe9154ac"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wayland/protocols/wlr-data-control/qt_attribution.json": {
+      "bytes": 815,
+      "gitBlob": "eea2dde6ef6824f607de3c84bcb154adb42ba7be",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wayland/protocols/wlr-data-control/qt_attribution.json",
+      "sha256": "433a74149249d01d946d86aa0d88d30bc755523f1a978f640f6142e9c8fa1035",
+      "sha512": "c6e0a0a3cf0c3c7fa94b7890d5df0102023f9dcc06b77412c8a75596507bd19eb5d52b6b2623f6f6bf359ed8530489b420912cd8cbe25987f605dc22a9f40fef"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wayland/protocols/wp-primary-selection/qt_attribution.json": {
+      "bytes": 824,
+      "gitBlob": "ab305bb6924d7238921e803dcaffe3dd63007d11",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wayland/protocols/wp-primary-selection/qt_attribution.json",
+      "sha256": "14586c06e09439e9c2b7719766f68e219d0ff0231811e13e44f4587dabf52707",
+      "sha512": "ed44dd71f15a85cf3a67b0e8d969429816bf813e941282f35bdba74ba6ebc411c7320768247c1fb1b94715170060108f8a3ce448e03ad535835642bfb68a55f1"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wayland/protocols/xdg-activation/qt_attribution.json": {
+      "bytes": 865,
+      "gitBlob": "1f55ad27b612a53ced8f53bb25f83b537a66f407",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wayland/protocols/xdg-activation/qt_attribution.json",
+      "sha256": "8f13cfd4c78a2f116d3e674c329d3d211b647d80190e7a95493528cd6dedbd89",
+      "sha512": "5102fa6b393fcb4c93bfa9e9d0baba732cf2b0ddef2266236ba74d68efefdf26f60deaa58e29f46ad9db118345f9edc318ae4c183df026aab1a14ea7abb84151"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wayland/protocols/xdg-decoration/qt_attribution.json": {
+      "bytes": 843,
+      "gitBlob": "7e551a5d2003b5f7ce6fce9b7ee9aef8e5ec9ef7",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wayland/protocols/xdg-decoration/qt_attribution.json",
+      "sha256": "b8d9102ff3c7eccd840f7d5332d072e41e95eb055a8a9f2e3719a83005879c86",
+      "sha512": "270d9fe10d08a6f86207070655f120a39edf40180b932af6fe255f63bfed3c12fc1de2ad373cd58d2eb6871fbced8c75c6e8866433c8dbcaef2724dcda59f54e"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wayland/protocols/xdg-dialog/qt_attribution.json": {
+      "bytes": 566,
+      "gitBlob": "4a6d959e4a1757b42abb6818574ed10d9459d11e",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wayland/protocols/xdg-dialog/qt_attribution.json",
+      "sha256": "c7918fb63ad5be29e9a95db3464a7832224c7d904d21617ccfc689e6b0ab04c0",
+      "sha512": "ca20ba6db1866c28d214c3da355e8718b2bc90734a2954c77c0fae048e1006075419c690a9a9cb97aafb74078d2f2300588b068de18a21bc334a3aae02282418"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wayland/protocols/xdg-foreign/qt_attribution.json": {
+      "bytes": 729,
+      "gitBlob": "00daedd5b953d2acc6b640f368a9bd67bacc8fe4",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wayland/protocols/xdg-foreign/qt_attribution.json",
+      "sha256": "0ed6fbddba411b647bbe895b6e7a842c2a884905206888c0b4df6b6cd3bb9f79",
+      "sha512": "a9ce8002de56b18108e3a04818bcb6a3b45bf2a8d29d95a58e9de5b2e7bf63eb4f3e41fc3eac6f5ffa730ef2840fc081acd866b1a6687609869e7b0fbb9484e2"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wayland/protocols/xdg-output/qt_attribution.json": {
+      "bytes": 813,
+      "gitBlob": "04c6bf482f5e88655dcf5421ac9e92f66951c9a1",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wayland/protocols/xdg-output/qt_attribution.json",
+      "sha256": "c5e4f132de8d08a75af02682bba3a9349a00f49b773e23ef5543648209b76658",
+      "sha512": "8c6abbbb82f25a87a3db2c08f44756a2b1543162140427ce7239d24f16163905fcc07facbe150c15e0b9924ebcdcd1a8af50d396bef2a8e7b99ebaea0a65046b"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wayland/protocols/xdg-shell/qt_attribution.json": {
+      "bytes": 990,
+      "gitBlob": "b47679c71487dda753629b9d73a162a67e5e5610",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wayland/protocols/xdg-shell/qt_attribution.json",
+      "sha256": "e1367b44fe28fce2eee7656cda75203f4102662bb6aa370b3c9f3eb5a2cc3f82",
+      "sha512": "9913500c1f67808f3968cacad11913cc8ba94471c62e945967c3313ad3b512ae5ee6ba05688eaaaea05af152ad8a622d77a298175e5582ec97d7e491ef7bd1ca"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wayland/protocols/xdg-system-bell/qt_attribution.json": {
+      "bytes": 820,
+      "gitBlob": "cf8b0e5bde8bd544da5e8680ea97db4cf9a87b1d",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wayland/protocols/xdg-system-bell/qt_attribution.json",
+      "sha256": "43a10e6b73a26d9c75e99447f5e731d170047ed2e709878e61eb83f6453cb3da",
+      "sha512": "7d77ecbe94f589a76562141d17e67bd5cf5cd28d10edeec332d2432198e365ff53f0c9effbbe8ea0720b8c82a660625816c8f76afc961a166674618ec4de7ba7"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wayland/protocols/xdg-toplevel-icon/qt_attribution.json": {
+      "bytes": 845,
+      "gitBlob": "e0a675b93d330b930bfcd9824b4b501d13e6315c",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wayland/protocols/xdg-toplevel-icon/qt_attribution.json",
+      "sha256": "2e022951f22a56051a099b9045f4fb0c569daa896a218d23f47b0dac3e905c04",
+      "sha512": "831379a9392b73147b2fd24eb54173660b209314f7e0df10e1060bdbc0d91af0e5a21098037f25f79953a32aa2ef92a4a876e0dee30d28754428f2199d4832b0"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/wintab/qt_attribution.json": {
+      "bytes": 602,
+      "gitBlob": "6c3a0ef6fe687facbc4c1a3fc9d0383fb47e0f8b",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/wintab/qt_attribution.json",
+      "sha256": "b879ea91b719531d45e1cfe33d2241d060a9260200bd91a09ada074b16063f9c",
+      "sha512": "8b2555fd658bf62386b65b5b9cb8ff14d62c94b02e419e192c3e91de14837ad91527cd09b7c0f8491958e7abd030c0d60365562526b770ebe591b8ba76acd909"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/xcb/LICENSE": {
+      "bytes": 1246,
+      "gitBlob": "8f4e5c3a72e2e08469fbb7b5074ed2735135022d",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/xcb/LICENSE",
+      "sha256": "82775191bc05f85b40404d77bb69b1edeaeb4033f48387e9e5eab4dd67f5d6f1",
+      "sha512": "226eaba6f71e32f1b854bc2ecd62a22003b990aa795768fa14941eb1dd2e07065ff4f3cd7576beec66a70a73d793ef9d7da26a75fc6afbea056b1b5028e5258e"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/xcb/qt_attribution.json": {
+      "bytes": 825,
+      "gitBlob": "26dc030a3ee96158fc3f4cc74e8c81439dc17aeb",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/xcb/qt_attribution.json",
+      "sha256": "8bae8861957bc0168d586d24da6e8e93edceb11796811c5f614d211f4674d437",
+      "sha512": "6daa628a5cb0232c067010082a053a9652c26c10d5d8795f87e3684f016894668450a721494bce0e2a1c32a724e3754e557d89888dbd611ecf6f4e367bc7e606"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/zlib/LICENSE": {
+      "bytes": 1465,
+      "gitBlob": "9c57e18006ec54be5d52d0bd4ff04cd5432c975f",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/zlib/LICENSE",
+      "sha256": "d7e3139972874dc8abdbbfce27ec1e6f942b28279dd7d27453630a8b4610e080",
+      "sha512": "d246f0cf85121a02c08ba2a806d747a17080d593fa94e06d47dde1d0cc8292a2e1abccd42a109443746e05655d86026bdc7ab6ad152eba53f4f5c1bad246672c"
+    },
+    "licenses/dependencies/qt/qtbase/src/3rdparty/zlib/qt_attribution.json": {
+      "bytes": 731,
+      "gitBlob": "d550c40ac61c2ab7acb92429566750ce1157a9fa",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/3rdparty/zlib/qt_attribution.json",
+      "sha256": "0346805e9c4048316dbc7c58d560a20c12482ea0218de264282212e9619b6d64",
+      "sha512": "2246ad84ab526af3ae4640d37ed936773a9fcf6eb4700229a67d82f98026ab252e7e961b49a938a3d0d6e2dc41e658608d8c5aeff0709966729a8bef84fc7847"
+    },
+    "licenses/dependencies/qt/qtbase/src/corelib/CMakeLists.txt": {
+      "bytes": 62690,
+      "gitBlob": "8c9e61e2b23450947961abcdc215e17ac4af2451",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/corelib/CMakeLists.txt",
+      "sha256": "432ecea503b04ed8f7c066f04862329913b7473338253b4f5e6991b6f8af29af",
+      "sha512": "aa8e90013d1831868b980bd410f238bc994cec873c3af2e0cf24eb53b32fc733a7e7ea9a4683c375ef432bacb308296065cc1a86210616b15a68238784200409"
+    },
+    "licenses/dependencies/qt/qtbase/src/corelib/global/qt_attribution.json": {
+      "bytes": 814,
+      "gitBlob": "22379e261913af86c9ec3fe6837cb5fb7d38b53b",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/corelib/global/qt_attribution.json",
+      "sha256": "64698063a65a1502b986bd61163b5eb9c6bde87f93feb28e4eab43ff07a4f10a",
+      "sha512": "0ed3a013d890f7a41438a49790ab58c77a48c1b865a2c5a9589051f61f8e8e9b97c61a388bf11f69d1670091992267152ede9a5bd4e72ce5adaff23fb92e559c"
+    },
+    "licenses/dependencies/qt/qtbase/src/corelib/kernel/LICENSE.QEVENTDISPATCHER_CF.txt": {
+      "bytes": 1501,
+      "gitBlob": "8c08f48528fb29cfe2cd83c9517a00ab1965c086",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/corelib/kernel/LICENSE.QEVENTDISPATCHER_CF.txt",
+      "sha256": "e9e5b9f66d21c0e88a4179525ab39cd8d7eac9af78a8404f322c32b0874783d5",
+      "sha512": "d6a931373cfc37f8f9788362e3b276f6a37da668fab9f015d248c8e05228f2f7d97f49b144fa3f0106d41f907a9bbd67d0e9ac4ad2df24b221bacf0cd40c2ca6"
+    },
+    "licenses/dependencies/qt/qtbase/src/corelib/kernel/qt_attribution.json": {
+      "bytes": 564,
+      "gitBlob": "3fa6f179dfab05eaed00b17382f6e17647e4519c",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/corelib/kernel/qt_attribution.json",
+      "sha256": "27bb1f28d336f1f8f6d44689f28cb650f0844cc82672e36ae168d0716783fad5",
+      "sha512": "79bf7b455126887aa26796ec9cab649ad9ff0cd1152087bc71b8183731c4584ab8d1551326e30e0a2c6221d5b48a4db161b60547b2a0f2fa70e368c4ea3dc9b2"
+    },
+    "licenses/dependencies/qt/qtbase/src/corelib/mimetypes/3rdparty/qt_attribution.json": {
+      "bytes": 1383,
+      "gitBlob": "b30d70417529fef3e12a3cf615e919d748ec7968",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/corelib/mimetypes/3rdparty/qt_attribution.json",
+      "sha256": "329652c93e6b47663115543cfd746cb56b96a98d774d540d58e64614bd9739eb",
+      "sha512": "2f50c9649ac0f13789b88785ff0cd81b16c1b7bb1eeaf2aab7a8a3910221f8c90f506c7b0df5a12051599d4ac356c0d03b60e98cc960a794eee89429cc50e184"
+    },
+    "licenses/dependencies/qt/qtbase/src/corelib/text/qt_attribution.json": {
+      "bytes": 2170,
+      "gitBlob": "5bc5e3f58f60febeb87ff12d745210a31496ba77",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/corelib/text/qt_attribution.json",
+      "sha256": "4e23736600be956e4214849ad8baaa955441656db7324713fab6353c1163b4f5",
+      "sha512": "3222a435d5ee17d7486d1beec0187a4cd0c4c1c20aae04e6b850850699afca02276636d044eefdea6e25348ca057b84902ceeec805f3b1a6808c725e65bec6bb"
+    },
+    "licenses/dependencies/qt/qtbase/src/dbus/LICENSE.LIBDBUS-1.txt": {
+      "bytes": 27248,
+      "gitBlob": "ff2c19be4599e53c694dfc2f6570818ec57a4041",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/dbus/LICENSE.LIBDBUS-1.txt",
+      "sha256": "ad90aa08bb1a9b7056aa51e2e215b36630855457cde5dffd36aa0faa7b169f24",
+      "sha512": "3dd180d686a9706c34d5ecc5f429ab6af0b6cbc6522495e1d5a39fa99a9fbb58152144e838ac26aea427162ead8a97de8f67dfd5dca02fd4bcc269921a2c7ac1"
+    },
+    "licenses/dependencies/qt/qtbase/src/dbus/qt_attribution.json": {
+      "bytes": 959,
+      "gitBlob": "faffd45685af14d9de98ca387238d189dbd836f3",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/dbus/qt_attribution.json",
+      "sha256": "346532e1fb3bf653bc949408834c305646fc93f96650a2af9b2171d141c107ee",
+      "sha512": "3593fd32c747af741e122269e08c0bebe8102606bad3d9b8630cc0c50d5714e33a14ccf1d8bbdd2d38ec97b7b49b50c75efda777419ac449b183d3fff0fd76c1"
+    },
+    "licenses/dependencies/qt/qtbase/src/gui/CMakeLists.txt": {
+      "bytes": 44793,
+      "gitBlob": "b04556eb2a7bf6f8be005e64b90c9c0ac737a662",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/gui/CMakeLists.txt",
+      "sha256": "3f1e30f10369a97d6cd105b2f44ffc2fbe9d39bb5556593cfa21bee97416bbe0",
+      "sha512": "087430ac4e49ee527688bdcf9ee56fef2c1dc2b4cd09a029508bfb3b8e0e9b87e13bb4f26d466dfa61cffce0a04983aa29bfad468ba2409e2777f57444ffbe5e"
+    },
+    "licenses/dependencies/qt/qtbase/src/gui/opengl/LICENSE.KHRONOS.txt": {
+      "bytes": 1084,
+      "gitBlob": "63b1e1f94076b2b8b0cc977a23d8430cc3ee4993",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/gui/opengl/LICENSE.KHRONOS.txt",
+      "sha256": "2e484f3c26ff5008c704a3ca9dd809d43f24a004a1abb6c202660fbff0d19715",
+      "sha512": "955fd060e96353d7ae8173a12dacadf29d58230c227eb00fcc9e66bcd10116d14d98a0389678e6a6b869b4da823074017b5206e42e768ad658a2fbd98289afad"
+    },
+    "licenses/dependencies/qt/qtbase/src/gui/opengl/qt_attribution.json": {
+      "bytes": 1526,
+      "gitBlob": "e346e262862650816e54d4c61c75e86af0828f76",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/gui/opengl/qt_attribution.json",
+      "sha256": "d05626e02386f22186b385b3ce2cd5a6431b84e2fc552c68f7133e38da552fc1",
+      "sha512": "b7beccb72b83706070a37935e0bb5634e349c270a05c414bdddc6c437a912964bc5e4e0361a2ca41db86604737b5504ec77ffe282bacd898b7d904823dd7264f"
+    },
+    "licenses/dependencies/qt/qtbase/src/gui/painting/LICENSE.QIMAGETRANSFORM.txt": {
+      "bytes": 3004,
+      "gitBlob": "67c910826a99b2fe3c3e78c022c0aa56b102db1a",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/gui/painting/LICENSE.QIMAGETRANSFORM.txt",
+      "sha256": "46b3cbfa2f2946b93291506351e9be1dd0a28d2a53260f5aa488abd36fbeca9d",
+      "sha512": "e90ef75831740e3b60d410590e98ed66452d676f3556699fea2cbfc9718e2d39cae515b151a3546edd79068857a209db219705264482557785cc95f7b28a8789"
+    },
+    "licenses/dependencies/qt/qtbase/src/gui/painting/LICENSE.XCONSORTIUM.txt": {
+      "bytes": 2294,
+      "gitBlob": "5d98625787e83d0a65b0b2230c7d7e6f682001f7",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/gui/painting/LICENSE.XCONSORTIUM.txt",
+      "sha256": "a216b01291eb38fc1af93cfccf1fc67b48d9923612e517c2a695e95b3f03c22c",
+      "sha512": "96936297ba7b62fdb15a2e5392042aeef7bd0b8423e41271212a668ab8a85f2fbc5dd138d60ecd78592510382eb891dfc8cb0675ff3fd88fb90bfe02eae53953"
+    },
+    "licenses/dependencies/qt/qtbase/src/gui/painting/qt_attribution.json": {
+      "bytes": 2256,
+      "gitBlob": "f238cb56733c712fd2d7a47c858c5c96aeabd9cc",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/gui/painting/qt_attribution.json",
+      "sha256": "8cddd6c73a885f697261c4d6d60e5cd814a2544fcd407504b52a5eb9b7cc3600",
+      "sha512": "57698ab70f21fda930f04ac480cfb470306de91e51f15114458f0ab40c2ade26cecd65369c9d2f3d2950d43a2511097042608812f055b79dbbc10153f812b9d7"
+    },
+    "licenses/dependencies/qt/qtbase/src/gui/rhi/LICENSE.MiniEngine.txt": {
+      "bytes": 1077,
+      "gitBlob": "b8b569d7746d98d07183806fb4af673fca6dfb57",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/gui/rhi/LICENSE.MiniEngine.txt",
+      "sha256": "cf248820bf1178370bb4f1670a59f8748d46bc96d0f64080cd631511c6046409",
+      "sha512": "cbfdbb38c5059710afb31d614cd2dd0f05dd2a0e1d2b29bf90408f4d39aabfc2014cd5d4744a129d4c541f416cca649f4e7ee898cd6aecb107c607cf498d4b13"
+    },
+    "licenses/dependencies/qt/qtbase/src/gui/rhi/qt_attribution.json": {
+      "bytes": 782,
+      "gitBlob": "e1094396af24ddbfaeee533b2e50791b1aea4c92",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/gui/rhi/qt_attribution.json",
+      "sha256": "59df3efb041ed346aa797602a76ef8d284e84c3cc6ace30967d6704fc65dbb47",
+      "sha512": "922020803661b6a695e0995ab24d49ba112f805421737424ba5aab0973b8e7f24822781c020c7653b7d06cd3c830d0bdccc21f4af3406330a71afb3f8efa6d96"
+    },
+    "licenses/dependencies/qt/qtbase/src/gui/text/LICENSE.AGLFN.txt": {
+      "bytes": 1425,
+      "gitBlob": "50abffca157c2b31aabcdc880a008ff8c15197c5",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/gui/text/LICENSE.AGLFN.txt",
+      "sha256": "40818155548ff41c67d3a40edf355e9658992b292c227f4c1147425cedc746c6",
+      "sha512": "a6b35a350138db139781693700bf964d4cbb0f38f106f46ac6af8af81ed0de238bf7b37c7ad5680ca58e9477475bb2136e8422c8f87db12f89289cd79254f57a"
+    },
+    "licenses/dependencies/qt/qtbase/src/gui/text/qt_attribution.json": {
+      "bytes": 807,
+      "gitBlob": "47af803ee90c570258453b69079d3c25506e3dc7",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/gui/text/qt_attribution.json",
+      "sha256": "73066a55ff52c6546753e1dc0802d8890d58e93e7efa394565cd8bdd0df0995b",
+      "sha512": "51f5787866435e10ffb8901ab89cfa1f6a3e96555ade2fa154cdb71928a25923eb53de78840115659dd7508eb5802863913ad140af89b15eccb61c34628d64e0"
+    },
+    "licenses/dependencies/qt/qtbase/src/gui/vulkan/LICENSE.txt": {
+      "bytes": 11473,
+      "gitBlob": "21dd179fc9ae5cfbce853b4d40803777f42865f3",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/gui/vulkan/LICENSE.txt",
+      "sha256": "5f618873b0cdd1e84c611c5529212c2524bfc887bdfd7d1f3b568bad3c649612",
+      "sha512": "e4cea9bb2c65a7bb7970077b12fac5da2e5136f388ed2421bdd3c72f5a20ba2e5203161d8f30eb4caefd83f670b4aceff973d50e4e450ee68c1938e6a59d2141"
+    },
+    "licenses/dependencies/qt/qtbase/src/gui/vulkan/qt_attribution.json": {
+      "bytes": 801,
+      "gitBlob": "acc66a8210efe3591e1c1212d698723fe47d5571",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/gui/vulkan/qt_attribution.json",
+      "sha256": "b4beb6ac27b066a6a71408da116fea60131c06ac9799c9763fe9cef28a76e7b9",
+      "sha512": "fdd61e02d58728cc0cfd5e9141aff24e606909f9272e78482ba3c6d1000dc822f969ebbed9ed3c13f2888ec15d8e639edacb6441f96cb6d084ab199b76c216d1"
+    },
+    "licenses/dependencies/qt/qtbase/src/plugins/platforms/cocoa/LICENSE.COCOA.txt": {
+      "bytes": 1501,
+      "gitBlob": "8c08f48528fb29cfe2cd83c9517a00ab1965c086",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/plugins/platforms/cocoa/LICENSE.COCOA.txt",
+      "sha256": "e9e5b9f66d21c0e88a4179525ab39cd8d7eac9af78a8404f322c32b0874783d5",
+      "sha512": "d6a931373cfc37f8f9788362e3b276f6a37da668fab9f015d248c8e05228f2f7d97f49b144fa3f0106d41f907a9bbd67d0e9ac4ad2df24b221bacf0cd40c2ca6"
+    },
+    "licenses/dependencies/qt/qtbase/src/plugins/platforms/cocoa/qt_attribution.json": {
+      "bytes": 720,
+      "gitBlob": "927315c38eef74edc16ef6667b995b809f187561",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/plugins/platforms/cocoa/qt_attribution.json",
+      "sha256": "27a435bfea96ca950f4a5ad6a82be7fe2a62bb4db0d8851e7a84fc5dce0c3ff3",
+      "sha512": "386be2951bd30259f097c62bf13ba4fc7702140c4eb1996d78a2604d6cebf5477710fc0fdc0edaf8f2ef478a159c79adb58b34bd9248ecdfcc285d61a9209a7a"
+    },
+    "licenses/dependencies/qt/qtbase/src/plugins/platforms/windows/CMakeLists.txt": {
+      "bytes": 7975,
+      "gitBlob": "4cb2689e820d58f86d6b3eedcc01115386b07ed6",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/plugins/platforms/windows/CMakeLists.txt",
+      "sha256": "cbcfb8a503b3dd5446e0deb42a6686a90dc9afe9390510ce018647063f8c6af3",
+      "sha512": "568bdb806f77de51cad7466980eb24809f20ce64073541eb1f42c2a848d46a0ec94c515f1676eb8136c2cba5c28b45bbfc397085f3527983817edf29d0d0e4c2"
+    },
+    "licenses/dependencies/qt/qtbase/src/testinternal/3rdparty/cmake/Copyright.txt": {
+      "bytes": 5477,
+      "gitBlob": "2074109b019445458a65e6cd3935aa24a0878c7c",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/testinternal/3rdparty/cmake/Copyright.txt",
+      "sha256": "0676e30827684487aa0ea8f72f01e9460a6320fa34a2888df0ad1dd3e8a06eb8",
+      "sha512": "20133e162759f39a7a614bd9278b616aa9af75673b1dc12a84156252b71be217acda98506d6e32f43f24438f8a1e9dd80d47e916a8ff2afd82ff99db68e978dc"
+    },
+    "licenses/dependencies/qt/qtbase/src/testinternal/3rdparty/cmake/qt_attribution.json": {
+      "bytes": 515,
+      "gitBlob": "e1cdbcdb9f8179997200c703737654cf9f6aa9c3",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/testinternal/3rdparty/cmake/qt_attribution.json",
+      "sha256": "f194ea33cf9b0d44615a6fa9eb4d45e7796b50cb0a88cdadf5d9b15745bf52f0",
+      "sha512": "d6cc0572c90c8c4ed062c02b0b6277bfc56cdd0b47037e9a1777e10872951f2c8204b936c0cee0d4800aad4ac5c2ff0302ad68f1b1e57ae9b438351dcc77b29c"
+    },
+    "licenses/dependencies/qt/qtbase/src/testlib/3rdparty/catch2/LICENSE.txt": {
+      "bytes": 1338,
+      "gitBlob": "36b7cd93cdfbac762f5be4c6ce276df2ea6305c2",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/testlib/3rdparty/catch2/LICENSE.txt",
+      "sha256": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+      "sha512": "d6078467835dba8932314c1c1e945569a64b065474d7aced27c9a7acc391d52e9f234138ed9f1aa9cd576f25f12f557e0b733c14891d42c16ecdc4a7bd4d60b8"
+    },
+    "licenses/dependencies/qt/qtbase/src/testlib/3rdparty/catch2/qt_attribution.json": {
+      "bytes": 898,
+      "gitBlob": "ad231efd4266ac3910f6c9fd72f5097b5baf13a5",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/testlib/3rdparty/catch2/qt_attribution.json",
+      "sha256": "8149331a9f68c529955173cbfb12e3f0193c2e4db23ae4117bcd537ee1eacde0",
+      "sha512": "91f66323d1c21411033fcbf466c7485c4dd6d404e90263fd177ce15fba5fac8c420d3ccef4196ada1a896b63950cd5b3db7cb8a6782a7e5ade4430b1a9a5631b"
+    },
+    "licenses/dependencies/qt/qtbase/src/testlib/3rdparty/cycle/LICENSE.txt": {
+      "bytes": 1023,
+      "gitBlob": "c9b44cb8aaebb163e8524d67558696aa965ad0ec",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/testlib/3rdparty/cycle/LICENSE.txt",
+      "sha256": "cb5aedb296c5246d1f22e9099f925a65146f9f0d6b4eebba97fd27a6cdbbab2d",
+      "sha512": "c68e0f49cbd5b9dd3d840081c65392103f3d6d698b8d3b4c4a6bea4877669418e032437d776ab585ea8aac16c4e89c55d4613cbc6254a11601a7aa3fe2d4206e"
+    },
+    "licenses/dependencies/qt/qtbase/src/testlib/3rdparty/cycle/qt_attribution.json": {
+      "bytes": 1227,
+      "gitBlob": "6f3af0ac1d68608b0cfe2bd467d3c0d4a9711728",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/testlib/3rdparty/cycle/qt_attribution.json",
+      "sha256": "5b4c5fc477cd61b935983b93ec6d09b39a8f5644ea4fe5ac787c84583f521c7c",
+      "sha512": "dd9d663ee515b9605e94275ec57d7b4c40c6ce8b553e2ed5f5c0fc1234ab0bc4cb355323a73521ce8e555348a06f12fb3cb007e6550ba988460241ac72e11fbd"
+    },
+    "licenses/dependencies/qt/qtbase/src/testlib/3rdparty/linux/LICENSE.txt": {
+      "bytes": 18458,
+      "gitBlob": "c0ff68a2b2a68336b73079916836499348bf283b",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/testlib/3rdparty/linux/LICENSE.txt",
+      "sha256": "ed71cfca021790f74094e9810f42e31288e7f43cf00c8d9ac8d6f904124bd815",
+      "sha512": "d65410d08bc611420d479c80465bdfcd28ce86c65f03f25e6afbe23b4f3fad1ab90fdf56945b655968cd0b0f3f6835a63686886013c8fdd25b6755184af2345d"
+    },
+    "licenses/dependencies/qt/qtbase/src/testlib/3rdparty/linux/qt_attribution.json": {
+      "bytes": 1678,
+      "gitBlob": "0f04f56fb81d16a5866b1a64aaa662fcc4259fb6",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/testlib/3rdparty/linux/qt_attribution.json",
+      "sha256": "44299f5c08474790c164e73894b81b650463f9e40121041cefdeebd9b5eb734c",
+      "sha512": "c99a3a61251d1cd3be73fdef9ef0d5b7edb278dd9086a5883d295ce0c3c55bbfb6312e7c7eacd8e49b633ef1a9a51cd7ac0f09eef432ca33c3f1589e70d6a3f8"
+    },
+    "licenses/dependencies/qt/qtbase/src/testlib/3rdparty/valgrind/LICENSE.txt": {
+      "bytes": 1667,
+      "gitBlob": "d17836a47df3e24b01253119b63c0f9323e7feaa",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/testlib/3rdparty/valgrind/LICENSE.txt",
+      "sha256": "ec72eebd6326165156787da828caaa18386489387aefaa073c9bd40b8b2a400e",
+      "sha512": "aafffd23eeec90bfc151072bd429628a4964c9784cbd6b7b0a4f81039b1d545e9d48808273219fab604a44f9e459ee07d511a06d69b0ae8ea72a6c42e3e64591"
+    },
+    "licenses/dependencies/qt/qtbase/src/testlib/3rdparty/valgrind/qt_attribution.json": {
+      "bytes": 979,
+      "gitBlob": "262bc8380b4f34b3fc3fa85388de88ae3ffaa8c2",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/src/testlib/3rdparty/valgrind/qt_attribution.json",
+      "sha256": "202daf86588d8cded6c492d490cec190e5790796fff23ec5065b116b78e70fbc",
+      "sha512": "7b0092d5ad8d59e07186f1ab274ca187ae1906b4d85d92512005dbe61921954eebd8c0b2902f637d9f53aa8275b2064af7b39eaaec8e8e8cf8f62c3415edd6d5"
+    },
+    "licenses/dependencies/qt/qtbase/util/gradientgen/LICENSE.WEBGRADIENTS.txt": {
+      "bytes": 1062,
+      "gitBlob": "1a4d527a4d23f06c1fd3afe8650a0055ff62b540",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/util/gradientgen/LICENSE.WEBGRADIENTS.txt",
+      "sha256": "9be732e45b638c74f9c0e5248541dd54dc7e8e9a5545df96b5c4b7c9ac0c68ba",
+      "sha512": "dc3b798c50253b2f4be3eb081db995d998ae23bdf687ecb64e4912012bc3f0e20a5b91ef681ebe9f41139d9ef7aaa6eefb1ae61eeea43071c7c3c6eeb1705b25"
+    },
+    "licenses/dependencies/qt/qtbase/util/gradientgen/qt_attribution.json": {
+      "bytes": 596,
+      "gitBlob": "c6bd57462490aab12442bd983ee6bbf1e674038c",
+      "gitPath": "distribution/qt-notices/6.11.2/qtbase/util/gradientgen/qt_attribution.json",
+      "sha256": "6e87ac5d79ab92110e6e517b2c74e4f4fd15878540e93eea0300e529d3318572",
+      "sha512": "b4d1033fa6946a33e984d6816c21be90e839760a44a8dfa1d0c7ae293e6d6a1d1041ad9aa6ebc865d0929bc440863c62804fae5ec139d06783f7bca4ca76ae2c"
+    },
+    "licenses/dependencies/qt/qtsvg/LICENSES/BSD-3-Clause.txt": {
+      "bytes": 1469,
+      "gitBlob": "b91bbd89468099ae5c3028f176783976ca538187",
+      "gitPath": "distribution/qt-notices/6.11.2/qtsvg/LICENSES/BSD-3-Clause.txt",
+      "sha256": "9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce",
+      "sha512": "1baebc9749f9e34fe3ce3dfcf423e323a0837d570440c3dd6b0a9b7dad8f435fbd4355d586ae145377e005a5404b9c22114108c6287bb790e2c484fc4179a988"
+    },
+    "licenses/dependencies/qt/qtsvg/LICENSES/GFDL-1.3-no-invariants-only.txt": {
+      "bytes": 22955,
+      "gitBlob": "857214dd84593e0bacaac0211d76de0b69f2fa18",
+      "gitPath": "distribution/qt-notices/6.11.2/qtsvg/LICENSES/GFDL-1.3-no-invariants-only.txt",
+      "sha256": "110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4",
+      "sha512": "22d46818d3998ad841f537af4de7c50440dd918099fb6c5d4ab324cd71dc03066bfe1b67210a5efde77abd1d97b88da3c3dbfc39a24ae7248ee2d64e7f0fe6bb"
+    },
+    "licenses/dependencies/qt/qtsvg/LICENSES/GPL-2.0-only.txt": {
+      "bytes": 18092,
+      "gitBlob": "d159169d1050894d3ea3b98e1c965c4058208fe1",
+      "gitPath": "distribution/qt-notices/6.11.2/qtsvg/LICENSES/GPL-2.0-only.txt",
+      "sha256": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+      "sha512": "aee80b1f9f7f4a8a00dcf6e6ce6c41988dcaedc4de19d9d04460cbfb05d99829ffe8f9d038468eabbfba4d65b38e8dbef5ecf5eb8a1b891d9839cda6c48ee957"
+    },
+    "licenses/dependencies/qt/qtsvg/LICENSES/GPL-3.0-only.txt": {
+      "bytes": 35147,
+      "gitBlob": "94a9ed024d3859793618152ea559a168bbcbb5e2",
+      "gitPath": "distribution/qt-notices/6.11.2/qtsvg/LICENSES/GPL-3.0-only.txt",
+      "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "sha512": "7633623b66b5e686bb94dd96a7cdb5a7e5ee00e87004fab416a5610d59c62badaf512a2e26e34e2455b7ed6b76690d2cd47464836d7d85d78b51d50f7e933d5c"
+    },
+    "licenses/dependencies/qt/qtsvg/LICENSES/HPND-sell-variant.txt": {
+      "bytes": 1185,
+      "gitBlob": "9ad49316a65be2048c83c45f1f2b50420d198cbf",
+      "gitPath": "distribution/qt-notices/6.11.2/qtsvg/LICENSES/HPND-sell-variant.txt",
+      "sha256": "3a946598a9f674d44df764279ca0b85b5d6faba08f3bc75d8e0fcf6cd729a9bd",
+      "sha512": "45f8ebe4d3859aa11b55da17b6ab15f583e3f22ac0e95adb5c606d108bfd32fe6c5214a550401339ebc297ca0c876958b69c1553368fe10e8cc67fca2cd5f8c2"
+    },
+    "licenses/dependencies/qt/qtsvg/LICENSES/LGPL-3.0-only.txt": {
+      "bytes": 7651,
+      "gitBlob": "65c5ca88a67c30becee01c5a8816d964b03862f9",
+      "gitPath": "distribution/qt-notices/6.11.2/qtsvg/LICENSES/LGPL-3.0-only.txt",
+      "sha256": "da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768",
+      "sha512": "da6bcf3b76076d488f9a728debc7297b1bed6d94eb9cc44b15344c9b663a240c34434cc5511181f2a9b0e810b22449f5b13d793b7f225336f810367153bc8fd1"
+    },
+    "licenses/dependencies/qt/qtsvg/LICENSES/LicenseRef-Qt-Commercial.txt": {
+      "bytes": 462,
+      "gitBlob": "825b1f358b1f42d762112defbf0a193c9d968488",
+      "gitPath": "distribution/qt-notices/6.11.2/qtsvg/LICENSES/LicenseRef-Qt-Commercial.txt",
+      "sha256": "9b1f50aae6267f9d5e0ceb6775ee86450262c25ec7c0573e151fe5d3f18a4700",
+      "sha512": "ba87f17dc9a8ccf303848a9a9b956e5ee0f35d267c688a7ad7a61bfb0d73ef9e1f8e019ecbc9518ca09a7411eb4429bc46ef8744b02d4cc57a357d193a7ea736"
+    },
+    "licenses/dependencies/qt/qtsvg/REUSE.toml": {
+      "bytes": 2169,
+      "gitBlob": "9712cda455e2ba9ca4151ff08801d30a41eaa428",
+      "gitPath": "distribution/qt-notices/6.11.2/qtsvg/REUSE.toml",
+      "sha256": "a72f1a9217e1092ea11c22c7ed7222914e32555518e4b8d3b5fd5d74d81cff5b",
+      "sha512": "e0fd0400a218f9bce0b9f4c04bf0de8534e08220d1b0bb43e83f1b782be3596e8e80c9864efdfaffea274d6f4e396acd71c693bf948931cc26d294ce6408809c"
+    },
+    "licenses/dependencies/qt/qtsvg/src/svg/LICENSE.XSVG.txt": {
+      "bytes": 1185,
+      "gitBlob": "9ad49316a65be2048c83c45f1f2b50420d198cbf",
+      "gitPath": "distribution/qt-notices/6.11.2/qtsvg/src/svg/LICENSE.XSVG.txt",
+      "sha256": "3a946598a9f674d44df764279ca0b85b5d6faba08f3bc75d8e0fcf6cd729a9bd",
+      "sha512": "45f8ebe4d3859aa11b55da17b6ab15f583e3f22ac0e95adb5c606d108bfd32fe6c5214a550401339ebc297ca0c876958b69c1553368fe10e8cc67fca2cd5f8c2"
+    },
+    "licenses/dependencies/qt/qtsvg/src/svg/qt_attribution.json": {
+      "bytes": 551,
+      "gitBlob": "6c5ed854d2a712654f37df6ccd72e212b1cba32d",
+      "gitPath": "distribution/qt-notices/6.11.2/qtsvg/src/svg/qt_attribution.json",
+      "sha256": "c1b0472511c791561b89ee0d11c11d78a85fbdf5df5ad94c1a4653e192367759",
+      "sha512": "9e9cce18d4a7d7c57c1c9fe2977b82ea105160cb886c9cac9a751ea67831e12e75008d57e870b34c72daa18e9ddc422a3d31f2ac296c7490d75b7610df31a54a"
+    },
+    "licenses/dependencies/qt/qttools/LICENSES/Apache-2.0.txt": {
+      "bytes": 10398,
+      "gitBlob": "136d90045663ab0acaeff2a3ecf0013c968de8c9",
+      "gitPath": "distribution/qt-notices/6.11.2/qttools/LICENSES/Apache-2.0.txt",
+      "sha256": "e3ba223bb1423f0aad8c3dfce0fe3148db48926d41e6fbc3afbbf5ff9e1c89cb",
+      "sha512": "f2216bcd3d052627afd372c3890942ecb87fb3ec54887eef2309f74a1ebf3621f021bd7be8bf3e883cec8f725493e9b92fe17e5cbca3c33ff3fff7bf0961d778"
+    },
+    "licenses/dependencies/qt/qttools/LICENSES/BSD-3-Clause.txt": {
+      "bytes": 1469,
+      "gitBlob": "b91bbd89468099ae5c3028f176783976ca538187",
+      "gitPath": "distribution/qt-notices/6.11.2/qttools/LICENSES/BSD-3-Clause.txt",
+      "sha256": "9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce",
+      "sha512": "1baebc9749f9e34fe3ce3dfcf423e323a0837d570440c3dd6b0a9b7dad8f435fbd4355d586ae145377e005a5404b9c22114108c6287bb790e2c484fc4179a988"
+    },
+    "licenses/dependencies/qt/qttools/LICENSES/BSL-1.0.txt": {
+      "bytes": 1340,
+      "gitBlob": "9cc4741747a0f8d7e107a74cae898a69ad25fd21",
+      "gitPath": "distribution/qt-notices/6.11.2/qttools/LICENSES/BSL-1.0.txt",
+      "sha256": "3abd6471b9a9a08d65ce771143f8e278bb4c1aeb10c1c2d476935a6b049653f5",
+      "sha512": "70929596d86eb5759cad8c7d81d79de04fd39fb6dda5fa10530c3e13c376203dcad23bf829a6dc6496b7398ef2252fe504275cb052ada20974da18aca9acc149"
+    },
+    "licenses/dependencies/qt/qttools/LICENSES/CC0-1.0.txt": {
+      "bytes": 7048,
+      "gitBlob": "0e259d42c996742e9e3cba14c677129b2c1b6311",
+      "gitPath": "distribution/qt-notices/6.11.2/qttools/LICENSES/CC0-1.0.txt",
+      "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "sha512": "1eb4436f8d58766cbe99db97e5e8c0db8a706376afd291c337de1ba7a6b066d3791dc85ad034bdd54ea336bed6e6e8e7a037d8b04b2773c9c7517b9d9921d1fa"
+    },
+    "licenses/dependencies/qt/qttools/LICENSES/GFDL-1.3-no-invariants-only.txt": {
+      "bytes": 22955,
+      "gitBlob": "857214dd84593e0bacaac0211d76de0b69f2fa18",
+      "gitPath": "distribution/qt-notices/6.11.2/qttools/LICENSES/GFDL-1.3-no-invariants-only.txt",
+      "sha256": "110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4",
+      "sha512": "22d46818d3998ad841f537af4de7c50440dd918099fb6c5d4ab324cd71dc03066bfe1b67210a5efde77abd1d97b88da3c3dbfc39a24ae7248ee2d64e7f0fe6bb"
+    },
+    "licenses/dependencies/qt/qttools/LICENSES/GPL-2.0-only.txt": {
+      "bytes": 18092,
+      "gitBlob": "d159169d1050894d3ea3b98e1c965c4058208fe1",
+      "gitPath": "distribution/qt-notices/6.11.2/qttools/LICENSES/GPL-2.0-only.txt",
+      "sha256": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+      "sha512": "aee80b1f9f7f4a8a00dcf6e6ce6c41988dcaedc4de19d9d04460cbfb05d99829ffe8f9d038468eabbfba4d65b38e8dbef5ecf5eb8a1b891d9839cda6c48ee957"
+    },
+    "licenses/dependencies/qt/qttools/LICENSES/GPL-3.0-only.txt": {
+      "bytes": 35147,
+      "gitBlob": "94a9ed024d3859793618152ea559a168bbcbb5e2",
+      "gitPath": "distribution/qt-notices/6.11.2/qttools/LICENSES/GPL-3.0-only.txt",
+      "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "sha512": "7633623b66b5e686bb94dd96a7cdb5a7e5ee00e87004fab416a5610d59c62badaf512a2e26e34e2455b7ed6b76690d2cd47464836d7d85d78b51d50f7e933d5c"
+    },
+    "licenses/dependencies/qt/qttools/LICENSES/LGPL-3.0-only.txt": {
+      "bytes": 7651,
+      "gitBlob": "65c5ca88a67c30becee01c5a8816d964b03862f9",
+      "gitPath": "distribution/qt-notices/6.11.2/qttools/LICENSES/LGPL-3.0-only.txt",
+      "sha256": "da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768",
+      "sha512": "da6bcf3b76076d488f9a728debc7297b1bed6d94eb9cc44b15344c9b663a240c34434cc5511181f2a9b0e810b22449f5b13d793b7f225336f810367153bc8fd1"
+    },
+    "licenses/dependencies/qt/qttools/LICENSES/LLVM-exception.txt": {
+      "bytes": 873,
+      "gitBlob": "733e9b0f52a844e70cc143d28e180dd123d7e01e",
+      "gitPath": "distribution/qt-notices/6.11.2/qttools/LICENSES/LLVM-exception.txt",
+      "sha256": "f717ab4cf953fd1003be7f1b7adc7f54dd8690a7ebfbc2c22710e920071ac486",
+      "sha512": "cd6287adbedb315fa1341d20e7b144e299fb4c1f80cc6f11106a28268f2d3318adaf5ef2d0484f3cf2db1974ad8486415152dfa8d344696168c37b8c87d06903"
+    },
+    "licenses/dependencies/qt/qttools/LICENSES/LicenseRef-Qt-Commercial.txt": {
+      "bytes": 462,
+      "gitBlob": "825b1f358b1f42d762112defbf0a193c9d968488",
+      "gitPath": "distribution/qt-notices/6.11.2/qttools/LICENSES/LicenseRef-Qt-Commercial.txt",
+      "sha256": "9b1f50aae6267f9d5e0ceb6775ee86450262c25ec7c0573e151fe5d3f18a4700",
+      "sha512": "ba87f17dc9a8ccf303848a9a9b956e5ee0f35d267c688a7ad7a61bfb0d73ef9e1f8e019ecbc9518ca09a7411eb4429bc46ef8744b02d4cc57a357d193a7ea736"
+    },
+    "licenses/dependencies/qt/qttools/LICENSES/Qt-GPL-exception-1.0.txt": {
+      "bytes": 965,
+      "gitBlob": "d0322bf0e4e1d484d35cc6a1d96fa2b65b9d579b",
+      "gitPath": "distribution/qt-notices/6.11.2/qttools/LICENSES/Qt-GPL-exception-1.0.txt",
+      "sha256": "40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2",
+      "sha512": "60564f2316e2572dcfb399901d65dd9710246fd009c8860313eda1533b0463205313f594bfa6015258aebad56aba462328557547ed100089121930855002c306"
+    },
+    "licenses/dependencies/qt/qttools/REUSE.toml": {
+      "bytes": 6818,
+      "gitBlob": "9d0a4ea824284b622460eefec629180a1155d355",
+      "gitPath": "distribution/qt-notices/6.11.2/qttools/REUSE.toml",
+      "sha256": "5fd619087a464ce885462d1ec2a7aa5ac62301d7650dcb78793da5f4779c76bf",
+      "sha512": "4086d7cfd4399b62dd5c46faa10d0aa96cf6bfd6bb0b3a198b8239e2fdbd8a77ceb323599cf80f084523530ea2646acce7496471358202803d7fc92940fbe375"
+    },
+    "licenses/dependencies/qt/qttools/src/qdoc/catch/LICENSE.CATCH.txt": {
+      "bytes": 1338,
+      "gitBlob": "36b7cd93cdfbac762f5be4c6ce276df2ea6305c2",
+      "gitPath": "distribution/qt-notices/6.11.2/qttools/src/qdoc/catch/LICENSE.CATCH.txt",
+      "sha256": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+      "sha512": "d6078467835dba8932314c1c1e945569a64b065474d7aced27c9a7acc391d52e9f234138ed9f1aa9cd576f25f12f557e0b733c14891d42c16ecdc4a7bd4d60b8"
+    },
+    "licenses/dependencies/qt/qttools/src/qdoc/catch/qt_attribution.json": {
+      "bytes": 705,
+      "gitBlob": "ad2cfb796fde81cc7336ebeb335c2a20c657e28f",
+      "gitPath": "distribution/qt-notices/6.11.2/qttools/src/qdoc/catch/qt_attribution.json",
+      "sha256": "0cf3d536104ede1a1e1c3ddd2f192ab039bc2fd0c3b626f096ccd9decc142748",
+      "sha512": "649eccb95f9e776754db157b22eb08fb767ff7c8df2f4c651002a913be0b6d62a73f70eb7d441814549e08388f32a1a6866932325a0db26aa5a3902ddcffe88b"
+    },
+    "licenses/dependencies/qt/qttools/src/qdoc/qdoc/src/qdoc/clang/AST/LICENSE.LLVM.txt": {
+      "bytes": 15141,
+      "gitBlob": "fa6ac540007032cbd0ec772a1c72e6cb5527a4fe",
+      "gitPath": "distribution/qt-notices/6.11.2/qttools/src/qdoc/qdoc/src/qdoc/clang/AST/LICENSE.LLVM.txt",
+      "sha256": "8d85c1057d742e597985c7d4e6320b015a9139385cff4cbae06ffc0ebe89afee",
+      "sha512": "4a3325224ec2c86de08cf6f9320f1c95a6de061e45b53841df8fcab755d77341c27e0e064e4330d096b413c4fbb5310362b2f6c9b5c60e907bdceb2ff9b956d0"
+    },
+    "licenses/dependencies/qt/qttools/src/qdoc/qdoc/src/qdoc/clang/AST/qt_attribution.json": {
+      "bytes": 840,
+      "gitBlob": "d71bdecd016c69aef6715db2ac73b984dded11b7",
+      "gitPath": "distribution/qt-notices/6.11.2/qttools/src/qdoc/qdoc/src/qdoc/clang/AST/qt_attribution.json",
+      "sha256": "c44e85ec30b36bf497d685de3db85e5dd5d5dad52a79c8184eeac82600b10295",
+      "sha512": "0230e1eecc32f5945c35941bfe07b8d0318c86cefde0308c528f91b29ceca516e6214c201f69bf57eff569c1b16f35cb9afefb3ea58aa558df52f8d8d66ca4f9"
+    }
+  },
+  "publicVerificationPending": true,
+  "repository": "https://github.com/hashfunction/beatquay",
+  "schemaVersion": 1,
+  "sourceArchives": [
+    {
+      "bytes": 4310712,
+      "name": "fftw-3.3.11.tar.gz",
+      "owner": "fftw3",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/fftw-3.3.11.tar.gz",
+      "sha256": "5630c24cdeb33b131612f7eb4b1a9934234754f9f388ff8617458d0be6f239a1",
+      "sha512": "ca1bf80490dc6955a0ab49b1af05d6658c2ecc0968b3bde5b4af22271e47d30cd38f6f8347e8e6124091b6a17717447942bee95f94ca29574ba71c4d167af351"
+    },
+    {
+      "bytes": 77777,
+      "name": "hiir-4a9a1e67fa6f8ce7688e1c0c8a2b017cecd206a3.tar.gz",
+      "owner": "hiir",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/hiir-4a9a1e67fa6f8ce7688e1c0c8a2b017cecd206a3.tar.gz",
+      "sha256": "fb9535bb3141fcf85ae1f65e44192fe974987d068905800379a208cb6d89c334",
+      "sha512": "d54b546c780fcc7c19258062da14015406aab779ae106f3290aefad8fc9eec2de43c0dadf4d03d8d6df07756c6df41ecf7618b0f2ab79713999cc413347f2b34"
+    },
+    {
+      "bytes": 974901,
+      "name": "xiph-flac-1.5.0.tar.gz",
+      "owner": "libflac",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/xiph-flac-1.5.0.tar.gz",
+      "sha256": "aea54ed186ad07a34750399cb27fc216a2b62d0ffcd6dc2e3064a3518c3146f8",
+      "sha512": "c8e119462205cfd8bbe22b0aff112625d3e51ca11de97e4de06a46fb43a0768d7ec9c245b299b09b7aa4d811c6fc7b57856eaa1c217e82cca9b3ad1c0e545cbe"
+    },
+    {
+      "bytes": 254178,
+      "name": "xiph-ogg-v1.3.6.tar.gz",
+      "owner": "libogg",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/xiph-ogg-v1.3.6.tar.gz",
+      "sha256": "95b643da661155d79db9de2fca55daed3a8d491039829def246aacb3d9201c81",
+      "sha512": "c247e1da8b12f8b33272fafb6d7c171a1a2687c3632977439fa60b96ccc2ad751d88a2931bb3e18e1ddf2eea2e82cdd0aab087b2ec5393a9228c703476fa0167"
+    },
+    {
+      "bytes": 3954784,
+      "name": "libsndfile-libsamplerate-0.2.2.tar.gz",
+      "owner": "libsamplerate",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/libsndfile-libsamplerate-0.2.2.tar.gz",
+      "sha256": "16e881487f184250deb4fcb60432d7556ab12cb58caea71ef23960aec6c0405a",
+      "sha512": "37e0fd604907caf978659466289315befd66eec16c21a94e0b6106de18ffe803fbf2e7f3a8fb0430b33c0b784ecd6d4eaf3b9a862ed2670104647decbee913d6"
+    },
+    {
+      "bytes": 684875,
+      "name": "libsndfile-libsndfile-1.2.2.tar.gz",
+      "owner": "libsndfile",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/libsndfile-libsndfile-1.2.2.tar.gz",
+      "sha256": "ffe12ef8add3eaca876f04087734e6e8e029350082f3251f565fa9da55b52121",
+      "sha512": "fb8b4d367240a8ac9d55be6f053cb19419890691c56a8552d1600d666257992b6e8e41a413a444c9f2d6c5d71406013222c92a3bfa67228944a26475444240a1"
+    },
+    {
+      "bytes": 1234573,
+      "name": "xiph-vorbis-v1.3.7.tar.gz",
+      "owner": "libvorbis",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/xiph-vorbis-v1.3.7.tar.gz",
+      "sha256": "270c76933d0934e42c5ee0a54a36280e2d87af1de3cc3e584806357e237afd13",
+      "sha512": "bfb6f5dbfd49ed38b2b08b3667c06d02e68f649068a050f21a3cc7e1e56b27afd546aaa3199c4f6448f03f6e66a82f9a9dc2241c826d3d1d4acbd38339b9e9fb"
+    },
+    {
+      "bytes": 1524133,
+      "name": "lame-3.100.tar.gz",
+      "owner": "mp3lame",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/lame-3.100.tar.gz",
+      "sha256": "ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e",
+      "sha512": "0844b9eadb4aacf8000444621451277de365041cc1d97b7f7a589da0b7a23899310afd4e4d81114b9912aa97832621d20588034715573d417b2923948c08634b"
+    },
+    {
+      "bytes": 1122088,
+      "name": "mpg123-1.33.4.tar.bz2",
+      "owner": "mpg123",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/mpg123-1.33.4.tar.bz2",
+      "sha256": "3ae8c9ff80a97bfc0e22e89fbcd74687eca4fc1db315b12607f27f01cb5a47d9",
+      "sha512": "9b7aa93b692132da7eb8dcfef12ce91bf66bf8475af50e9c57d7b80225f96c0e74264e518e558371af1f4cf6d2afda5b3dfc844949fd747db7ac7c44d0e9f6ad"
+    },
+    {
+      "bytes": 4183352,
+      "name": "xiph-opus-v1.5.2.tar.gz",
+      "owner": "opus",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/xiph-opus-v1.5.2.tar.gz",
+      "sha256": "9480e329e989f70d69886ded470c7f8cfe6c0667cc4196d4837ac9e668fb7404",
+      "sha512": "4ffefd9c035671024f9720c5129bfe395dea04f0d6b730041c2804e89b1db6e4d19633ad1ae58855afc355034233537361e707f26dc53adac916554830038fab"
+    },
+    {
+      "bytes": 1463329,
+      "name": "PortAudio-portaudio-147dd722548358763a8b649b3e4b41dfffbcfbb6.tar.gz",
+      "owner": "portaudio",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/PortAudio-portaudio-147dd722548358763a8b649b3e4b41dfffbcfbb6.tar.gz",
+      "sha256": "95457b809ce60d4d4790f84bb692e271f644e59d8adf96feb988c89ab52a506a",
+      "sha512": "0f56e5f5b004f51915f29771b8fc1fe886f1fef5d65ab5ea1db43f43c49917476b9eec14b36aa54d3e9fb4d8bdf61e68c79624d00b7e548d4c493395a758233a"
+    },
+    {
+      "bytes": 66987512,
+      "name": "qtbase-ef55f427f2c8b410d34f8a7681020a3000cf6866-raw-git.tar.gz",
+      "owner": "qtbase",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/qtbase-ef55f427f2c8b410d34f8a7681020a3000cf6866-raw-git.tar.gz",
+      "sha256": "7fa40cb6053479cf9f8316cbc9717f2bc1ded670e5e50df5a27a68fc566b2268",
+      "sha512": "a6c1ff52b6470fcb8db534b88d53120eb3e91993befd71a475fc9fbfffddbaeb2d5a0747c6934e6d02ecbe5ae52de3d1c7f50c0a7d2668cd55514072b2db3744"
+    },
+    {
+      "bytes": 2615150,
+      "name": "qtsvg-17ca512f903f935282ebeca496aac5d11ba4199a-raw-git.tar.gz",
+      "owner": "qtsvg",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/qtsvg-17ca512f903f935282ebeca496aac5d11ba4199a-raw-git.tar.gz",
+      "sha256": "a30d3290e510ff0db60b0dcb5886cb35c3cf00ff8ae91f23a15df17be0469aa7",
+      "sha512": "3abb585e7e3aff5a908d3263ea884c659cdd789b6915b7893799adc60c4b17c8abf8a0730ad742476ecd2332ea1b914580aee0849fb397b15f44efb9743f2602"
+    },
+    {
+      "bytes": 12015655,
+      "name": "qttools-8026c0462f19e9549501718152523ea223a19fd3-raw-git.tar.gz",
+      "owner": "qttools",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/qttools-8026c0462f19e9549501718152523ea223a19fd3-raw-git.tar.gz",
+      "sha256": "a23aef9204f588cb08d63a6d9aca57a68bcc2fd7263d65aefe2dbda157d5828a",
+      "sha512": "90d74fe9ab99b5cbcef1ba9673dbe6327b533ccfd3da8961b21d725a223009eee9e9f67f43bf4cdbada0fadd3bae2e33283d682013829309203775d8e8a62779"
+    },
+    {
+      "bytes": 49935,
+      "name": "ringbuffer-1c46ef34a28d4637b43fb6d5ebb31d38c05f4bd8.tar.gz",
+      "owner": "ringbuffer",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/ringbuffer-1c46ef34a28d4637b43fb6d5ebb31d38c05f4bd8.tar.gz",
+      "sha256": "fd5b75dc7a9507dd2579a36475758ef75d1ad6c767b4ff99e5b0a6619c020917",
+      "sha512": "4b15be03e441efe442536c885cfb08e13190bc6715c91938b6f96a50d390a09b0ba822392fb17417476ecd73bba0a321e005d1082ba217d9677f4c56dd1c0328"
+    },
+    {
+      "bytes": 5334507,
+      "name": "vcpkg-9e593bb.tar.gz",
+      "owner": "vcpkg",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/vcpkg-9e593bb.tar.gz",
+      "sha256": "e9255b62719c659f224fcc639b1bf4a6226e4996ad3fb006e18e1533cad77725",
+      "sha512": "1df9b0cbfa8edcf52a8e48f56d3f5e8df737dd2d5ecf2e4bcc9b5ec1a3380552d65e30c4fe4936f7db418ba419662dabdfaf5ae2d4ad5f1d51c209e97e57cacb"
+    },
+    {
+      "bytes": 1566911,
+      "name": "madler-zlib-v1.3.2.tar.gz",
+      "owner": "zlib",
+      "publicUrl": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/madler-zlib-v1.3.2.tar.gz",
+      "sha256": "b99a0b86c0ba9360ec7e78c4f1e43b1cbdf1e6936c8fa0f6835c0cd694a495a1",
+      "sha512": "16fea4df307a68cf0035858abe2fd550250618a97590e202037acd18a666f57afc10f8836cbbd472d54a0e76539d0e558cb26f059d53de52ff90634bbf4f47d4"
+    }
+  ],
+  "tag": "beatsprig-native-source-1.0.1"
+}

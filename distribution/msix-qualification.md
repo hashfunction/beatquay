@@ -13,6 +13,24 @@ clean pinned native build, tests, install, and render checks succeed, it:
    must finish before the next starts, including normal exit, exact uninstall,
    unsigned-input preservation and all owned cleanup checks.
 
+Before bootstrap, the entry point removes only the original TortoiseSVN MSI
+from the approved GitHub-hosted `win22` image `20260907.297.1`. This runner
+preparation checks the original MSI product identity, both original overlay DLL
+hashes and 72 installer-defined registry values in both registry views. It
+records original inputs twice, the exact system MSI command and original exit,
+then requires all relevant registrations and DLL files absent. Unknown images,
+versions, paths, shared overlay clients, mutations, read errors, reboot-required
+exits and remaining inputs fail. This helper is for that disposable CI image;
+it is not run on customer machines. See `runner-shell-review.md` for provenance.
+The application loaded-module origin policy remains unchanged.
+
+The original `runner-shell-preparation.json` is bound into both package records.
+Each installation rehashes it and rereads the registry/DLL absence during
+preflight and immediately before fresh broker activation. Export independently
+checks the original preparation, exact native uninstall result, and both
+observations from each lifecycle. A previous run's preparation cannot qualify
+the current source/run/attempt.
+
 Qt binary SDK archives do not contain a reliable prefix-level `LICENSES`
 directory. `distribution/collect_qt_notices.py` therefore validates and copies
 the source-pinned Qt 6.11.2 notice bundle for the exact `qtbase`, `qtsvg`, and
@@ -48,7 +66,7 @@ consumer input, ownership, timeout and acceptance predicates are shared.
 The native input, package, installed and consumer records bind the current
 workflow run and attempt as exact positive-decimal strings and the exact source
 commit. The source input inventory covers the package, verification and consumer
-helpers. Installation preflight rehashes ten directly used helpers, and the
+helpers. Installation preflight rehashes twelve directly used helper/input files, and the
 consumer step rechecks those bytes before and after execution. Their observed
 hash/size map is recorded with installation and consumer results. Actual UIA
 main-window handles are recorded in startup, consumer and screenshot metadata.
@@ -67,13 +85,44 @@ The separate metadata paths are `build-evidence/msix-package-record.json` and
 filenames are `BeatSprig.Qualification_1.0.1.0_x64.msix` and
 `BeatSprig_1.0.1.0_x64.msix`, in separate exclusive runner-temporary outputs.
 
-The workflow uploads JSON, text, XML, logs, owned UI screenshots and the two
-retained project XML files from each consumer lifecycle. The
-unsigned and test-signed MSIX, unpacked package, EXEs, DLLs, and ephemeral
-certificate stay under the disposable runner's temporary paths. This first
-Store-mode implementation adds no release exporter or binary artifact. License clearance, complete corresponding source,
-physical audio, WACK, public release, and Store submission remain false until
-separately completed and recorded.
+The ordinary workflow uploads JSON, text, XML, logs, owned UI screenshots and
+the two retained project XML files from each consumer lifecycle. An unsigned
+Store export requires a separate explicit `workflow_dispatch` opt-in:
+`export_store_package=true` and `reviewed_public_source` equal to the exact
+independently reviewed public commit. The default is false. Both original full
+installed lifecycles still run before export; their package/install/consumer
+records retain their original meaning and bytes.
+
+`cmake/msix/export_store_package.py` reconstructs both original package records
+from the same-run native stage, source, PE/source-owner mapping and original
+Microsoft SDK/redist DLLs. It checks the exact current Git commit/tree against
+the anonymous public Git API, rehashes the two original unsigned packages and
+SDK tools, verifies both installed receipts and all cleanup operations, rereads
+the retained project files and raw screenshots, and checks the recorded typed
+WAV metrics. The WAV was independently inspected while the app was running and
+then removed by owned cleanup; the exporter explicitly does not claim to reread
+that deleted audio file.
+
+The separate publication pin identifies the previously published 17 source
+archives and their original notice/build-guide assets. Export anonymously
+streams every public asset and verifies its exact size and hashes, then binds
+all 259 original notice members to both current source and Store payload. The
+historical source-preparation and package-record flags remain unchanged; the
+export receipt records only the newly verified delivery of source for the exact
+current minimal native stage. An unmapped runtime, changed original Microsoft
+DLL, unavailable source URL, signed output, wrong run/attempt or incomplete
+lifecycle is refused.
+
+The exclusive `build-evidence/store-export` directory contains exactly
+`BeatSprig_1.0.1.0_x64.msix` and `BeatSprig_1.0.1.0_x64.export.json`. The latter
+embeds the Store package record, original package/evidence hashes, both full
+lifecycle summaries and public source proof. Local package/source/evidence
+checks run again before and after copying. Cleanup removes only unchanged files
+created by this exporter; changed or unexpected output is retained and the
+original failure is raised. A success-only, explicitly opted-in artifact step
+names those two exact files. Test-signed packages, unpacked payloads and ephemeral
+certificates are not exported. This tool performs no binary release upload or
+Store submission and makes no WACK, upgrade, device playback or recording claim.
 
 A local policy-test pass does not establish Windows execution. Native package,
 broker activation, real first-run settings interaction, loaded-module checks,

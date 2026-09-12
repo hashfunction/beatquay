@@ -621,10 +621,12 @@ function Invoke-BeatQuayConsumerWorkflow($State) {
   $dialog=Wait-BeatQuayConsumerWindow $State 'Export project'
   Select-BeatQuayConsumerCombo $State $dialog 'Bit depth:' '16 Bit integer'
   $dialog=Wait-BeatQuayConsumerWindow $State 'Export project'
+  $State.workflow.export_loop_settings=[ordered]@{}
   foreach($name in @('Export as loop (remove extra bar)','Export between loop markers')){
    $control=Find-BeatQuayConsumerControl $dialog $State.process.Id 'CheckBox' $name
    $toggle=$control.element.GetCurrentPattern([Windows.Automation.TogglePattern]::Pattern)
    if($toggle.Current.ToggleState -ne [Windows.Automation.ToggleState]::Off){throw 'Unrequested loop export setting is active'}
+   $State.workflow.export_loop_settings[$name]=$toggle.Current.ToggleState.ToString()
   }
   Save-BeatQuayConsumerStage $State 'export_settings' $dialog
   Save-BeatQuayConsumerScreen $State '02-export-project' 'Evening Pulse Reopened - BeatSprig 1.0.1' @('Export project')

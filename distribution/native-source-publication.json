@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "repository": "https://github.com/hashfunction/beatquay",
+  "tag": "beatsprig-native-source-1.0.1",
+  "releaseId": 387570510,
+  "sourcePublicationCommit": "ca996c5811415ec4a1272114715a53e2dec85afd",
+  "sourcePublicationTree": "5a8f492dc5fdf15bac7db31d640a8f1add097547",
+  "publicReceipt": {
+    "url": "https://github.com/hashfunction/beatquay/releases/download/beatsprig-native-source-1.0.1/public-source-delivery.json",
+    "bytes": 13180,
+    "sha256": "9b25fa44c88cc4c41605fdc1d08c3d722338499d44d53d15b0904e76bfd5543a"
+  },
+  "sourceReleaseManifestSha256": "38537badf5e029ed8a934b21e6e2e9c53c8a61e89a6441a124889265c7f2fd5f",
+  "scope": "The exact published native source and original notices are bound independently to each current reviewed public application commit and actual minimal Windows stage. Historical preparation flags are preserved."
+}

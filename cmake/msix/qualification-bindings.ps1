@@ -51,7 +51,7 @@ function Get-BeatQuayQualificationHelperPaths {
     @('cmake/msix/qualify-msix-install.ps1','cmake/msix/consumer-workflow.ps1','cmake/msix/consumer-display.ps1',
         'cmake/msix/first-run.ps1','cmake/msix/consumer_files.py','tests/scripted/starter_render.py',
         'cmake/msix/verify_record.py','cmake/msix/msix_qualification.py','cmake/msix/qualification-bindings.ps1',
-        'cmake/msix/ms_runtime_origins.py')
+        'cmake/msix/ms_runtime_origins.py','cmake/msix/runner-shell.ps1','distribution/runner-shell-inputs.json')
 }
 
 function Get-BeatQuayQualificationHelperBindings([string]$SourceRoot,$SourceInputs) {

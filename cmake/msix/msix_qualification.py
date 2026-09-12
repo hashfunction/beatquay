@@ -93,8 +93,11 @@ DEBUG_CRT = {
 }
 SOURCE_FILES = (
     "LICENSE.txt", "README.md", "doc/AUTHORS", "doc/UPSTREAM_README.md", "vcpkg.json",
+    "cmake/msix/runner-shell.ps1", "distribution/runner-shell-inputs.json",
     "distribution/candidate-inputs.json", "distribution/product-identity.md",
-    "distribution/msix-qualification.md",
+    "distribution/msix-qualification.md", "distribution/native-source-publication.json",
+    ".github/workflows/windows-candidate.yml", "cmake/msix/export_store_package.py",
+    "cmake/msix/source_publication.py", "cmake/msix/store_workflow_evidence.py",
     "distribution/starter-inputs.json", "distribution/starter-arrangements.md",
     "distribution/generate_starters.py", "data/projects/templates/BeatSprig-Drum-Grid.mpt",
     "data/projects/templates/BeatSprig-Bassline-Sketch.mpt",
@@ -122,7 +125,7 @@ EVIDENCE_FILES = (
     "stage-inventory.json", "vcpkg-installed-status.txt", "qt-downloads.json",
     "dependency-downloads.json", "candidate-inputs.json", "configure-flags.txt", "submodules.txt",
     "render-smoke.json", "starter-render.json", "result.json", "pe-imports.json",
-    "ms-runtime-selection.json", "ms-runtime-origins.json",
+    "ms-runtime-selection.json", "ms-runtime-origins.json", "runner-shell-preparation.json",
 )
 PACKAGE_METADATA = {"[Content_Types].xml", "AppxBlockMap.xml", "AppxMetadata/CodeIntegrity.cat"}
 PACKAGE_INPUT_RECORD = "build-evidence/package-input.json"

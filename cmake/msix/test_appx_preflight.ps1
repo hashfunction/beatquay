@@ -4,6 +4,7 @@ $ErrorActionPreference='Stop'
 Set-StrictMode -Version Latest
 . (Join-Path $PSScriptRoot 'qualify-msix-install.ps1') -LibraryOnly
 $script:ActualCore=${function:Invoke-BeatQuayQualificationCore}
+$script:ActualFileMatch=${function:Assert-FileMatchesRecord}
 $temporaryBase=if ($IsMacOS) { '/private/tmp' } else { [IO.Path]::GetTempPath() }
 $script:root=Join-Path $temporaryBase ('beatquay-appx-test-'+[guid]::NewGuid().ToString('N'))
 $script:events=[Collections.Generic.List[string]]::new()
@@ -18,9 +19,22 @@ $env:GITHUB_RUN_ID='123456'
 $env:GITHUB_RUN_ATTEMPT='2'
 $Python=Join-Path $script:root 'python'
 
-# Only the host OS gate and the external Python verifier are substituted. The
+# The host OS, original runner probe and external Python verifier are controlled. The
 # production preflight still checks the record, exact identity, files and hashes.
 function Assert-BeatQuayWindowsCi {}
+function Assert-FileMatchesRecord([string]$Path,$Expected,[string]$Label){
+    if($Label -ceq 'Original runner shell preparation'){
+        if([IO.Path]::GetFileName($Path) -cne 'runner-shell-preparation.json'){throw 'Wrong original runner receipt route'}
+        $Path=Join-Path $script:root 'runner-shell-preparation.json'
+    }
+    return & $script:ActualFileMatch $Path $Expected $Label
+}
+function Assert-BeatSprigShellAbsentBeforeLaunch([string]$Path,[string]$Mode){
+    if([IO.Path]::GetFileName($Path) -cne 'runner-shell-preparation.json' -or $Mode -cne $script:identityMode){throw 'Wrong runner absence route'}
+    $script:events.Add('runner-probe')
+    if($script:scenario -ceq 'runner-present'){throw 'Original runner overlay still present'}
+    return @{absent=$true;identity_mode=$Mode}
+}
 function Invoke-CheckedNative([string]$Program,[string[]]$Arguments) {
     if ($Program -cne $Python -or [IO.Path]::GetFileName($Arguments[0]) -cne 'verify_record.py') { throw 'Unexpected native tool before Appx initialization' }
     $modeIndex=[Array]::IndexOf($Arguments,'--identity-mode')
@@ -64,7 +78,8 @@ try {
     $package=Join-Path $script:root 'original.msix'
     $makeappx=Join-Path $script:root '10.0.26100.0/x64/makeappx.exe'
     $signtool=Join-Path $script:root '10.0.26100.0/x64/signtool.exe'
-    foreach ($file in @($package,$makeappx,$signtool)) { [IO.File]::WriteAllText($file,'fixture bytes') }
+    $shell=Join-Path $script:root 'runner-shell-preparation.json'
+    foreach ($file in @($package,$makeappx,$signtool,$shell)) { [IO.File]::WriteAllText($file,'fixture bytes') }
     $hash=(Get-FileHash $package -Algorithm SHA256).Hash.ToLowerInvariant()
     $record=[ordered]@{
         sourceCommit=$env:GITHUB_SHA;workflowRunId=$env:GITHUB_RUN_ID;workflowRunAttempt=$env:GITHUB_RUN_ATTEMPT
@@ -74,6 +89,7 @@ try {
         containerVerification=@{package=@{sha256=$hash}}
         makeAppx=@{path=$makeappx;bytes=(Get-Item $makeappx).Length;sha256=$hash;sdkVersion='10.0.26100.0'}
         sourceInputs=[ordered]@{}
+        evidenceInputs=@{'runner-shell-preparation.json'=@{bytes=(Get-Item $shell).Length;sha256=$hash}}
     }
     foreach($name in Get-BeatQuayQualificationHelperPaths){
         $path=Join-Path $PSScriptRoot "../../$name"
@@ -99,21 +115,21 @@ Export-ModuleMember -Function Get-AppxPackage,Add-AppxPackage,Remove-AppxPackage
       $record.storeIdentityStaged=$script:identityMode -ceq 'store'
       $record.identity=Get-BeatQuayPackageIdentity $script:identityMode
       $record | ConvertTo-Json -Depth 10 | Set-Content $recordPath -Encoding utf8
-      foreach ($script:scenario in @('import-failed','import-succeeded')) {
+      foreach ($script:scenario in @('runner-present','import-failed','import-succeeded')) {
         $script:events.Clear()
         $output=Join-Path $script:root ($script:identityMode+'-'+$script:scenario)
         $failure=$null
         try { Invoke-BeatQuayInstallQualification $package $recordPath $signtool $output -Mode $script:identityMode | Out-Null }
         catch { $failure=$_.Exception.Message }
         $evidence=Get-Content (Join-Path $output 'installation-qualification.json') -Raw | ConvertFrom-Json
-        $expected=if ($script:scenario -eq 'import-failed') { 'Appx compatibility import failed' } else { 'Reached preparation after compatible Appx preflight' }
-        $expectedEvents=if ($script:scenario -eq 'import-failed') { 'verify-record,import' } else { 'verify-record,import,prepare' }
+        $expected=if($script:scenario -ceq 'runner-present'){'Original runner overlay still present'}elseif ($script:scenario -eq 'import-failed') { 'Appx compatibility import failed' } else { 'Reached preparation after compatible Appx preflight' }
+        $expectedEvents=if($script:scenario -ceq 'runner-present'){'verify-record,runner-probe'}elseif ($script:scenario -eq 'import-failed') { 'verify-record,runner-probe,import' } else { 'verify-record,runner-probe,import,prepare' }
         if ($evidence.primary_error -cne $expected -or $failure -notlike "*$expected*") { throw "Wrong preflight outcome: $failure" }
         if (($script:events -join ',') -cne $expectedEvents) { throw "Import/preparation ordering changed: $($script:events -join ',')" }
         if ($evidence.installation_qualification_passed -or $evidence.add_appx_completed -or $evidence.registration_ownership_established -or $evidence.process_identity_ownership_established -or $evidence.signed_copy_sha256) { throw 'Preflight fixture falsely claimed signing, installation, activation or acceptance' }
         if (-not $evidence.unsigned_package_unchanged -or $evidence.cleanup_errors.Count -or $evidence.evidence_errors.Count) { throw 'Initialization failure lost package integrity or safe cleanup evidence' }
         if($evidence.identity_mode -cne $script:identityMode -or $evidence.workflow_run_id -cne $env:GITHUB_RUN_ID -or $evidence.workflow_run_attempt -cne $env:GITHUB_RUN_ATTEMPT -or
-           @($evidence.helper_bindings.PSObject.Properties).Count -ne 10 -or $evidence.installed_identity_verified -or $evidence.store_identity_used){throw 'Staged identity or helper metadata claimed installation or lost current run binding'}
+           @($evidence.helper_bindings.PSObject.Properties).Count -ne 12 -or $evidence.installed_identity_verified -or $evidence.store_identity_used){throw 'Staged identity or helper metadata claimed installation or lost current run binding'}
         Write-Output "PASS real recorded Appx preflight: $script:identityMode / $script:scenario"
       }
     }
