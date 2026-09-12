@@ -44,7 +44,15 @@ class SourceCheckoutTest(unittest.TestCase):
         # outside the Windows-only host guard and before dependency bootstrap.
         script = (SOURCE / "distribution/qualify-candidate.ps1").read_text(encoding="utf-8")
         preflight = script.split("$sourceCommit=", 1)[1].split("$lock =", 1)[0]
-        self.probe = self.root / "preflight.ps1"
+        # Preserve the production script/helper topology outside the checkout
+        # under test, so exercising preflight does not dirty that checkout.
+        harness = self.root / "harness"
+        self.probe = harness / "distribution/preflight.ps1"
+        self.probe.parent.mkdir(parents=True)
+        helper = harness / "cmake/msix/qualification-bindings.ps1"
+        helper.parent.mkdir(parents=True)
+        helper.write_bytes((SOURCE / "cmake/msix/qualification-bindings.ps1").read_bytes())
+        self.assertEqual(helper.read_bytes(), (SOURCE / "cmake/msix/qualification-bindings.ps1").read_bytes())
         self.probe.write_text("$ErrorActionPreference='Stop'\n$sourceCommit=" + preflight,
                               encoding="utf-8")
         self.pwsh = os.environ.get("BEATQUAY_TEST_PWSH") or shutil.which("pwsh")
@@ -58,8 +66,9 @@ class SourceCheckoutTest(unittest.TestCase):
     def status(self):
         return self.git("status", "--porcelain", "--untracked-files=all")
 
-    def preflight(self):
-        environment = dict(os.environ, GITHUB_SHA=self.commit)
+    def preflight(self, **overrides):
+        environment = dict(os.environ, GITHUB_SHA=self.commit, GITHUB_RUN_ID="123456", GITHUB_RUN_ATTEMPT="2")
+        environment.update(overrides)
         return subprocess.run([self.pwsh, "-NoLogo", "-NoProfile", "-File", str(self.probe)],
                               cwd=self.work, env=environment, capture_output=True, text=True)
 
@@ -76,6 +85,14 @@ class SourceCheckoutTest(unittest.TestCase):
         self.assertEqual(self.status(), "")
         self.assertEqual((self.work / "build-evidence/source-status-before-build.txt").read_text(), "")
         self.assertEqual((self.work / "build-evidence/source-status-exit-code.txt").read_text().strip(), "0")
+
+    def test_actual_helper_rejects_missing_run_and_invalid_attempt(self):
+        for overrides in ({"GITHUB_RUN_ID": ""}, {"GITHUB_RUN_ATTEMPT": "0"}):
+            with self.subTest(overrides=overrides):
+                result = self.preflight(**overrides)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("Exact source commit, workflow run and attempt are required", result.stderr)
+                self.assertEqual(self.status(), "")
 
     def test_unrelated_log_still_rejects_and_records_exact_path(self):
         for relative in ("unrelated.log", "other/aqtinstall.log", "cmake/msix/unexpected.py"):
