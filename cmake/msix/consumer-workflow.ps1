@@ -62,7 +62,7 @@ function Get-BeatQuayConsumerControl($Element) {
   $value=$null;$pattern=$null
   if($Element.TryGetCurrentPattern([Windows.Automation.ValuePattern]::Pattern,[ref]$pattern)){$value=[string]$pattern.Current.Value}
   return @{available=$true;name=[string]$c.Name;type=$type.ProgrammaticName.Replace('ControlType.','');help=[string]$c.HelpText;
-   automation_id=[string]$c.AutomationId;class_name=[string]$c.ClassName;process_id=$c.ProcessId;visible=(-not $c.IsOffscreen);enabled=$c.IsEnabled;
+   automation_id=[string]$c.AutomationId;class_name=[string]$c.ClassName;process_id=$c.ProcessId;native_window_handle=$c.NativeWindowHandle;visible=(-not $c.IsOffscreen);enabled=$c.IsEnabled;
    x=$b.X;y=$b.Y;width=$b.Width;height=$b.Height;value=$value}
  } catch {return @{available=$false;observation_error=$_.Exception.Message}}
 }
@@ -74,28 +74,69 @@ function Assert-BeatQuayConsumerOwner($State) {
   (Get-CanonicalPath $State.process.MainModule.FileName) -ine (Get-CanonicalPath (Join-Path $State.installed.InstallLocation 'beatsprig.exe'))){throw 'Consumer process package/executable identity changed'}
 }
 
-function Get-BeatQuayConsumerWindows($State) {
- Assert-BeatQuayConsumerOwner $State
- $condition=[Windows.Automation.PropertyCondition]::new([Windows.Automation.AutomationElement]::ProcessIdProperty,$State.process.Id)
- $windows=[Windows.Automation.AutomationElement]::RootElement.FindAll([Windows.Automation.TreeScope]::Children,$condition)
- if($windows.Count -gt 8){throw 'Consumer window count exceeds bound'}
- foreach($index in 0..($windows.Count-1)){
-  if($windows.Count -eq 0){break}
-  $element=$windows.Item($index);$current=Get-BeatQuayConsumerControl $element
+function Get-BeatQuayConsumerWindowInventory($Element,[int]$ProcessId) {
+  $current=Get-BeatQuayConsumerControl $Element
   $items=[Collections.Generic.List[object]]::new();$controls=[Collections.Generic.List[object]]::new();$truncated=(-not $current.available)
   if($current.available){
-   if($current.process_id -ne $State.process.Id){throw 'Observed window PID changed after owned enumeration'}
-   $all=$element.FindAll([Windows.Automation.TreeScope]::Subtree,[Windows.Automation.Condition]::TrueCondition)
+   if($current.process_id -ne $ProcessId){throw 'Observed window PID changed after owned enumeration'}
+   $all=$Element.FindAll([Windows.Automation.TreeScope]::Subtree,[Windows.Automation.Condition]::TrueCondition)
    if($all.Count -gt 1500){throw 'Consumer control inventory exceeds bound'}
    for($i=0;$i -lt $all.Count;$i++){
     $child=$all.Item($i);$snapshot=Get-BeatQuayConsumerControl $child
     if(-not $snapshot.available){$truncated=$true}
+    elseif($snapshot.process_id -ne $ProcessId){throw 'Foreign control in owned consumer window'}
     elseif($snapshot.name.Length -gt 4096 -or $snapshot.help.Length -gt 4096 -or ($snapshot.value -and $snapshot.value.Length -gt 16384)){throw 'Consumer control text exceeds bound'}
     $items.Add(@{element=$child;snapshot=$snapshot});$controls.Add($snapshot)
    }
   }
-  $snapshot=@{title=if($current.available){$current.name}else{''};process_id=$State.process.Id;truncated=$truncated;root=$current;controls=@($controls)}
-  [pscustomobject]@{element=$element;snapshot=$snapshot;items=@($items)}
+  $snapshot=@{title=if($current.available){$current.name}else{''};process_id=$ProcessId;truncated=$truncated;root=$current;controls=@($controls)}
+  [pscustomobject]@{element=$Element;snapshot=$snapshot;items=@($items)}
+}
+
+function Get-BeatQuayNestedConsumerWindows($Window,[int]$ProcessId) {
+ if($Window.snapshot.truncated -or -not $Window.snapshot.root.available -or $Window.snapshot.root.process_id -ne $ProcessId){throw 'Incomplete or foreign parent window inventory'}
+ foreach($item in $Window.items){
+  $s=$item.snapshot
+  if(-not $s.available -or $s.process_id -ne $ProcessId){throw 'Incomplete or foreign nested window inventory'}
+  if($s.type -ceq 'Window' -and $s.visible -and $s.enabled){$item}
+ }
+}
+
+function Get-BeatQuayConsumerDesktopElements($State) {
+ $condition=[Windows.Automation.PropertyCondition]::new([Windows.Automation.AutomationElement]::ProcessIdProperty,$State.process.Id)
+ $windows=[Windows.Automation.AutomationElement]::RootElement.FindAll([Windows.Automation.TreeScope]::Children,$condition)
+ if($windows.Count -gt 8){throw 'Consumer window count exceeds bound'}
+ for($index=0;$index -lt $windows.Count;$index++){$windows.Item($index)}
+}
+
+function Test-BeatQuaySameConsumerElement($First,$Second) {
+ return [Windows.Automation.Automation]::Compare($First,$Second)
+}
+
+function Get-BeatQuayConsumerWindows($State,[switch]$IncludeNestedWindows) {
+ Assert-BeatQuayConsumerOwner $State
+ $windows=@(Get-BeatQuayConsumerDesktopElements $State)
+ if($windows.Count -gt 8){throw 'Consumer window count exceeds bound'}
+ $seen=[Collections.Generic.List[object]]::new()
+ for($index=0;$index -lt $windows.Count;$index++){
+  $element=$windows[$index];$duplicate=$false
+  foreach($prior in $seen){if(Test-BeatQuaySameConsumerElement $prior $element){$duplicate=$true;break}}
+  if($duplicate){continue}
+  $window=Get-BeatQuayConsumerWindowInventory $element $State.process.Id
+  $seen.Add($window.element)
+  $window
+  if(-not $IncludeNestedWindows -or $window.snapshot.truncated){continue}
+  # Qt-owned modal windows can be descendants of the main accessible window.
+  # Re-enumerate each actual window subtree; never infer it from ID prefixes.
+  foreach($child in @(Get-BeatQuayNestedConsumerWindows $window $State.process.Id)){
+   $duplicate=$false
+   foreach($prior in $seen){if(Test-BeatQuaySameConsumerElement $prior $child.element){$duplicate=$true;break}}
+   if($duplicate){continue}
+   if($seen.Count -ge 24){throw 'Nested consumer window count exceeds bound'}
+   $seen.Add($child.element)
+   Assert-BeatQuayConsumerOwner $State
+   Get-BeatQuayConsumerWindowInventory $child.element $State.process.Id
+  }
  }
 }
 
@@ -111,7 +152,7 @@ function Wait-BeatQuayConsumerWindow($State,[string]$Title,[int]$Seconds=30) {
  $Title=Resolve-BeatQuayConsumerWindowTitle $State $Title
  $deadline=[DateTime]::UtcNow.AddSeconds($Seconds)
  do {
-  $windows=@(Get-BeatQuayConsumerWindows $State)
+  $windows=@(Get-BeatQuayConsumerWindows $State -IncludeNestedWindows)
   $State.workflow.last_observation=@($windows|ForEach-Object {$_.snapshot})
   $matches=@($windows|Where-Object {$_.snapshot.title -ceq $Title -and -not $_.snapshot.truncated -and $_.snapshot.root.visible -and $_.snapshot.root.enabled})
   if($matches.Count -gt 1){throw "Ambiguous owned consumer window: $Title"}
@@ -256,6 +297,7 @@ function Set-BeatQuayConsumerValue($State,$Window,$Control,[string]$Value) {
  Set-BeatQuayConsumerForeground $State $Window
  $current=Get-BeatQuayConsumerControl $Control.element
  Assert-BeatQuayConsumerControl $current $State.process.Id $Control.snapshot.type $Control.snapshot.name
+ if($current.automation_id -cne $Control.snapshot.automation_id -or $current.class_name -cne $Control.snapshot.class_name -or $current.help -cne $Control.snapshot.help){throw 'Input selector changed before value mutation'}
  $pattern=$Control.element.GetCurrentPattern([Windows.Automation.ValuePattern]::Pattern)
  if($pattern.Current.IsReadOnly){throw 'Consumer value input is read-only'}
  $pattern.SetValue($Value)
@@ -263,10 +305,16 @@ function Set-BeatQuayConsumerValue($State,$Window,$Control,[string]$Value) {
  $State.workflow.inputs.Add(@{action=$State.workflow.current_action;kind='uia_value';control=$current;value=$Value})
 }
 
+function Find-BeatQuayConsumerFileName($Window,[int]$ProcessId) {
+ $edit=Find-BeatQuayConsumerControl $Window $ProcessId 'Edit' '' 'QApplication.QFileDialog.fileNameEdit'
+ if($edit.snapshot.class_name -cne 'QLineEdit'){throw 'Unexpected native Qt filename editor class'}
+ return $edit
+}
+
 function Invoke-BeatQuayConsumerFileDialog($State,[string]$Title,[string]$Path,[string]$Action) {
  $window=Wait-BeatQuayConsumerWindow $State $Title
  # QFileDialog's actual filename editor objectName; do not type into an arbitrary edit control.
- $edit=Find-BeatQuayConsumerControl $window $State.process.Id 'Edit' '' 'fileNameEdit'
+ $edit=Find-BeatQuayConsumerFileName $window $State.process.Id
  Set-BeatQuayConsumerValue $State $window $edit $Path
  $window=Wait-BeatQuayConsumerWindow $State $Title
  Invoke-BeatQuayConsumerClick $State $window (Find-BeatQuayConsumerControl $window $State.process.Id 'Button' $Action)
