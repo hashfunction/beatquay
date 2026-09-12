@@ -11,15 +11,15 @@ private slots:
     void qtIdentityIsDistinctFromProjectSchema()
     {
         lmms::product::applyApplicationIdentity();
-        QCOMPARE(QCoreApplication::applicationName(), QString("BeatQuay"));
-        QCOMPARE(QCoreApplication::applicationVersion(), QString("1.0.0"));
+        QCOMPARE(QCoreApplication::applicationName(), QString("BeatSprig"));
+        QCOMPARE(QCoreApplication::applicationVersion(), QString("1.0.1"));
         QCOMPARE(QCoreApplication::organizationName(), QString("Trieflow LLC"));
         QCOMPARE(QCoreApplication::organizationDomain(), QString("trieflow.com"));
-        QCOMPARE(QString(lmms::product::DisplayTitle), QString("BeatQuay 1.0.0"));
+        QCOMPARE(QString(lmms::product::DisplayTitle), QString("BeatSprig 1.0.1"));
         QVERIFY(QString(LMMS_VERSION).startsWith("1.3.0"));
-        QCOMPARE(QString(lmms::product::Website), QString("https://beatquay.trieflow.com"));
-        QCOMPARE(QString(lmms::product::Privacy), QString("https://beatquay.trieflow.com/privacy"));
-        QCOMPARE(QString(lmms::product::Support), QString("https://beatquay.trieflow.com/support"));
+        QCOMPARE(QString(lmms::product::Website), QString("https://beatsprig.trieflow.com"));
+        QCOMPARE(QString(lmms::product::Privacy), QString("https://beatsprig.trieflow.com/privacy"));
+        QCOMPARE(QString(lmms::product::Support), QString("https://beatsprig.trieflow.com/support"));
     }
     void actualEmbeddedOriginalIcon()
     {

@@ -209,7 +209,7 @@ namespace BeatQuayQualification {
 }
 
 function Assert-BeatQuayWindowEvidence($Snapshot) {
-    if ($Snapshot.title -cne 'BeatQuay 1.0.0' -or -not $Snapshot.visible -or $Snapshot.process_id -le 0 -or
+    if ($Snapshot.title -cne 'BeatSprig 1.0.1' -or -not $Snapshot.visible -or $Snapshot.process_id -le 0 -or
         $Snapshot.width -lt 400 -or $Snapshot.height -lt 300 -or -not $Snapshot.screenshot_captured -or
         $Snapshot.screenshot_sha256 -cnotmatch '^[0-9a-f]{64}$' -or $Snapshot.sampled_colors -lt 16) {
         throw 'Missing exact rendered BeatQuay window/screenshot evidence.'
@@ -227,9 +227,9 @@ function Assert-BeatQuayFirstRunEvidence($Snapshot) {
         $Snapshot.working_directory.message -cne (Get-BeatQuayWorkingDirectoryMessage $Snapshot.working_directory.path)) {
         throw 'The exact owned working-directory creation prompt and action were not observed.'
     }
-    if ($Snapshot.setup_title -cne 'BeatQuay - Settings' -or -not $Snapshot.setup_visible -or
+    if ($Snapshot.setup_title -cne 'BeatSprig - Settings' -or -not $Snapshot.setup_visible -or
         $Snapshot.action_name -cne 'OK' -or -not $Snapshot.action_invoked -or
-        $Snapshot.editor_title -cne 'BeatQuay 1.0.0' -or -not $Snapshot.editor_visible) {
+        $Snapshot.editor_title -cne 'BeatSprig 1.0.1' -or -not $Snapshot.editor_visible) {
         throw 'Normal first-run setup and resulting BeatQuay editor were not both observed.'
     }
 }
@@ -240,7 +240,7 @@ function Get-WindowQualification([Diagnostics.Process]$Process, [string]$OutputD
     $root = [Windows.Automation.AutomationElement]::FromHandle($Process.MainWindowHandle)
     if (-not $root) { throw 'UI Automation could not bind the activated main window.' }
     $rootBounds = $root.Current.BoundingRectangle
-    if ($root.Current.Name -cne 'BeatQuay 1.0.0' -or $root.Current.ProcessId -ne $Process.Id) { throw 'UIA root is not the exact owned BeatQuay window.' }
+    if ($root.Current.Name -cne 'BeatSprig 1.0.1' -or $root.Current.ProcessId -ne $Process.Id) { throw 'UIA root is not the exact owned BeatQuay window.' }
     if ($root.Current.IsOffscreen -or $rootBounds.Width -le 0 -or $rootBounds.Height -le 0) { throw 'Activated main window is not visibly rendered.' }
     $topLevelWindows = [Collections.Generic.List[object]]::new()
     $processCondition = [Windows.Automation.PropertyCondition]::new([Windows.Automation.AutomationElement]::ProcessIdProperty, $Process.Id)
@@ -393,8 +393,8 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
         cleanClose = $false; uninstallVerified = $false
     }
     $expectedIdentity = [ordered]@{
-        packageName='Trieflow.BeatQuay.Qualification'; publisher='CN=BeatQuay-CI-Qualification'; version='1.0.0.0'
-        architecture='x64'; applicationId='BeatQuay'; executable='lmms.exe'
+        packageName='Trieflow.BeatQuay.Qualification'; publisher='CN=BeatQuay-CI-Qualification'; version='1.0.1.0'
+        architecture='x64'; applicationId='BeatQuay'; executable='beatsprig.exe'
         deviceFamily='Windows.Desktop'; minVersion='10.0.19041.0'; maxVersionTested='10.0.26100.0'; capability='runFullTrust'
     }
 
@@ -448,7 +448,7 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
         Import-Module -Name Appx -UseWindowsPowerShell -Global -ErrorAction Stop
         $existing = @(Get-AppxPackage -Name $expectedIdentity.packageName -ErrorAction Stop)
         $state.preflightPackageFullNames = @($existing | ForEach-Object { [string]$_.PackageFullName })
-        if ($existing.Count -gt 0) { throw 'A matching BeatQuay qualification package is already installed; refusing to replace or remove it.' }
+        if ($existing.Count -gt 0) { throw 'A matching BeatSprig qualification package is already installed; refusing to replace or remove it.' }
     }.GetNewClosure()
 
     $operations.PrepareSignedCopy = {
@@ -457,9 +457,9 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
         New-Item -ItemType Directory -Path $temporaryCandidate -ErrorAction Stop | Out-Null
         # Cleanup ownership starts only after exclusive creation succeeds.
         $state.temporary = $temporaryCandidate
-        $state.signedCopy = Join-Path $state.temporary 'BeatQuay.Qualification.signed.msix'
+        $state.signedCopy = Join-Path $state.temporary 'BeatSprig.Qualification.signed.msix'
         [IO.File]::Copy($state.package, $state.signedCopy, $false)
-        $state.publicCertificate = Join-Path $state.temporary 'BeatQuay.Qualification.public.cer'
+        $state.publicCertificate = Join-Path $state.temporary 'BeatSprig.Qualification.public.cer'
         $state.certificate = New-SelfSignedCertificate -Type Custom -KeyUsage DigitalSignature -KeyExportPolicy NonExportable -KeySpec Signature `
             -CertStoreLocation 'Cert:\CurrentUser\My' -TextExtension @('2.5.29.37={text}1.3.6.1.5.5.7.3.3','2.5.29.19={text}') `
             -Subject $expectedIdentity.publisher -FriendlyName 'BeatQuay ephemeral CI qualification' -NotAfter (Get-Date).AddHours(12)
@@ -513,7 +513,7 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
             $relative = $entry.Name
             $expected = Get-RecordPayloadEntry $state.record $relative
             $hash = Assert-FileMatchesRecord (Join-Path $state.installed.InstallLocation ($relative -replace '/', [IO.Path]::DirectorySeparatorChar)) $expected $relative
-            if ($relative -eq 'lmms.exe') { $state.executableSha256 = $hash }
+            if ($relative -eq 'beatsprig.exe') { $state.executableSha256 = $hash }
 
         }
     }.GetNewClosure()
@@ -531,11 +531,11 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
         $state.process = [Diagnostics.Process]::GetProcessById([int]$processId)
         $state.processHandle = $state.process.SafeHandle
         if ($state.processHandle.IsInvalid -or $state.processHandle.IsClosed) { throw 'Cannot retain the live broker-activated process handle.' }
-        $expectedExecutable = Get-CanonicalPath (Join-Path $state.installed.InstallLocation 'lmms.exe')
+        $expectedExecutable = Get-CanonicalPath (Join-Path $state.installed.InstallLocation 'beatsprig.exe')
         if ((Get-CanonicalPath $state.process.MainModule.FileName) -ine $expectedExecutable) { throw 'Broker returned an executable outside the owned installed path.' }
         $state.processPackageFullName = [BeatQuayQualification.NativePackageProbe]::GetFullName($state.process.Handle)
         if ($state.processPackageFullName -cne $state.ownedPackageFullName) { throw 'Broker process does not have the exact owned package identity.' }
-        Assert-FileMatchesRecord $expectedExecutable (Get-RecordPayloadEntry $state.record 'lmms.exe') 'Activated executable' | Out-Null
+        Assert-FileMatchesRecord $expectedExecutable (Get-RecordPayloadEntry $state.record 'beatsprig.exe') 'Activated executable' | Out-Null
         $state.processOwned = $true
         $deadline = [DateTime]::UtcNow.AddSeconds(30)
         do {
@@ -550,7 +550,7 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
         if ($state.processPackageFullName -cne [string]$state.installed.PackageFullName) { throw 'Activated process does not own the exact installed package full name.' }
         Start-Sleep -Seconds 3
         $state.process.Refresh()
-        if ($state.process.HasExited -or $state.process.MainWindowHandle -eq 0 -or $state.process.MainWindowTitle -cne 'BeatQuay 1.0.0') { throw 'Activated BeatQuay did not survive the stable-window interval.' }
+        if ($state.process.HasExited -or $state.process.MainWindowHandle -eq 0 -or $state.process.MainWindowTitle -cne 'BeatSprig 1.0.1') { throw 'Activated BeatQuay did not survive the stable-window interval.' }
         $state.modules = @(Get-BeatQuayVerifiedModules $state)
         Write-NewUtf8Json (Join-Path $state.output 'loaded-modules.json') $state.modules
         $state.window = Get-WindowQualification $state.process $state.output

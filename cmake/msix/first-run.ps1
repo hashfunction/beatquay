@@ -2,7 +2,7 @@
 # Copyright 2026 Trieflow LLC. MIT.
 function Get-BeatQuayWorkingDirectoryMessage([string]$Path) {
     $display=$Path.Replace('\','/').TrimEnd('/')+'/'
-    return "The BeatQuay working directory $display does not exist. Create it now? You can change the directory later via Edit -> Settings."
+    return "The BeatSprig working directory $display does not exist. Create it now? You can change the directory later via Edit -> Settings."
 }
 
 function New-BeatQuayWorkingDirectoryRecord([string]$Path,[string]$SourceCommit) {
@@ -107,13 +107,13 @@ function Wait-BeatQuayFirstRunDialog([Diagnostics.Process]$Process,[string]$Titl
         $Observations[$Title]=@($windows | ForEach-Object {$_.snapshot})
         foreach ($window in $windows) {
             if ($window.snapshot.process_id -ne $Process.Id -or ($window.snapshot.Contains('truncated') -and $window.snapshot.truncated)) {throw 'Owned startup observation is foreign or truncated; refusing interaction.'}
-            $transition=$Title -ceq 'BeatQuay - Settings' -and $window.snapshot.title -ceq 'Working directory'
-            if ($window.snapshot.visible -and $window.snapshot.title -cne $Title -and $window.snapshot.title -cne 'BeatQuay 1.0.0' -and -not $transition) {throw "Unexpected owned first-run surface: $($window.snapshot.title)"}
+            $transition=$Title -ceq 'BeatSprig - Settings' -and $window.snapshot.title -ceq 'Working directory'
+            if ($window.snapshot.visible -and $window.snapshot.title -cne $Title -and $window.snapshot.title -cne 'BeatSprig 1.0.1' -and -not $transition) {throw "Unexpected owned first-run surface: $($window.snapshot.title)"}
         }
         $matches=@($windows | Where-Object {$_.snapshot.title -ceq $Title})
         if ($matches.Count -gt 1) {throw "Ambiguous owned first-run dialog: $Title"}
         # Invoke is asynchronous: observe the first prompt disappear, then act on Settings.
-        $oldPromptVisible=$Title -ceq 'BeatQuay - Settings' -and @($windows | Where-Object {$_.snapshot.title -ceq 'Working directory' -and $_.snapshot.visible}).Count -gt 0
+        $oldPromptVisible=$Title -ceq 'BeatSprig - Settings' -and @($windows | Where-Object {$_.snapshot.title -ceq 'Working directory' -and $_.snapshot.visible}).Count -gt 0
         if ($matches.Count -eq 1 -and -not $oldPromptVisible) {return $matches[0]}
         Start-Sleep -Milliseconds 250
     } until ([DateTime]::UtcNow -ge $deadline)
@@ -141,7 +141,7 @@ function Wait-BeatQuayFirstRunEditor([Diagnostics.Process]$Process) {
     do {
         Start-Sleep -Milliseconds 250; $Process.Refresh()
         if ($Process.HasExited) {throw 'BeatQuay exited while completing first-run setup.'}
-    } until ($Process.MainWindowTitle -ceq 'BeatQuay 1.0.0' -or [DateTime]::UtcNow -ge $deadline)
+    } until ($Process.MainWindowTitle -ceq 'BeatSprig 1.0.1' -or [DateTime]::UtcNow -ge $deadline)
     return @{title=$Process.MainWindowTitle;visible=($Process.MainWindowHandle -ne 0)}
 }
 
@@ -153,13 +153,13 @@ function Complete-BeatQuayFirstRun([Diagnostics.Process]$Process,$Workspace,[str
     $Workspace.absent_before_action=$true
     Invoke-BeatQuayFirstRunAction $Process $working 'Working directory' 'Yes' $message
     $Workspace.action_invoked=$true
-    $setup=Wait-BeatQuayFirstRunDialog $Process 'BeatQuay - Settings' $Observations
+    $setup=Wait-BeatQuayFirstRunDialog $Process 'BeatSprig - Settings' $Observations
     Confirm-BeatQuayWorkingDirectoryOwnership $Workspace $Process.Id $PackageFullName
-    Assert-BeatQuayFirstRunDialog $setup.snapshot $Process.Id 'BeatQuay - Settings' 'OK' ''
-    Invoke-BeatQuayFirstRunAction $Process $setup 'BeatQuay - Settings' 'OK' ''
+    Assert-BeatQuayFirstRunDialog $setup.snapshot $Process.Id 'BeatSprig - Settings' 'OK' ''
+    Invoke-BeatQuayFirstRunAction $Process $setup 'BeatSprig - Settings' 'OK' ''
     $editor=Wait-BeatQuayFirstRunEditor $Process
     $snapshot=[ordered]@{working_directory=[ordered]@{title='Working directory';message=$message;path=$Workspace.path;process_id=$Process.Id;visible=$true;action_name='Yes';action_invoked=$true};
-        setup_title='BeatQuay - Settings';setup_visible=$true;action_name='OK';action_invoked=$true;editor_title=$editor.title;editor_visible=$editor.visible}
+        setup_title='BeatSprig - Settings';setup_visible=$true;action_name='OK';action_invoked=$true;editor_title=$editor.title;editor_visible=$editor.visible}
     Assert-BeatQuayFirstRunEvidence $snapshot
     return $snapshot
 }

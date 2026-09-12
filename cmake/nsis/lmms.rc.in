@@ -20,7 +20,7 @@ BEGIN
       VALUE "FileDescription",  "${BEATQUAY_NAME}\0"
       VALUE "FileVersion",      "@BEATQUAY_VERSION@\0"
       VALUE "LegalCopyright",   "Copyright (c) ${PROJECT_COPYRIGHT}; 2026 ${BEATQUAY_PUBLISHER}\0"
-      VALUE "OriginalFilename", "${CMAKE_PROJECT_NAME}.exe\0"
+      VALUE "OriginalFilename", "${BEATQUAY_EXECUTABLE_NAME}.exe\0"
       VALUE "ProductName",      "${BEATQUAY_NAME}\0"
       VALUE "ProductVersion",   "@BEATQUAY_VERSION@\0"
     END

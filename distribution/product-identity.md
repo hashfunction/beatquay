@@ -1,3 +1,9 @@
+# Current BeatSprig identity and compatibility
+
+The customer product is **BeatSprig 1.0.1**, with Windows host `beatsprig.exe` and canonical [product](https://beatsprig.trieflow.com), [privacy](https://beatsprig.trieflow.com/privacy), and [support](https://beatsprig.trieflow.com/support) routes. Existing `.beatquayrc.xml`, Documents `/BeatQuay/`, and portable `/beatquay-workspace/` paths remain unchanged. The Store identity remains `1659hashfunction.BeatQuay` with ApplicationId `BeatQuay`. The actual disposable qualifier retains its separate CI identity and upgrades its version to `1.0.1.0`. The synth modules and native template-test host are rebuilt against `beatsprig.exe`; stale `lmms.exe` imports fail package validation. See [rename review](beatsprig-rename-review.md) for exact current scope and pending Windows gates.
+
+The following is the preserved historical implementation and validation record. Its prior product names, executable basenames, source versions and pass claims apply only to the cited pre-rename candidates.
+
 # BeatQuay identity, default paths and release runtime
 
 This is section 1 of the approved BeatQuay release-stage plan. Product display

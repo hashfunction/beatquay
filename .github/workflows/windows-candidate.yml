@@ -1,4 +1,4 @@
-name: BeatQuay Windows release-stage qualification
+name: BeatSprig Windows release-stage qualification
 on:
   workflow_dispatch:
   push:
@@ -48,7 +48,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: BeatQuay-Windows-candidate-metadata
+          name: BeatSprig-Windows-candidate-metadata
           path: |
             build-evidence/**/*.json
             build-evidence/**/*.txt

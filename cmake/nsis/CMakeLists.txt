@@ -7,13 +7,13 @@ else()
 endif()
 
 SET(CPACK_NSIS_MUI_ICON                 "${CMAKE_SOURCE_DIR}/data/branding/beatquay.ico")
-SET(CPACK_NSIS_INSTALLED_ICON_NAME      "${CMAKE_PROJECT_NAME}.exe" PARENT_SCOPE)
+SET(CPACK_NSIS_INSTALLED_ICON_NAME      "${BEATQUAY_EXECUTABLE_NAME}.exe" PARENT_SCOPE)
 SET(CPACK_NSIS_DISPLAY_NAME             "${BEATQUAY_NAME} ${BEATQUAY_VERSION}" PARENT_SCOPE)
 SET(CPACK_NSIS_HELP_LINK                "${BEATQUAY_SUPPORT_URL}" PARENT_SCOPE)
 SET(CPACK_NSIS_URL_INFO_ABOUT           "${BEATQUAY_URL}" PARENT_SCOPE)
 SET(CPACK_NSIS_CONTACT                  "${BEATQUAY_SUPPORT_URL}" PARENT_SCOPE)
-SET(CPACK_PACKAGE_EXECUTABLES           "${CMAKE_PROJECT_NAME}.exe;${BEATQUAY_NAME}" PARENT_SCOPE)
-SET(CPACK_NSIS_MENU_LINKS               "${CMAKE_PROJECT_NAME}.exe;${BEATQUAY_NAME}" PARENT_SCOPE)
+SET(CPACK_PACKAGE_EXECUTABLES           "${BEATQUAY_EXECUTABLE_NAME}.exe;${BEATQUAY_NAME}" PARENT_SCOPE)
+SET(CPACK_NSIS_MENU_LINKS               "${BEATQUAY_EXECUTABLE_NAME}.exe;${BEATQUAY_NAME}" PARENT_SCOPE)
 SET(CPACK_NSIS_DEFINES                  "
   !addincludedir ${CMAKE_SOURCE_DIR}/cmake/nsis
   !include FileAssociation.nsh
@@ -21,8 +21,8 @@ SET(CPACK_NSIS_DEFINES                  "
   !include WinVer.nsh")
 SET(CPACK_PACKAGE_FILE_NAME             "${BEATQUAY_NAME}-${BEATQUAY_VERSION}-${WIN_PLATFORM}-win32")
 SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS   "
-  \\\${registerExtension} \\\"$INSTDIR\\\\${CMAKE_PROJECT_NAME}.exe\\\" \\\".mmp\\\" \\\"${BEATQUAY_NAME} Project\\\"
-  \\\${registerExtension} \\\"$INSTDIR\\\\${CMAKE_PROJECT_NAME}.exe\\\" \\\".mmpz\\\" \\\"${BEATQUAY_NAME} Project (compressed)\\\"
+  \\\${registerExtension} \\\"$INSTDIR\\\\${BEATQUAY_EXECUTABLE_NAME}.exe\\\" \\\".mmp\\\" \\\"${BEATQUAY_NAME} Project\\\"
+  \\\${registerExtension} \\\"$INSTDIR\\\\${BEATQUAY_EXECUTABLE_NAME}.exe\\\" \\\".mmpz\\\" \\\"${BEATQUAY_NAME} Project (compressed)\\\"
   \\\${IfNot} \\\${AtMostWin7}
     WriteRegDWORD HKLM \\\"Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\SideBySide\\\" \\\"PreferExternalManifest\\\" \\\"1\\\"
   \\\${EndIf}
@@ -66,5 +66,5 @@ endif()
 CONFIGURE_FILE("lmms.rc.in"             "${CMAKE_BINARY_DIR}/lmms.rc")
 CONFIGURE_FILE("zynaddsubfx.rc.in"      "${CMAKE_BINARY_DIR}/plugins/ZynAddSubFx/zynaddsubfx.rc")
 
-INSTALL(FILES "lmms.exe.manifest" DESTINATION .)
-INSTALL(FILES "lmms.VisualElementsManifest.xml" DESTINATION .)
+INSTALL(FILES "lmms.exe.manifest" DESTINATION . RENAME "${BEATQUAY_EXECUTABLE_NAME}.exe.manifest")
+INSTALL(FILES "lmms.VisualElementsManifest.xml" DESTINATION . RENAME "${BEATQUAY_EXECUTABLE_NAME}.VisualElementsManifest.xml")

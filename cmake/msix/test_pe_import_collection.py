@@ -33,11 +33,11 @@ class PeImportCollectionTests(unittest.TestCase):
         for name in EXPECTED_IMPORTS:
             self.write_binary(name, [])
         for name in msix.ALLOWED_PLUGIN_DLLS:
-            self.write_binary(name, ["lmms.exe"])
+            self.write_binary(name, ["beatsprig.exe"])
         # Include the unsuffixed/suffixed MSVC names from run 34656962792,
         # Include punctuation versus letters: OrdinalIgnoreCase incorrectly
         # places libA.dll before lib_.dll for Python's lowercase ASCII order.
-        self.write_binary("lmms.exe", list(reversed(EXPECTED_IMPORTS)) + ["KERNEL32.dll", "kernel32.DLL", "LIBa.DLL"])
+        self.write_binary("beatsprig.exe", list(reversed(EXPECTED_IMPORTS)) + ["KERNEL32.dll", "kernel32.DLL", "LIBa.DLL"])
         self.dumpbin = self.root / "dumpbin.ps1"
         self.dumpbin.write_text("Get-Content -LiteralPath $args[-1]; $global:LASTEXITCODE=0\n")
         self.output = self.root / "pe-imports.json"
@@ -74,7 +74,7 @@ class PeImportCollectionTests(unittest.TestCase):
         for culture in ("en-US", "tr-TR"):
             with self.subTest(culture=culture):
                 record = self.collect(culture)
-                host = next(row for row in record["files"] if row["path"] == "lmms.exe")
+                host = next(row for row in record["files"] if row["path"] == "beatsprig.exe")
                 self.assertEqual(host["imports"], EXPECTED_IMPORTS)
                 self.assertEqual(record["unresolvedImports"], [])
                 self.assertEqual(record["ambiguousPackagedImports"], [])
@@ -92,7 +92,7 @@ class PeImportCollectionTests(unittest.TestCase):
         for imports in invalid_lists:
             with self.subTest(imports=imports):
                 corrupted = copy.deepcopy(record)
-                next(row for row in corrupted["files"] if row["path"] == "lmms.exe")["imports"] = imports
+                next(row for row in corrupted["files"] if row["path"] == "beatsprig.exe")["imports"] = imports
                 with self.assertRaisesRegex(ValueError, "sorted unique list"):
                     self.validate(corrupted)
 
@@ -101,14 +101,14 @@ class PeImportCollectionTests(unittest.TestCase):
         for imports in (["\u212aERNEL32.dll"], ["../KERNEL32.dll"], [None], [["KERNEL32.dll"]]):
             with self.subTest(imports=imports):
                 corrupted = copy.deepcopy(record)
-                next(row for row in corrupted["files"] if row["path"] == "lmms.exe")["imports"] = imports
+                next(row for row in corrupted["files"] if row["path"] == "beatsprig.exe")["imports"] = imports
                 with self.assertRaisesRegex(ValueError, "Invalid imported module name"):
                     self.validate(corrupted)
 
     def test_missing_dependency_collector_evidence_is_rejected(self):
-        self.write_binary("lmms.exe", ["beatquay-fixture-missing-runtime.dll"])
+        self.write_binary("beatsprig.exe", ["beatquay-fixture-missing-runtime.dll"])
         record = self.collect()
-        self.assertEqual(record["unresolvedImports"], ["lmms.exe:beatquay-fixture-missing-runtime.dll"])
+        self.assertEqual(record["unresolvedImports"], ["beatsprig.exe:beatquay-fixture-missing-runtime.dll"])
         self.assertEqual(len(record["resolutionErrors"]), 1)
         with self.assertRaisesRegex(ValueError, "Unresolved or ambiguous"):
             self.validate(record)
@@ -116,7 +116,7 @@ class PeImportCollectionTests(unittest.TestCase):
     def test_ambiguous_packaged_dependency_collector_evidence_is_rejected(self):
         self.write_binary("extra/MSVCP140.dll", [])
         record = self.collect()
-        self.assertEqual(record["ambiguousPackagedImports"], ["lmms.exe:MSVCP140.dll"])
+        self.assertEqual(record["ambiguousPackagedImports"], ["beatsprig.exe:MSVCP140.dll"])
         with self.assertRaisesRegex(ValueError, "Unresolved or ambiguous"):
             self.validate(record)
 

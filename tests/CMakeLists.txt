@@ -53,12 +53,13 @@ foreach(LMMS_TEST_SRC IN LISTS LMMS_TESTS)
 endforeach()
 
 if(TARGET BeatQuayTemplateTest)
-	# The genuine Windows synth DLLs import the exported lmms.exe core. Run
+	# The genuine Windows synth DLLs import the exported beatsprig.exe core. Run
 	# the actual core/QTest host under that module name in an isolated folder;
 	# never load a second application's Engine globals into a differently named test.
 	set_target_properties(BeatQuayTemplateTest PROPERTIES
-		ENABLE_EXPORTS ON OUTPUT_NAME lmms
+		ENABLE_EXPORTS ON
 		RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/template-host")
+	beatquay_apply_host_identity(BeatQuayTemplateTest)
 	target_compile_definitions(BeatQuayTemplateTest PRIVATE
 		BEATQUAY_TEMPLATE_DIR="${CMAKE_SOURCE_DIR}/data/projects/templates"
 		BEATQUAY_KICKER_DIR="$<TARGET_FILE_DIR:kicker>"

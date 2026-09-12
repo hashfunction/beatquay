@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<lmms-project version="31" type="songtemplate" creator="BeatQuay source generator">
-  <!--Original note and synth parameter data for Trieflow LLC; CC0-1.0. See BEATQUAY-PROVENANCE.md.-->
+<lmms-project version="31" type="songtemplate" creator="BeatSprig source generator">
+  <!--Original note and synth parameter data for Trieflow LLC; CC0-1.0. See BEATSPRIG-PROVENANCE.md.-->
   <head bpm="112" mastervol="70" masterpitch="0" timesig_numerator="4" timesig_denominator="4" />
   <songtemplate>
     <trackcontainer>

@@ -157,11 +157,11 @@ void printVersion( char *executableName )
 
 
 
-void printHelp()
+void printHelp(const char *executableName)
 {
 	printf( "%s\n"
 		"Copyright (c) %s\n\n"
-		"Usage: lmms [global options...] [<action> [action parameters...]]\n\n"
+		"Usage: %s [global options...] [<action> [action parameters...]]\n\n"
 		"Actions:\n"
 		"  <no action> [options...] [<project>]  Start the application in normal GUI mode\n"
 		"  dump <in>                             Dump XML of compressed file <in>\n"
@@ -185,7 +185,7 @@ void printHelp()
 		"          the main window\n"
 		"          geometry is <xsizexysize+xoffset+yoffsety>.\n"
 		"      --import <in> [-e]         Import MIDI or Hydrogen file <in>.\n"
-		"          If -e is specified lmms exits after importing the file.\n"
+		"          If -e is specified the application exits after importing the file.\n"
 		"\nOptions for \"render\" and \"rendertracks\":\n"
 		"  -a, --float                    Use 32bit float bit depth\n"
 		"  -b, --bitrate <bitrate>        Specify output bitrate in KBit/s\n"
@@ -209,7 +209,7 @@ void printHelp()
 		"          Range: 44100 (default) to 192000\n"
 		"          Possible values: 1, 2, 4, 8\n"
 		"          Default: 2\n\n",
-		lmms::product::DisplayTitle, LMMS_PROJECT_COPYRIGHT );
+		lmms::product::DisplayTitle, LMMS_PROJECT_COPYRIGHT, executableName );
 }
 
 
@@ -265,7 +265,7 @@ int main( int argc, char * * argv )
 
 		if (arg == "--help" || arg == "-h")
 		{
-			printHelp();
+			printHelp(argv[0]);
 			return EXIT_SUCCESS;
 		}
 		else if (arg == "--version" || arg == "-v")

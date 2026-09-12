@@ -37,17 +37,17 @@ private slots:
         MainWindow window;
         auto song = Engine::getSong();
         window.resetWindowTitle();
-        QCOMPARE(window.title, QString("BeatQuay 1.0.0"));
+        QCOMPARE(window.title, QString("BeatSprig 1.0.1"));
         song->path = "/chosen/音楽.mmp";
         window.resetWindowTitle();
-        QCOMPARE(window.title, QString::fromUtf8("音楽 - BeatQuay 1.0.0"));
+        QCOMPARE(window.title, QString::fromUtf8("音楽 - BeatSprig 1.0.1"));
         song->modified = true;
         window.resetWindowTitle();
-        QCOMPARE(window.title, QString::fromUtf8("音楽* - BeatQuay 1.0.0"));
+        QCOMPARE(window.title, QString::fromUtf8("音楽* - BeatSprig 1.0.1"));
         window.session = SessionState::Recover;
         window.resetWindowTitle();
         QVERIFY(window.title.contains("Recover session. Please save your work!"));
-        QVERIFY(window.title.endsWith(" - BeatQuay 1.0.0"));
+        QVERIFY(window.title.endsWith(" - BeatSprig 1.0.1"));
     }
 };
 QTEST_GUILESS_MAIN(BeatQuayTitleMethodTest)

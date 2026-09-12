@@ -13,7 +13,7 @@ import sys
 import wave
 import xml.etree.ElementTree as ET
 
-NAMES = ("BeatQuay-Drum-Grid.mpt", "BeatQuay-Bassline-Sketch.mpt", "BEATQUAY-PROVENANCE.md", "CC0-1.0.txt")
+NAMES = ("BeatSprig-Drum-Grid.mpt", "BeatSprig-Bassline-Sketch.mpt", "BEATSPRIG-PROVENANCE.md", "CC0-1.0.txt")
 PREFIX = "data/projects/templates/"
 DIAGNOSTIC_BYTES = 64 * 1024
 
@@ -80,7 +80,7 @@ def inspect_starter_wave(path, bars, tempo):
 
 def run(source, stage, work, evidence, report):
     report["inputs"] = verify_installed_inputs(source, stage)
-    executable = regular(stage / ("lmms.exe" if os.name == "nt" else "lmms"), stage)
+    executable = regular(stage / ("beatsprig.exe" if os.name == "nt" else "lmms"), stage)
     report["executable"] = {"path": str(executable), "sha256": sha256(executable)}
     work.mkdir(parents=True, exist_ok=False)
     config = ET.Element("lmms")

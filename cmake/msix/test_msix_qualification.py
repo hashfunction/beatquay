@@ -38,7 +38,7 @@ class QualificationTests(unittest.TestCase):
         pe=[]
         for name,row in files.items():
             if name.lower().endswith(('.exe','.dll')):
-                imports=['KERNEL32.dll']+(['lmms.exe'] if name in msix.ALLOWED_PLUGIN_DLLS else [])
+                imports=['KERNEL32.dll']+(['beatsprig.exe'] if name in msix.ALLOWED_PLUGIN_DLLS else [])
                 pe.append(dict(path=name,**row,imports=sorted(imports,key=str.casefold)))
         (self.evidence/'pe-imports.json').write_text(json.dumps(dict(schemaVersion=1,files=pe,unresolvedImports=[],ambiguousPackagedImports=[],apiSetResolutions=[],resolutionErrors=[],systemDirectory='C:\\Windows\\System32')))
         result=dict(source_commit=self.commit,built=True,tests_passed=True,lifecycle_repeat_passed=True,installed_stage=True,native_render_smoke_passed=True,native_render_error_exit_passed=True,native_installed_starter_renders_passed=True,license_clearance=False)
@@ -46,8 +46,8 @@ class QualificationTests(unittest.TestCase):
     def refresh_inventory(self): self.inventory.write_text(json.dumps(msix.create_input_inventory(self.release,self.source,self.commit,self.evidence,self.artwork)))
     def stage(self): return msix.stage_release(self.release,self.artwork,self.root/'stage',self.commit,self.inventory,self.evidence,self.source)
     def test_complete_stage_binds_whole_input_notices_and_internal_host(self):
-        record=self.stage(); self.assertEqual(record['identity']['executable'],'lmms.exe'); self.assertEqual(record['releaseInput'],msix.inventory_tree(self.release)); self.assertEqual(record['payload'],msix.inventory_tree(self.root/'stage'))
-        self.assertEqual((self.root/'stage/licenses/BeatQuay/LICENSE.txt').read_bytes(),(self.source/'LICENSE.txt').read_bytes()); self.assertEqual((self.root/'stage/licenses/dependencies/qt/LGPL-3.0-only.txt').read_bytes(),b'Qt license'); self.assertFalse(record['licenseClearanceClaimed']); self.assertFalse(record['correspondingSourceComplete'])
+        record=self.stage(); self.assertEqual(record['identity']['executable'],'beatsprig.exe'); self.assertEqual(record['releaseInput'],msix.inventory_tree(self.release)); self.assertEqual(record['payload'],msix.inventory_tree(self.root/'stage'))
+        self.assertEqual((self.root/'stage/licenses/BeatSprig/LICENSE.txt').read_bytes(),(self.source/'LICENSE.txt').read_bytes()); self.assertEqual((self.root/'stage/licenses/dependencies/qt/LGPL-3.0-only.txt').read_bytes(),b'Qt license'); self.assertFalse(record['licenseClearanceClaimed']); self.assertFalse(record['correspondingSourceComplete'])
     def test_exact_plugins_projects_and_no_debug_crt(self):
         for name in ('plugins/unknown.dll','data/projects/demo.mmp','msvcp140d.dll'):
             with self.subTest(name=name):
@@ -67,6 +67,11 @@ class QualificationTests(unittest.TestCase):
         with self.assertRaises(ValueError): self.stage()
         self.source.joinpath('LICENSE.txt').write_bytes(b'source:LICENSE.txt'); self.release.joinpath('manual.pdf').write_bytes(b'changed')
         with self.assertRaises(ValueError): self.stage()
+    def test_previous_host_import_is_rejected_after_rename(self):
+        path=self.evidence/'pe-imports.json'; record=json.loads(path.read_text())
+        next(row for row in record['files'] if row['path']=='plugins/kicker.dll')['imports']=['KERNEL32.dll','lmms.exe']
+        path.write_text(json.dumps(record))
+        with self.assertRaisesRegex(ValueError,'internal host'): self.refresh_inventory()
     def test_consumer_helpers_are_bound_before_package_creation(self):
         names=('cmake/msix/consumer-workflow.ps1','cmake/msix/consumer-display.ps1','cmake/msix/consumer_files.py',
                'cmake/msix/qualify-msix-install.ps1','cmake/msix/first-run.ps1','tests/scripted/starter_render.py')
@@ -116,7 +121,7 @@ class QualificationTests(unittest.TestCase):
         (self.root/'stage').rmdir(); target=self.release/'manual.pdf'; target.unlink(); target.symlink_to(self.source/'LICENSE.txt')
         with self.assertRaises(ValueError): self.refresh_inventory()
     def test_manifest_uses_disposable_identity_and_exact_display(self):
-        data=msix.create_manifest(); self.assertEqual(msix.validate_manifest(data),msix.QUALIFICATION_IDENTITY); self.assertIn(b'BeatQuay 1.0.0',data); self.assertIn(b'lmms.exe',data)
+        data=msix.create_manifest(); self.assertEqual(msix.validate_manifest(data),msix.QUALIFICATION_IDENTITY); self.assertIn(b'BeatSprig 1.0.1',data); self.assertIn(b'beatsprig.exe',data)
     def test_opc_decoding_and_exact_container_payload(self):
         record=self.stage(); package=self.root/'fixture.msix'
         with zipfile.ZipFile(package,'w') as archive:

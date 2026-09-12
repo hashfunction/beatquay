@@ -9,8 +9,8 @@ import xml.etree.ElementTree as ET
 
 SOURCE = Path(__file__).resolve().parents[2]
 TEMPLATES = SOURCE / "data/projects/templates"
-CASES = {"BeatQuay-Drum-Grid.mpt": (4, 3, 55, 112, "kicker"),
-         "BeatQuay-Bassline-Sketch.mpt": (8, 1, 40, 108, "tripleoscillator")}
+CASES = {"BeatSprig-Drum-Grid.mpt": (4, 3, 55, 112, "kicker"),
+         "BeatSprig-Bassline-Sketch.mpt": (8, 1, 40, 108, "tripleoscillator")}
 
 
 class StarterTemplateTests(unittest.TestCase):
@@ -71,7 +71,7 @@ class StarterTemplateTests(unittest.TestCase):
             subprocess.run(["cmake", "-S", str(work), "-B", str(work / "build")], check=True, capture_output=True)
             subprocess.run(["cmake", "--install", str(work / "build"), "--prefix", str(work / "stage")], check=True, capture_output=True)
             files = {p.relative_to(work / "stage").as_posix(): p for p in (work / "stage").rglob("*") if p.is_file()}
-            expected = {"data/projects/templates/" + n for n in (*CASES, "BEATQUAY-PROVENANCE.md", "CC0-1.0.txt")}
+            expected = {"data/projects/templates/" + n for n in (*CASES, "BEATSPRIG-PROVENANCE.md", "CC0-1.0.txt")}
             self.assertEqual(set(files), expected)
             for relative, installed in files.items():
                 self.assertEqual(installed.read_bytes(), (TEMPLATES / Path(relative).name).read_bytes())

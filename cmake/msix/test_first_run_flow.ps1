@@ -2,12 +2,13 @@
 # Copyright 2026 Trieflow LLC. MIT.
 $ErrorActionPreference='Stop'; Set-StrictMode -Version Latest
 . (Join-Path $PSScriptRoot 'qualify-msix-install.ps1') -LibraryOnly
+if ((Get-BeatQuayWorkingDirectoryMessage 'C:\Users\fixture\Documents\BeatQuay') -cne 'The BeatSprig working directory C:/Users/fixture/Documents/BeatQuay/ does not exist. Create it now? You can change the directory later via Edit -> Settings.') {throw 'Customer prompt or compatible working-directory path changed.'}
 $script:process=[Diagnostics.Process]::GetCurrentProcess()
 $script:root=Join-Path ([IO.Path]::GetTempPath()) ('beatquay-first-run-'+[guid]::NewGuid().ToString('N'))
 [IO.Directory]::CreateDirectory($script:root) | Out-Null
 function Get-BeatQuayFirstRunWindows($Process) {
     $script:reads++
-    $title=if ($script:stage -eq 0) {'Working directory'} else {'BeatQuay - Settings'}
+    $title=if ($script:stage -eq 0) {'Working directory'} else {'BeatSprig - Settings'}
     $action=if ($script:stage -eq 0) {'Yes'} else {'OK'}
     $message=Get-BeatQuayWorkingDirectoryMessage $script:workspace.path
     $row=[ordered]@{title=$title;process_id=$Process.Id;visible=$true;enabled=$true;width=500;height=350;class_name='QDialog';controls=@(
@@ -41,10 +42,10 @@ function Invoke-BeatQuayFirstRunAction($Process,$Window,[string]$Title,[string]$
         if ($Title -cne 'Working directory' -or $Action -cne 'Yes' -or $Message -cne (Get-BeatQuayWorkingDirectoryMessage $script:workspace.path)) {throw 'Wrong creation action'}
         [IO.Directory]::CreateDirectory((Join-Path $script:workspace.path 'projects/templates')) | Out-Null
         [IO.Directory]::CreateDirectory((Join-Path $script:workspace.path 'samples')) | Out-Null
-    } elseif ($Title -cne 'BeatQuay - Settings' -or $Action -cne 'OK') {throw 'Wrong setup action'}
+    } elseif ($Title -cne 'BeatSprig - Settings' -or $Action -cne 'OK') {throw 'Wrong setup action'}
     $script:stage++
 }
-function Wait-BeatQuayFirstRunEditor($Process) {return @{title='BeatQuay 1.0.0';visible=$true}}
+function Wait-BeatQuayFirstRunEditor($Process) {return @{title='BeatSprig 1.0.1';visible=$true}}
 try {
     foreach ($script:scenario in @('normal','delayed-transition','wrong-title','wrong-content','wrong-process','foreign-action','wrong-action','disabled-action','hidden-action','hidden-dialog','duplicate-action','duplicate-dialog','unexpected-modal','raced-directory','settings-failure')) {
         $script:stage=0; $script:reads=0; $script:actions=[Collections.Generic.List[string]]::new()
@@ -119,7 +120,7 @@ try {
         } else {
             if (-not $failure -or -not (Test-Path $script:workspace.marker_path) -or $receipt.installation_qualification_passed -or $receipt.cleanup_errors[0] -notmatch 'termination is unproven') {throw 'Unproven termination removed the workspace or hid cleanup failure'}
         }
-        if (-not $receipt.first_run_observations.'Working directory' -or -not $receipt.first_run_observations.'BeatQuay - Settings') {throw 'First-run snapshots were not retained in the final receipt'}
+        if (-not $receipt.first_run_observations.'Working directory' -or -not $receipt.first_run_observations.'BeatSprig - Settings') {throw 'First-run snapshots were not retained in the final receipt'}
         Write-Output "PASS real cleanup/reporting closure: terminated=$script:terminated"
     }
 } finally {

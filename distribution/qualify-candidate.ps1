@@ -48,7 +48,7 @@ try {
         @{ path=[IO.Path]::GetRelativePath((Join-Path (Get-Location) 'stage'), $_.FullName); bytes=$_.Length; sha256=(Get-FileHash $_.FullName -Algorithm SHA256).Hash }
     } | ConvertTo-Json -Depth 3 | Set-Content build-evidence/stage-inventory.json
     Invoke-Checked python @('-m','unittest','discover','-s','tests/scripted','-p','test_candidate_render.py')
-    Invoke-Checked python @('tests/scripted/candidate_render.py','--executable',"$(Get-Location)/stage/lmms.exe",'--stage',"$(Get-Location)/stage",'--work',"$(Get-Location)/.cache/native-render-smoke",'--evidence',"$(Get-Location)/build-evidence")
+    Invoke-Checked python @('tests/scripted/candidate_render.py','--executable',"$(Get-Location)/stage/beatsprig.exe",'--stage',"$(Get-Location)/stage",'--work',"$(Get-Location)/.cache/native-render-smoke",'--evidence',"$(Get-Location)/build-evidence")
     Invoke-Checked python @('distribution/generate_starters.py','--check')
     Invoke-Checked python @('-m','unittest','discover','-s','tests/scripted','-p','test_starter*.py','-v')
     Invoke-Checked python @('tests/scripted/starter_render.py','--source',"$(Get-Location)",'--stage',"$(Get-Location)/stage",'--work',"$(Get-Location)/.cache/native-starter-smoke",'--evidence',"$(Get-Location)/build-evidence")

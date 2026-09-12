@@ -32,11 +32,11 @@ class StarterStageTests(unittest.TestCase):
         self.assertEqual(len(verify_installed_inputs(self.source, self.stage)), 4)
 
     def test_substituted_staged_template_is_rejected(self):
-        (self.stage / "data/projects/templates/BeatQuay-Drum-Grid.mpt").write_bytes(b"different")
+        (self.stage / "data/projects/templates/BeatSprig-Drum-Grid.mpt").write_bytes(b"different")
         with self.assertRaises(ValueError): verify_installed_inputs(self.source, self.stage)
 
     def test_missing_provenance_is_rejected(self):
-        (self.stage / "data/projects/templates/BEATQUAY-PROVENANCE.md").unlink()
+        (self.stage / "data/projects/templates/BEATSPRIG-PROVENANCE.md").unlink()
         with self.assertRaises(ValueError): verify_installed_inputs(self.source, self.stage)
 
     def test_extra_upstream_project_is_rejected(self):
@@ -46,11 +46,11 @@ class StarterStageTests(unittest.TestCase):
 
     def test_source_and_stage_modified_together_are_rejected(self):
         for base in (self.source, self.stage):
-            (base / "data/projects/templates/BeatQuay-Drum-Grid.mpt").write_bytes(b"different")
+            (base / "data/projects/templates/BeatSprig-Drum-Grid.mpt").write_bytes(b"different")
         with self.assertRaises(ValueError): verify_installed_inputs(self.source, self.stage)
 
     def test_well_formed_but_unapproved_music_or_plugin_changes_are_rejected(self):
-        name = "data/projects/templates/BeatQuay-Bassline-Sketch.mpt"
+        name = "data/projects/templates/BeatSprig-Bassline-Sketch.mpt"
         original = (self.source / name).read_bytes()
         for mutation in ("resource", "external_plugin", "effect", "invalid_note"):
             with self.subTest(mutation=mutation):
@@ -67,9 +67,9 @@ class StarterStageTests(unittest.TestCase):
         with self.assertRaises(ValueError): verify_installed_inputs(self.source, self.stage)
 
     def test_symlink_stage_entry_is_rejected(self):
-        path = self.stage / "data/projects/templates/BeatQuay-Drum-Grid.mpt"
+        path = self.stage / "data/projects/templates/BeatSprig-Drum-Grid.mpt"
         path.unlink()
-        try: path.symlink_to(self.source / "data/projects/templates/BeatQuay-Drum-Grid.mpt")
+        try: path.symlink_to(self.source / "data/projects/templates/BeatSprig-Drum-Grid.mpt")
         except OSError as error: self.skipTest("Symlink creation unavailable: " + str(error))
         with self.assertRaises(ValueError): verify_installed_inputs(self.source, self.stage)
 
@@ -140,7 +140,7 @@ class StarterProcessFailureTests(unittest.TestCase):
     def invoke_failure(self, *, timeout=False, collide_log=False, collide_report=False, large_output=False):
         # Keep input checks, report handling and the actual subprocess transport.
         # Only replace the unavailable native application with a real Python child.
-        executable = self.stage / ("lmms.exe" if os.name == "nt" else "lmms")
+        executable = self.stage / ("beatsprig.exe" if os.name == "nt" else "lmms")
         executable.write_bytes(b"explicit test launch adapter, not a native renderer")
         child = self.root / "child.py"
         child.write_text(
@@ -151,7 +151,7 @@ class StarterProcessFailureTests(unittest.TestCase):
             + ('time.sleep(10)\n' if timeout else 'sys.exit(7)\n')
         )
         evidence = self.root / "evidence"; evidence.mkdir()
-        log = evidence / "BeatQuay-Drum-Grid.mpt.render.log"
+        log = evidence / "BeatSprig-Drum-Grid.mpt.render.log"
         report_path = evidence / "starter-render.json"
         if collide_log: log.write_bytes(b"prior log bytes")
         if collide_report: report_path.write_bytes(b"prior report bytes")

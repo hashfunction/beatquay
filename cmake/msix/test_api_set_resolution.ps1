@@ -54,7 +54,7 @@ try {
     }
     $stage=Join-Path $root 'stage'
     New-Item -ItemType Directory -Path $stage | Out-Null
-    $main=Join-Path $stage 'lmms.exe'
+    $main=Join-Path $stage 'beatsprig.exe'
     $qt=Join-Path $stage 'Qt6Core.dll'
     [IO.File]::WriteAllText($main,"  $contract`n  Qt6Core.dll`n")
     [IO.File]::WriteAllText($qt,"  $contract`n")

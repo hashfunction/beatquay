@@ -5,7 +5,7 @@ import hashlib
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
-NAMES = ("BeatQuay-Drum-Grid.mpt", "BeatQuay-Bassline-Sketch.mpt")
+NAMES = ("BeatSprig-Drum-Grid.mpt", "BeatSprig-Bassline-Sketch.mpt")
 TEMPLATES = Path(__file__).resolve().parents[1] / "data/projects/templates"
 
 
@@ -14,8 +14,8 @@ def element(parent, tag, **attributes):
 
 
 def project(bpm):
-    root = ET.Element("lmms-project", version="31", type="songtemplate", creator="BeatQuay source generator")
-    root.append(ET.Comment("Original note and synth parameter data for Trieflow LLC; CC0-1.0. See BEATQUAY-PROVENANCE.md."))
+    root = ET.Element("lmms-project", version="31", type="songtemplate", creator="BeatSprig source generator")
+    root.append(ET.Comment("Original note and synth parameter data for Trieflow LLC; CC0-1.0. See BEATSPRIG-PROVENANCE.md."))
     element(root, "head", bpm=bpm, mastervol=70, masterpitch=0, timesig_numerator=4, timesig_denominator=4)
     container = element(element(root, "songtemplate"), "trackcontainer")
     return root, container

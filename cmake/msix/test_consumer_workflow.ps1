@@ -61,8 +61,8 @@ try{
  Check ($profile.sha256 -ceq $prior) 'Rejected profile mutation erased last attributable hash.'
  Reject {Confirm-BeatQuayConsumerProfile $state -AfterClose} 'Profile attribution accepted unproven normal close.'
  # Replay an early consumer failure after ConfigManager saved the opened template.
- $profile.projects=@('C:/owned/BeatQuay-Drum-Grid.mpt','factoryprojects:templates/BeatQuay-Drum-Grid.mpt')
- $known=$xml.Replace('<recentfiles/>','<recentfiles><file path="factoryprojects:templates/BeatQuay-Drum-Grid.mpt"/></recentfiles>')
+ $profile.projects=@('C:/owned/BeatSprig-Drum-Grid.mpt','factoryprojects:templates/BeatSprig-Drum-Grid.mpt')
+ $known=$xml.Replace('<recentfiles/>','<recentfiles><file path="factoryprojects:templates/BeatSprig-Drum-Grid.mpt"/></recentfiles>')
  [IO.File]::WriteAllText($profilePath,$known)
  $state.workflow.current_action='maximize_song_editor'
  Confirm-BeatQuayConsumerFailureProfile $state
@@ -71,7 +71,7 @@ try{
  foreach($mutation in @('foreign_recent','foreign_setting','workingdir','untracked_ui','replaced','unowned_process')){
   $changed=$known;$savedCreation=$profile.creation_utc
   switch($mutation){
-   foreign_recent{$changed=$known.Replace('factoryprojects:templates/BeatQuay-Drum-Grid.mpt','C:/foreign.mmp')}
+   foreign_recent{$changed=$known.Replace('factoryprojects:templates/BeatSprig-Drum-Grid.mpt','C:/foreign.mmp')}
    foreign_setting{$changed=$known.Replace('configured="1"','configured="0"')}
    workingdir{$changed=$known.Replace('C:/owned/BeatQuay/','C:/foreign/')}
    untracked_ui{$changed=$known.Replace('<ui/>','<ui unknown="1"/>')}
@@ -97,7 +97,8 @@ Write-Output 'PASS: actual production control/ownership/completion/profile bound
 
 # Replay the actual native rectangles/identities from the failed installed run.
 $captured=Get-Content -LiteralPath (Join-Path $PSScriptRoot 'fixtures/song-editor-34678072633.json') -Raw|ConvertFrom-Json -AsHashtable
-$nativeMain=$captured.controls[0];$nativeArea=$captured.controls[1];$nativeSong=$captured.controls[2];$nativeContent=$captured.controls[3]
+$nativeMain=$captured.controls[0].Clone();$nativeMain.name='BeatSprig 1.0.1'; # Current title applied only to replay; historical fixture stays unchanged.
+$nativeArea=$captured.controls[1];$nativeSong=$captured.controls[2];$nativeContent=$captured.controls[3]
 $point=Get-BeatQuaySongTitlePoint $nativeMain $nativeSong $nativeContent $nativeArea 7720
 Check ($point.x -eq 428 -and $point.y -eq 178) 'Observed Song-Editor title strip was not selected.'
 foreach($mutation in @('foreign_pid','wrong_title','wrong_class','wrong_ancestry','empty_size','hidden','disabled','content_outside','title_missing','title_oversized','narrow','outside_area','main_identity','nonfinite')){
@@ -164,7 +165,7 @@ function Wait-BeatQuayConsumerWindow($State,$Title){return @{snapshot=@{title=$T
 function Set-BeatQuayConsumerForeground($State,$Window){$script:titleCalls.Add('foreground')}
 function Get-BeatQuayConsumerWindows($State){
  $script:postReads++;if($script:noMaximize -and $script:postReads -gt 1){throw 'Bounded fixture ends unmaximized observation'}
- return @{snapshot=@{title='BeatQuay 1.0.0 - [Song-Editor]';truncated=$false;root=@{visible=$true;enabled=$true}}}}
+ return @{snapshot=@{title='BeatSprig 1.0.1 - [Song-Editor]';truncated=$false;root=@{visible=$true;enabled=$true}}}}
 function Get-BeatQuaySongEditorSurface($State,$Main){
  $script:surfaceRead++
  $s=$nativeSong.Clone()
@@ -182,11 +183,11 @@ Invoke-BeatQuayConsumerMaximizeSongEditor $state
 Check (($script:titleCalls -join ',') -ceq 'foreground,hit,click,hit,click') 'Title-bar input was not individually hit-tested.'
 Check ($state.workflow.inputs.Count -eq 2) 'Native title clicks were not recorded.'
 Check ($state.workflow.song_editor_maximized -and $state.workflow.stages.Count -eq 1) 'Post-input full-area proof missing.'
-Check ((Resolve-BeatQuayConsumerWindowTitle $state 'BeatQuay 1.0.0') -ceq 'BeatQuay 1.0.0 - [Song-Editor]') 'Actual maximized title not resolved.'
-Check ((Resolve-BeatQuayConsumerWindowTitle $state 'Evening Pulse - BeatQuay 1.0.0') -ceq 'Evening Pulse - BeatQuay 1.0.0 - [Song-Editor]') 'Saved project title not resolved.'
+Check ((Resolve-BeatQuayConsumerWindowTitle $state 'BeatSprig 1.0.1') -ceq 'BeatSprig 1.0.1 - [Song-Editor]') 'Actual maximized title not resolved.'
+Check ((Resolve-BeatQuayConsumerWindowTitle $state 'Evening Pulse - BeatSprig 1.0.1') -ceq 'Evening Pulse - BeatSprig 1.0.1 - [Song-Editor]') 'Saved project title not resolved.'
 Check ((Resolve-BeatQuayConsumerWindowTitle $state 'Export completed') -ceq 'Export completed') 'Dialog title changed.'
 $state.workflow.song_editor_maximized=$false
-Check ((Resolve-BeatQuayConsumerWindowTitle $state 'BeatQuay 1.0.0') -ceq 'BeatQuay 1.0.0') 'Suffix accepted without actual full-area proof.'
+Check ((Resolve-BeatQuayConsumerWindowTitle $state 'BeatSprig 1.0.1') -ceq 'BeatSprig 1.0.1') 'Suffix accepted without actual full-area proof.'
 foreach($failure in @(1,2)){
  $script:titleCalls.Clear();$script:surfaceRead=0;$script:titleHitFailure=$failure
  Reject {Invoke-BeatQuayConsumerMaximizeSongEditor $state} 'Foreign title hit still sent input.'

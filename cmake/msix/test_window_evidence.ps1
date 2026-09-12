@@ -1,9 +1,9 @@
 # Copyright 2026 Trieflow LLC. MIT. Observation-policy fixtures, not GUI execution.
 $ErrorActionPreference='Stop'; Set-StrictMode -Version Latest
 . (Join-Path $PSScriptRoot 'qualify-msix-install.ps1') -LibraryOnly
-$good=[ordered]@{title='BeatQuay 1.0.0';process_id=123;visible=$true;width=800;height=600;screenshot_captured=$true;screenshot_sha256=('a'*64);sampled_colors=50;actionable_controls_verified=$true;actionable_control_count=3;controls=@()}
+$good=[ordered]@{title='BeatSprig 1.0.1';process_id=123;visible=$true;width=800;height=600;screenshot_captured=$true;screenshot_sha256=('a'*64);sampled_colors=50;actionable_controls_verified=$true;actionable_control_count=3;controls=@()}
 Assert-BeatQuayWindowEvidence $good
-$first=[ordered]@{setup_title='BeatQuay - Settings';setup_visible=$true;action_name='OK';action_invoked=$true;editor_title='BeatQuay 1.0.0';editor_visible=$true}
+$first=[ordered]@{setup_title='BeatSprig - Settings';setup_visible=$true;action_name='OK';action_invoked=$true;editor_title='BeatSprig 1.0.1';editor_visible=$true}
 $first.working_directory=[ordered]@{title='Working directory';visible=$true;action_name='Yes';action_invoked=$true;process_id=123;path=[IO.Path]::GetFullPath('BeatQuay');message=(Get-BeatQuayWorkingDirectoryMessage ([IO.Path]::GetFullPath('BeatQuay')))}
 Assert-BeatQuayFirstRunEvidence $first
 foreach($field in @('title','visible','action_name','action_invoked','process_id','path','message')){

@@ -22,11 +22,27 @@ namespace BeatQuayConsumer {
   [DllImport("user32.dll")] public static extern bool MoveWindow(IntPtr hwnd,int x,int y,int width,int height,bool repaint);
   [DllImport("user32.dll")] static extern bool SetCursorPos(int x,int y);
   [DllImport("user32.dll")] static extern IntPtr WindowFromPoint(POINT point);
+  [DllImport("user32.dll")] static extern IntPtr GetAncestor(IntPtr hwnd,uint flags);
   [DllImport("user32.dll",SetLastError=true)] static extern uint SendInput(uint count,INPUT[] inputs,int size);
   public static void Foreground(int pid){uint actual;GetWindowThreadProcessId(GetForegroundWindow(),out actual);if(pid<=0||actual!=pid)throw new InvalidOperationException("Owned foreground process changed");}
   static void Send(INPUT input){if(SendInput(1,new[]{input},Marshal.SizeOf<INPUT>())!=1)throw new Win32Exception(Marshal.GetLastWin32Error());}
   public static void Key(int pid,ushort key,bool up){Foreground(pid);Send(new INPUT{type=1,data=new UNION{key=new KEY{vk=key,flags=up?2u:0u}}});}
   public static void Click(int pid,int x,int y){Foreground(pid);uint actual;GetWindowThreadProcessId(WindowFromPoint(new POINT{X=x,Y=y}),out actual);if(actual!=pid)throw new InvalidOperationException("Click point is covered by a foreign window");if(!SetCursorPos(x,y))throw new InvalidOperationException("Cannot position owned input");Send(new INPUT{type=0,data=new UNION{mouse=new MOUSE{flags=2}}});Send(new INPUT{type=0,data=new UNION{mouse=new MOUSE{flags=4}}});}
+  public static void RequireTempoPointer(int pid,long expected,long foreground,int hitPid,long hitRoot){if(pid<=0||expected==0||foreground!=expected||hitPid!=pid||hitRoot!=expected)throw new InvalidOperationException("Exact native tempo foreground/hit ownership changed");}
+  public static void TempoPointer(int pid,IntPtr main,int x,int y,string kind){
+   if(kind!="wheel"&&kind!="context")throw new InvalidOperationException("Unexpected tempo pointer action");
+   Foreground(pid);if(GetForegroundWindow()!=main)throw new InvalidOperationException("Tempo main foreground changed");
+   if(!SetCursorPos(x,y))throw new InvalidOperationException("Cannot position tempo pointer");
+   uint actual;IntPtr hit=WindowFromPoint(new POINT{X=x,Y=y});GetWindowThreadProcessId(hit,out actual);
+   RequireTempoPointer(pid,main.ToInt64(),GetForegroundWindow().ToInt64(),(int)actual,GetAncestor(hit,2).ToInt64());
+   if(kind=="wheel"){Send(new INPUT{type=0,data=new UNION{mouse=new MOUSE{flags=0x800,data=120}}});}
+   else{INPUT[] packet={new INPUT{type=0,data=new UNION{mouse=new MOUSE{flags=8}}},new INPUT{type=0,data=new UNION{mouse=new MOUSE{flags=16}}}};uint sent=SendInput(2,packet,Marshal.SizeOf<INPUT>());if(sent!=2){if(sent==1)Send(packet[1]);throw new InvalidOperationException("Tempo context click input incomplete");}}
+  }
+  public static void DismissTempoMenu(int pid,IntPtr main,IntPtr menu){
+   uint actual;GetWindowThreadProcessId(menu,out actual);IntPtr foreground=GetForegroundWindow();
+   if(pid<=0||main==IntPtr.Zero||menu==IntPtr.Zero||actual!=pid||(foreground!=main&&foreground!=menu))throw new InvalidOperationException("Tempo popup ownership changed before Escape");
+   Foreground(pid);Key(pid,0x1b,false);Key(pid,0x1b,true);
+  }
  }
 }
 '@
@@ -55,7 +71,7 @@ function Assert-BeatQuayConsumerOwner($State) {
  $State.process.Refresh()
  if(-not $State.processOwned -or $State.process.HasExited -or $State.processHandle.IsInvalid -or $State.processHandle.IsClosed){throw 'Retained consumer process is not live and owned'}
  if([BeatQuayQualification.NativePackageProbe]::GetFullName($State.process.Handle) -cne $State.ownedPackageFullName -or
-  (Get-CanonicalPath $State.process.MainModule.FileName) -ine (Get-CanonicalPath (Join-Path $State.installed.InstallLocation 'lmms.exe'))){throw 'Consumer process package/executable identity changed'}
+  (Get-CanonicalPath $State.process.MainModule.FileName) -ine (Get-CanonicalPath (Join-Path $State.installed.InstallLocation 'beatsprig.exe'))){throw 'Consumer process package/executable identity changed'}
 }
 
 function Get-BeatQuayConsumerWindows($State) {
@@ -87,7 +103,7 @@ function Resolve-BeatQuayConsumerWindowTitle($State,[string]$Title) {
  # Qt's native MDI title merge is enabled only after the actual Song-Editor filled
  # the MDI area. Dialog titles and unmaximized main titles stay exact.
  if($State.workflow.Contains('song_editor_maximized') -and $State.workflow.song_editor_maximized -and
-  ($Title -ceq 'BeatQuay 1.0.0' -or $Title.EndsWith(' - BeatQuay 1.0.0',[StringComparison]::Ordinal))){return $Title+' - [Song-Editor]'}
+  ($Title -ceq 'BeatSprig 1.0.1' -or $Title.EndsWith(' - BeatSprig 1.0.1',[StringComparison]::Ordinal))){return $Title+' - [Song-Editor]'}
  return $Title
 }
 
@@ -123,7 +139,7 @@ function Get-BeatQuaySongTitlePoint($Main,$Song,$Content,$Area,[int]$ProcessId) 
   if($s.class_name -cne $pair[2] -or $s.automation_id -cne $pair[3]){throw 'Unexpected Song-Editor provider ancestry'}
   foreach($key in @('x','y','width','height')){if(-not [double]::IsFinite($s[$key])){throw 'Nonfinite Song-Editor geometry'}}
  }
- if($Song.name -cne 'Song-Editor' -or $Main.name -cne 'BeatQuay 1.0.0'){throw 'Unexpected Song-Editor surface title'}
+ if($Song.name -cne 'Song-Editor' -or $Main.name -cne 'BeatSprig 1.0.1'){throw 'Unexpected Song-Editor surface title'}
  foreach($pair in @(@($Area,$Main),@($Song,$Area),@($Content,$Song))){
   $child=$pair[0];$parent=$pair[1]
   if($child.x -lt $parent.x -or $child.y -lt $parent.y -or $child.x+$child.width -gt $parent.x+$parent.width -or
@@ -170,7 +186,7 @@ function Send-BeatQuayConsumerTitleClick($State,$Point) {
 }
 
 function Invoke-BeatQuayConsumerMaximizeSongEditor($State) {
- $main=Wait-BeatQuayConsumerWindow $State 'BeatQuay 1.0.0'
+ $main=Wait-BeatQuayConsumerWindow $State 'BeatSprig 1.0.1'
  Set-BeatQuayConsumerForeground $State $main
  $surface=Get-BeatQuaySongEditorSurface $State $main
  $point=Get-BeatQuaySongTitlePoint $surface.main $surface.song $surface.content $surface.area $State.process.Id
@@ -191,7 +207,7 @@ function Invoke-BeatQuayConsumerMaximizeSongEditor($State) {
  do{
   $windows=@(Get-BeatQuayConsumerWindows $State)
   $State.workflow.last_observation=@($windows|ForEach-Object {$_.snapshot})
-  $matches=@($windows|Where-Object {$_.snapshot.title -ceq 'BeatQuay 1.0.0 - [Song-Editor]' -and
+  $matches=@($windows|Where-Object {$_.snapshot.title -ceq 'BeatSprig 1.0.1 - [Song-Editor]' -and
    -not $_.snapshot.truncated -and $_.snapshot.root.visible -and $_.snapshot.root.enabled})
   if($matches.Count -gt 1){throw 'Ambiguous maximized main window'}
   if($matches.Count -eq 1){
@@ -371,6 +387,76 @@ function Find-BeatQuayConsumerTempo($Main,[int]$ProcessId) {
  return $control
 }
 
+function Get-BeatQuayTempoPoint($Main,$Tempo,[int]$ProcessId) {
+ Assert-BeatQuayConsumerControl $Main $ProcessId 'Window' ''
+ Assert-BeatQuayConsumerControl $Tempo $ProcessId 'Group' ''
+ $mainId='QApplication.lmms::gui::MainWindow'
+ if($Main.class_name -cne 'lmms::gui::MainWindow' -or $Main.automation_id -cne $mainId -or
+  $Tempo.class_name -cne 'lmms::gui::LcdSpinBox' -or $Tempo.automation_id -cne ($mainId+'.QWidget.mainToolbar.lmms::gui::LcdSpinBox')){throw 'Unexpected tempo provider ancestry'}
+ foreach($s in @($Main,$Tempo)){foreach($key in @('x','y','width','height')){if(-not [double]::IsFinite($s[$key])){throw 'Nonfinite tempo geometry'}}}
+ if($Tempo.x -lt $Main.x -or $Tempo.y -lt $Main.y -or $Tempo.x+$Tempo.width -gt $Main.x+$Main.width -or $Tempo.y+$Tempo.height -gt $Main.y+$Main.height){throw 'Tempo lies outside owned main window'}
+ return @{x=[int]($Tempo.x+$Tempo.width/2);y=[int]($Tempo.y+$Tempo.height/2)}
+}
+
+function Assert-BeatQuayTempoHit($Control,$Point) {
+ $hit=[Windows.Automation.AutomationElement]::FromPoint([Windows.Point]::new($Point.x,$Point.y))
+ if($null -eq $hit -or -not [Windows.Automation.Automation]::Compare($hit,$Control.element)){throw 'Tempo point is covered by a different accessible surface'}
+}
+
+function Send-BeatQuayTempoPointer($State,$Main,$Point,[string]$Kind) {
+ [BeatQuayConsumer.Native]::TempoPointer($State.process.Id,[IntPtr]$Main.element.Current.NativeWindowHandle,$Point.x,$Point.y,$Kind)
+}
+
+function Invoke-BeatQuayTempoPointer($State,$Main,[ValidateSet('context','wheel')][string]$Kind) {
+ Set-BeatQuayConsumerForeground $State $Main
+ $control=Find-BeatQuayConsumerTempo $Main $State.process.Id
+ Assert-BeatQuayConsumerOwner $State
+ $current=Get-BeatQuayConsumerControl $control.element
+ $point=Get-BeatQuayTempoPoint (Get-BeatQuayConsumerControl $Main.element) $current $State.process.Id
+ Assert-BeatQuayTempoHit $control $point
+ Send-BeatQuayTempoPointer $State $Main $point $Kind
+ $State.workflow.inputs.Add(@{action=$State.workflow.current_action;kind=('native_tempo_'+$Kind);control=$current;x=$point.x;y=$point.y;wheel_delta=if($Kind -ceq 'wheel'){120}else{0};observed_utc=[DateTime]::UtcNow.ToString('o')})
+}
+
+function Assert-BeatQuayTempoMenu($Menu,[int]$ProcessId,[int]$Value) {
+ if($Menu.snapshot.truncated -or $Menu.snapshot.title -cne 'Tempo' -or $Menu.snapshot.root.class_name -cne 'lmms::gui::CaptionMenu'){throw 'Unexpected tempo context menu'}
+ Assert-BeatQuayConsumerControl $Menu.snapshot.root $ProcessId 'Menu' 'Tempo'
+ $caption=@($Menu.items|Where-Object {$s=$_.snapshot;$s.available -and $s.process_id -eq $ProcessId -and $s.visible -and -not $s.enabled -and $s.type -ceq 'MenuItem' -and $s.name -ceq 'Tempo'})
+ if($caption.Count -ne 1){throw 'Context menu lacks exact disabled Tempo caption'}
+ $null=Find-BeatQuayConsumerControl $Menu $ProcessId 'MenuItem' "Copy value ($Value)"
+}
+
+function Confirm-BeatQuayTempoValue($State,$Main,[int]$Value) {
+ Invoke-BeatQuayTempoPointer $State $Main 'context'
+ $menu=Wait-BeatQuayConsumerWindow $State 'Tempo'
+ Assert-BeatQuayTempoMenu $menu $State.process.Id $Value
+ Save-BeatQuayConsumerStage $State "tempo_value_$Value" $menu
+ Assert-BeatQuayConsumerOwner $State
+ # Read the actual source-defined menu without copying any clipboard value.
+ [BeatQuayConsumer.Native]::DismissTempoMenu($State.process.Id,[IntPtr]$Main.element.Current.NativeWindowHandle,[IntPtr]$menu.element.Current.NativeWindowHandle)
+ $State.workflow.inputs.Add(@{action=$State.workflow.current_action;kind='native_escape_tempo_menu';value=$Value})
+ $deadline=[DateTime]::UtcNow.AddSeconds(15)
+ do{
+  $windows=@(Get-BeatQuayConsumerWindows $State);$State.workflow.last_observation=@($windows|ForEach-Object {$_.snapshot})
+  if(@($windows|Where-Object {$_.snapshot.truncated}).Count){throw 'Incomplete inventory after tempo menu Escape'}
+  if(@($windows|Where-Object {$_.snapshot.title -ceq 'Tempo' -and $_.snapshot.root.visible}).Count -eq 0){return}
+  Start-Sleep -Milliseconds 200
+ }while([DateTime]::UtcNow -lt $deadline)
+ throw 'Actual tempo context menu did not dismiss'
+}
+
+function Invoke-BeatQuayConsumerTempoEdit($State) {
+ $main=Wait-BeatQuayConsumerWindow $State 'BeatSprig 1.0.1'
+ Confirm-BeatQuayTempoValue $State $main 112
+ # LcdSpinBox::wheelEvent adds one model step per event. A fresh context-menu
+ # read proves every event was consumed; there are exactly four detents, no retry.
+ foreach($value in 113..116){
+  Invoke-BeatQuayTempoPointer $State $main 'wheel'
+  $main=Wait-BeatQuayConsumerWindow $State 'Untitled* - BeatSprig 1.0.1'
+  Confirm-BeatQuayTempoValue $State $main $value
+ }
+}
+
 function Select-BeatQuayConsumerCombo($State,$Window,[string]$Label,[string]$Value) {
  $labelControl=Find-BeatQuayConsumerControl $Window $State.process.Id 'Text' $Label
  $label=$labelControl.snapshot
@@ -398,7 +484,7 @@ function Invoke-BeatQuayConsumerWorkflow($State) {
  try{
   Assert-BeatQuayConsumerOwner $State
   Start-BeatQuayConsumerDisplay $State
-  $main=Wait-BeatQuayConsumerWindow $State 'BeatQuay 1.0.0'
+  $main=Wait-BeatQuayConsumerWindow $State 'BeatSprig 1.0.1'
   $handle=[IntPtr]$main.element.Current.NativeWindowHandle
   [BeatQuayConsumer.Native]::ShowWindow($handle,9)|Out-Null
   Set-BeatQuayConsumerForeground $State $main
@@ -410,58 +496,51 @@ function Invoke-BeatQuayConsumerWorkflow($State) {
   $first=Join-Path $work 'Evening Pulse.mmp';$reopened=Join-Path $work 'Evening Pulse Reopened.mmp';$wave=Join-Path $work 'Evening Pulse.wav'
   $State.workflow.project_paths=@{first=$first;reopened=$reopened;wave=$wave}
   foreach($path in @($first,$reopened,$wave)){if(Test-Path -LiteralPath $path){throw 'A consumer output exists before its UI creation'}}
-  $template=Join-Path $State.installed.InstallLocation 'data/projects/templates/BeatQuay-Drum-Grid.mpt'
-  foreach($name in @('BeatQuay-Drum-Grid.mpt','BEATQUAY-PROVENANCE.md','CC0-1.0.txt')){
+  $template=Join-Path $State.installed.InstallLocation 'data/projects/templates/BeatSprig-Drum-Grid.mpt'
+  foreach($name in @('BeatSprig-Drum-Grid.mpt','BEATSPRIG-PROVENANCE.md','CC0-1.0.txt')){
    $relative='data/projects/templates/'+$name
    Assert-FileMatchesRecord (Join-Path $State.installed.InstallLocation $relative) (Get-RecordPayloadEntry $State.record $relative) 'Original starter and attribution'|Out-Null
   }
-  $State.profile.projects+=@($template,'factoryprojects:templates/BeatQuay-Drum-Grid.mpt')
+  $State.profile.projects+=@($template,'factoryprojects:templates/BeatSprig-Drum-Grid.mpt')
   $State.workflow.current_action='new_from_original_template'
-  foreach($name in @('File','New from template','BeatQuay-Drum-Grid')){
+  foreach($name in @('File','New from template','BeatSprig-Drum-Grid')){
    $input=Find-BeatQuayConsumerInput $State 'MenuItem' $name
    Invoke-BeatQuayConsumerClick $State $input.window $input.control
   }
   # Source implements this as a new unmodified untitled project, with no original template file selected for overwriting.
-  $main=Wait-BeatQuayConsumerWindow $State 'BeatQuay 1.0.0'
+  $main=Wait-BeatQuayConsumerWindow $State 'BeatSprig 1.0.1'
   foreach($name in @('Low pulse','Backbeat','Short ticks')){$null=Find-BeatQuayConsumerControl $main $State.process.Id 'CheckBox' $name}
   Confirm-BeatQuayConsumerProfile $State
   Save-BeatQuayConsumerStage $State 'original_template_opened' $main
   $State.workflow.current_action='maximize_song_editor'
   Invoke-BeatQuayConsumerMaximizeSongEditor $State
   $State.workflow.current_action='edit_tempo_116'
-  $main=Wait-BeatQuayConsumerWindow $State 'BeatQuay 1.0.0'
-  $tempo=Find-BeatQuayConsumerTempo $main $State.process.Id
-  Invoke-BeatQuayConsumerClick $State $main $tempo -Double
-  $dialog=Wait-BeatQuayConsumerWindow $State 'Set value'
-  $value=Find-BeatQuayConsumerControl $dialog $State.process.Id 'Edit' ''
-  if($value.snapshot.value -cne '112'){throw 'Tempo dialog did not expose the original 112 BPM'}
-  Set-BeatQuayConsumerValue $State $dialog $value '116'
-  Invoke-BeatQuayConsumerClick $State $dialog (Find-BeatQuayConsumerControl $dialog $State.process.Id 'Button' 'OK')
-  $main=Wait-BeatQuayConsumerWindow $State 'Untitled* - BeatQuay 1.0.0'
+  Invoke-BeatQuayConsumerTempoEdit $State
+  $main=Wait-BeatQuayConsumerWindow $State 'Untitled* - BeatSprig 1.0.1'
   $State.workflow.current_action='save_original_project'
   Send-BeatQuayConsumerKeys $State $main @(0x11,0x53)
   $State.profile.projects+=@($first)
   Invoke-BeatQuayConsumerFileDialog $State 'Save Project' $first 'Save'
-  $main=Wait-BeatQuayConsumerWindow $State 'Evening Pulse - BeatQuay 1.0.0'
+  $main=Wait-BeatQuayConsumerWindow $State 'Evening Pulse - BeatSprig 1.0.1'
   $firstHash=(Get-FileHash -LiteralPath $first -Algorithm SHA256).Hash.ToLowerInvariant()
   Confirm-BeatQuayConsumerProfile $State
   Save-BeatQuayConsumerStage $State 'project_saved' $main
   # Save a working-editor capture before creating the independently checked reopened copy.
-  Save-BeatQuayConsumerScreen $State '01-evening-pulse-project' 'Evening Pulse - BeatQuay 1.0.0'
+  Save-BeatQuayConsumerScreen $State '01-evening-pulse-project' 'Evening Pulse - BeatSprig 1.0.1'
   $State.workflow.current_action='new_then_reopen_saved_project'
   Send-BeatQuayConsumerKeys $State $main @(0x11,0x4e)
-  $main=Wait-BeatQuayConsumerWindow $State 'BeatQuay 1.0.0'
+  $main=Wait-BeatQuayConsumerWindow $State 'BeatSprig 1.0.1'
   Save-BeatQuayConsumerStage $State 'new_empty_project_before_reopen' $main
   Send-BeatQuayConsumerKeys $State $main @(0x11,0x4f)
   Invoke-BeatQuayConsumerFileDialog $State 'Open Project' $first 'Open'
-  $main=Wait-BeatQuayConsumerWindow $State 'Evening Pulse - BeatQuay 1.0.0'
+  $main=Wait-BeatQuayConsumerWindow $State 'Evening Pulse - BeatSprig 1.0.1'
   $State.workflow.current_action='save_reopened_memory_to_new_project'
   Send-BeatQuayConsumerKeys $State $main @(0x11,0x10,0x53)
   $State.profile.projects+=@($reopened)
   Invoke-BeatQuayConsumerFileDialog $State 'Save Project' $reopened 'Save'
-  $main=Wait-BeatQuayConsumerWindow $State 'Evening Pulse Reopened - BeatQuay 1.0.0'
+  $main=Wait-BeatQuayConsumerWindow $State 'Evening Pulse Reopened - BeatSprig 1.0.1'
   $State.workflow.file_verification=Invoke-BeatQuayConsumerFileCheck $State @('project','--template',$template,'--first',$first,'--reopened',$reopened,'--root',$work)
-  if($State.workflow.file_verification.template_sha256 -cne (Get-RecordPayloadEntry $State.record 'data/projects/templates/BeatQuay-Drum-Grid.mpt').sha256){throw 'Independent project comparison used a changed installed starter'}
+  if($State.workflow.file_verification.template_sha256 -cne (Get-RecordPayloadEntry $State.record 'data/projects/templates/BeatSprig-Drum-Grid.mpt').sha256){throw 'Independent project comparison used a changed installed starter'}
   if((Get-FileHash -LiteralPath $first -Algorithm SHA256).Hash.ToLowerInvariant() -cne $firstHash){throw 'Reopen mutated the original saved project'}
   Confirm-BeatQuayConsumerProfile $State
   Save-BeatQuayConsumerStage $State 'reopened_project_verified' $main
@@ -479,7 +558,7 @@ function Invoke-BeatQuayConsumerWorkflow($State) {
    if($toggle.Current.ToggleState -ne [Windows.Automation.ToggleState]::Off){throw 'Unrequested loop export setting is active'}
   }
   Save-BeatQuayConsumerStage $State 'export_settings' $dialog
-  Save-BeatQuayConsumerScreen $State '02-export-project' 'Evening Pulse Reopened - BeatQuay 1.0.0' @('Export project')
+  Save-BeatQuayConsumerScreen $State '02-export-project' 'Evening Pulse Reopened - BeatSprig 1.0.1' @('Export project')
   if(Test-Path -LiteralPath $wave){throw 'WAV exists before actual Start action'}
   Invoke-BeatQuayConsumerClick $State $dialog (Find-BeatQuayConsumerControl $dialog $State.process.Id 'Button' 'Start')
   $State.workflow.current_action='wait_actual_export_completion'
@@ -488,12 +567,12 @@ function Invoke-BeatQuayConsumerWorkflow($State) {
   Assert-BeatQuayConsumerExportResult $completed.snapshot $State.process.Id $wave (Get-Item -LiteralPath $wave).Length
   $State.workflow.wave_verification=Invoke-BeatQuayConsumerFileCheck $State @('wave','--path',$wave,'--root',$work)
   Save-BeatQuayConsumerStage $State 'actual_export_completed' $completed
-  Save-BeatQuayConsumerScreen $State '03-export-completed' 'Evening Pulse Reopened - BeatQuay 1.0.0' @('Export project','Export completed')
+  Save-BeatQuayConsumerScreen $State '03-export-completed' 'Evening Pulse Reopened - BeatSprig 1.0.1' @('Export project','Export completed')
   Invoke-BeatQuayConsumerClick $State $completed (Find-BeatQuayConsumerControl $completed $State.process.Id 'Button' 'Close')
-  $main=Wait-BeatQuayConsumerWindow $State 'Evening Pulse Reopened - BeatQuay 1.0.0'
+  $main=Wait-BeatQuayConsumerWindow $State 'Evening Pulse Reopened - BeatSprig 1.0.1'
   $State.workflow.current_action='stop_transport_and_verify_persistence'
   Invoke-BeatQuayConsumerClick $State $main (Find-BeatQuayConsumerControl $main $State.process.Id 'Button' 'Stop (Space)')
-  $main=Wait-BeatQuayConsumerWindow $State 'Evening Pulse Reopened - BeatQuay 1.0.0'
+  $main=Wait-BeatQuayConsumerWindow $State 'Evening Pulse Reopened - BeatSprig 1.0.1'
   $null=Find-BeatQuayConsumerControl $main $State.process.Id 'Button' 'Play (Space)'
   $finalFiles=Invoke-BeatQuayConsumerFileCheck $State @('project','--template',$template,'--first',$first,'--reopened',$reopened,'--root',$work)
   if(($finalFiles|ConvertTo-Json -Compress) -cne ($State.workflow.file_verification|ConvertTo-Json -Compress)){throw 'Export changed saved project bytes or semantics'}

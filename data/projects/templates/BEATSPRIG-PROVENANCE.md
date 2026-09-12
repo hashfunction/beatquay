@@ -1,3 +1,19 @@
+# Original BeatSprig starter arrangements
+
+These are the existing Trieflow CC0 arrangements, renamed from BeatQuay for BeatSprig 1.0.1. Musical notes, timing, voices, synthesis parameters and schema remain identical. Only the two menu filenames, the source-generator creator label and the provenance comment changed. This rename does not claim new native GUI/render qualification.
+
+Current generated source inputs:
+
+| Current file | SHA-256 |
+| --- | --- |
+| `data/projects/templates/BeatSprig-Drum-Grid.mpt` | `ae6fd8059509cfc7690be2ba505513f165761b66140ade0ff2d5504b668c6a86` |
+| `data/projects/templates/BeatSprig-Bassline-Sketch.mpt` | `8f77628fe6b0897a0c4c51562b68cc1cd5422f447fdcc13e7e1cd59b47d6a3dc` |
+| `distribution/generate_starters.py` | `0c28426aa9df7851a9042b59adb0369b08d42cbcce04d1faa1e4244dbd9a0e64` |
+
+The unchanged CC0 dedication and original authorship/source record follow. Their BeatQuay names and original digests refer to historical source, retained in Git before the rename; they are not digests of the renamed files.
+
+## Historical original authorship record
+
 # Original BeatQuay starter arrangements
 
 The note, timing, velocity and synthesizer parameter data in `BeatQuay-Drum-Grid.mpt` and `BeatQuay-Bassline-Sketch.mpt` were authored by Codex for Trieflow LLC on September 11, 2026 under the approved BeatQuay development task. These arrangements were created from explicit new musical choices in `distribution/generate_starters.py`. No LMMS demo, preset, sample pack, commercial work or third-party composition was used as musical input.

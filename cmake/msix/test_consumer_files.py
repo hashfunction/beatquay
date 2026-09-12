@@ -11,7 +11,7 @@ import xml.etree.ElementTree as ET
 
 import consumer_files as subject
 SOURCE = Path(__file__).resolve().parents[2]
-TEMPLATE = SOURCE / 'data/projects/templates/BeatQuay-Drum-Grid.mpt'
+TEMPLATE = SOURCE / 'data/projects/templates/BeatSprig-Drum-Grid.mpt'
 
 class ConsumerFilesTests(unittest.TestCase):
     def setUp(self):

@@ -1,4 +1,4 @@
-# BeatQuay qualification MSIX pipeline
+# BeatSprig qualification MSIX pipeline
 
 `distribution/qualify-candidate.ps1` is the Windows CI entry point. After the
 clean pinned native build, tests, install, and render checks succeed, it:
@@ -18,10 +18,11 @@ binds Qt's authoritative tag objects, commits, Git blobs, byte sizes and SHA-256
 digests. It explicitly leaves complete corresponding-source closure false.
 
 The package uses the CI-only identity `Trieflow.BeatQuay.Qualification` and the
-internal `lmms.exe` host name required by the installed instrument modules. It
+customer `beatsprig.exe` host name. All three instrument modules are rebuilt
+against that host import name and their imports are checked explicitly. It
 contains the complete native stage, the exact three approved instrument DLLs,
 the two original starter arrangements and their provenance/license files,
-BeatQuay source notices, and the same-run Qt/vcpkg notices. Known debug CRT
+BeatSprig source notices, and the same-run Qt/vcpkg notices. Known debug CRT
 files, unexpected plugin/project files, unresolved PE imports, source changes,
 and incomplete or substituted evidence fail the run.
 

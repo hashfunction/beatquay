@@ -1,0 +1,38 @@
+{
+  "run_id": 34681627248,
+  "source_commit": "d79b36432a691c2a30ae5abfde99d5c45506b42f",
+  "source_artifact_sha256": "7eda616f57fb6f8b865daf9ed9bc418ddae21f50c6f1edd1aaddc119077a0b38",
+  "note": "Exact failed-run main and tempo snapshots; no context-menu or wheel success evidence was present.",
+  "main": {
+    "enabled": true,
+    "process_id": 3772,
+    "help": "",
+    "class_name": "lmms::gui::MainWindow",
+    "x": 232.0,
+    "visible": true,
+    "y": 81.0,
+    "value": "",
+    "automation_id": "QApplication.lmms::gui::MainWindow",
+    "width": 1456.0,
+    "name": "BeatQuay 1.0.0 - [Song-Editor]",
+    "type": "Window",
+    "available": true,
+    "height": 901.0
+  },
+  "tempo": {
+    "enabled": true,
+    "process_id": 3772,
+    "help": "",
+    "class_name": "lmms::gui::LcdSpinBox",
+    "x": 480.0,
+    "visible": true,
+    "y": 102.0,
+    "value": "",
+    "automation_id": "QApplication.lmms::gui::MainWindow.QWidget.mainToolbar.lmms::gui::LcdSpinBox",
+    "width": 45.0,
+    "name": "",
+    "type": "Group",
+    "available": true,
+    "height": 30.0
+  }
+}

@@ -36,26 +36,26 @@ ET.register_namespace("rescap", RESCAP_NS)
 QUALIFICATION_IDENTITY = {
     "packageName": "Trieflow.BeatQuay.Qualification",
     "publisher": "CN=BeatQuay-CI-Qualification",
-    "version": "1.0.0.0",
+    "version": "1.0.1.0",
     "architecture": "x64",
     "applicationId": "BeatQuay",
-    "executable": "lmms.exe",
+    "executable": "beatsprig.exe",
     "deviceFamily": "Windows.Desktop",
     "minVersion": "10.0.19041.0",
     "maxVersionTested": "10.0.26100.0",
     "capability": "runFullTrust",
 }
 REQUIRED_RELEASE_FILES = (
-    "lmms.exe", "Qt6Core.dll", "Qt6Gui.dll", "Qt6Widgets.dll", "Qt6Svg.dll", "Qt6Xml.dll",
+    "beatsprig.exe", "Qt6Core.dll", "Qt6Gui.dll", "Qt6Widgets.dll", "Qt6Svg.dll", "Qt6Xml.dll",
     "platforms/qwindows.dll", "iconengines/qsvgicon.dll", "imageformats/qsvg.dll",
     "plugins/audiofileprocessor.dll", "plugins/kicker.dll", "plugins/tripleoscillator.dll",
-    "data/projects/templates/BeatQuay-Drum-Grid.mpt",
-    "data/projects/templates/BeatQuay-Bassline-Sketch.mpt",
-    "data/projects/templates/BEATQUAY-PROVENANCE.md",
+    "data/projects/templates/BeatSprig-Drum-Grid.mpt",
+    "data/projects/templates/BeatSprig-Bassline-Sketch.mpt",
+    "data/projects/templates/BEATSPRIG-PROVENANCE.md",
     "data/projects/templates/CC0-1.0.txt",
 )
 RUNTIME = {
-    "executable": "lmms.exe", "qtCore": "Qt6Core.dll", "qtGui": "Qt6Gui.dll",
+    "executable": "beatsprig.exe", "qtCore": "Qt6Core.dll", "qtGui": "Qt6Gui.dll",
     "qtWidgets": "Qt6Widgets.dll", "qtSvg": "Qt6Svg.dll", "qtXml": "Qt6Xml.dll",
     "platformPlugin": "platforms/qwindows.dll",
 }
@@ -71,9 +71,9 @@ SOURCE_FILES = (
     "distribution/candidate-inputs.json", "distribution/product-identity.md",
     "distribution/msix-qualification.md",
     "distribution/starter-inputs.json", "distribution/starter-arrangements.md",
-    "distribution/generate_starters.py", "data/projects/templates/BeatQuay-Drum-Grid.mpt",
-    "data/projects/templates/BeatQuay-Bassline-Sketch.mpt",
-    "data/projects/templates/BEATQUAY-PROVENANCE.md", "data/projects/templates/CC0-1.0.txt",
+    "distribution/generate_starters.py", "data/projects/templates/BeatSprig-Drum-Grid.mpt",
+    "data/projects/templates/BeatSprig-Bassline-Sketch.mpt",
+    "data/projects/templates/BEATSPRIG-PROVENANCE.md", "data/projects/templates/CC0-1.0.txt",
     "cmake/msix/PIPELINE-MIT.txt", "cmake/msix/RETICLEQUAY-MIT.txt",
     "cmake/msix/collect-pe-imports.ps1", "cmake/msix/api-set-resolution.ps1",
     "cmake/msix/api-set-resolver.cs",
@@ -270,7 +270,7 @@ def _validate_pe_imports(release, path, files):
         raise ValueError("PE import evidence must cover every staged executable and DLL")
     by_path = {row["path"].replace("\\", "/"): row for row in record["files"]}
     for plugin in ALLOWED_PLUGIN_DLLS:
-        if "lmms.exe" not in {name.lower() for name in by_path[plugin]["imports"]}:
+        if "beatsprig.exe" not in {name.lower() for name in by_path[plugin]["imports"]}:
             raise ValueError(f"Plugin does not bind the required internal host: {plugin}")
     if record.get("unresolvedImports") != [] or record.get("ambiguousPackagedImports") != [] or record.get("resolutionErrors") != []:
         raise ValueError("Unresolved or ambiguous PE imports remain")
@@ -360,7 +360,7 @@ def create_input_inventory(release, source_root, source_commit, evidence_root, a
         buildProvenance=dict(
             qt="Exact Qt binary downloads and source-pinned module notice manifests/files are bound as evidence",
             vcpkg="Pinned vcpkg input, installed status, downloads and copied copyright files are bound",
-            imports="Every staged PE is recorded; all three instrument DLLs import lmms.exe",
+            imports="Every staged PE is recorded; all three instrument DLLs import beatsprig.exe",
             inventoryIsLicenseClearance=False,
             correspondingSourceComplete=False,
         ),
@@ -390,9 +390,9 @@ def create_manifest():
     )
     properties = ET.SubElement(package, f"{{{APPX_NS}}}Properties")
     for name, value in (
-        ("DisplayName", "BeatQuay 1.0.0"),
+        ("DisplayName", "BeatSprig 1.0.1"),
         ("PublisherDisplayName", "Trieflow LLC"),
-        ("Description", "BeatQuay qualification package"),
+        ("Description", "BeatSprig qualification package"),
         ("Logo", r"Assets\StoreLogo.png"),
     ):
         ET.SubElement(properties, f"{{{APPX_NS}}}{name}").text = value
@@ -422,8 +422,8 @@ def create_manifest():
         application,
         f"{{{UAP_NS}}}VisualElements",
         {
-            "DisplayName": "BeatQuay 1.0.0",
-            "Description": "BeatQuay qualification package",
+            "DisplayName": "BeatSprig 1.0.1",
+            "Description": "BeatSprig qualification package",
             "BackgroundColor": "#142e38",
             "Square150x150Logo": r"Assets\Square150x150Logo.png",
             "Square44x44Logo": r"Assets\Square44x44Logo.png",
@@ -470,9 +470,9 @@ def validate_manifest(data):
         raise ValueError("Unexpected qualification identity")
     properties = _one(root, f"{{{APPX_NS}}}Properties", "properties")
     expected_properties = {
-        "DisplayName": "BeatQuay 1.0.0",
+        "DisplayName": "BeatSprig 1.0.1",
         "PublisherDisplayName": "Trieflow LLC",
-        "Description": "BeatQuay qualification package",
+        "Description": "BeatSprig qualification package",
         "Logo": r"Assets\StoreLogo.png",
     }
     if (
@@ -511,8 +511,8 @@ def validate_manifest(data):
         len(application) != 1
         or visual.attrib
         != {
-            "DisplayName": "BeatQuay 1.0.0",
-            "Description": "BeatQuay qualification package",
+            "DisplayName": "BeatSprig 1.0.1",
+            "Description": "BeatSprig qualification package",
             "BackgroundColor": "#142e38",
             "Square150x150Logo": r"Assets\Square150x150Logo.png",
             "Square44x44Logo": r"Assets\Square44x44Logo.png",
@@ -666,12 +666,12 @@ def stage_release(release, artwork, stage, source_commit, inventory, evidence_ro
             with _regular_stream(release / relative) as source, target.open("xb") as output:
                 shutil.copyfileobj(source, output, 1024 * 1024)
         license_sources = {
-            "licenses/BeatQuay/LICENSE.txt": Path(source_root) / "LICENSE.txt",
-            "licenses/BeatQuay/AUTHORS.txt": Path(source_root) / "doc/AUTHORS",
+            "licenses/BeatSprig/LICENSE.txt": Path(source_root) / "LICENSE.txt",
+            "licenses/BeatSprig/AUTHORS.txt": Path(source_root) / "doc/AUTHORS",
             "licenses/pipeline/PIPELINE-MIT.txt": Path(source_root) / "cmake/msix/PIPELINE-MIT.txt",
             "licenses/pipeline/RETICLEQUAY-MIT.txt": Path(source_root) / "cmake/msix/RETICLEQUAY-MIT.txt",
             "licenses/templates/CC0-1.0.txt": Path(source_root) / "data/projects/templates/CC0-1.0.txt",
-            "licenses/templates/BEATQUAY-PROVENANCE.md": Path(source_root) / "data/projects/templates/BEATQUAY-PROVENANCE.md",
+            "licenses/templates/BEATSPRIG-PROVENANCE.md": Path(source_root) / "data/projects/templates/BEATSPRIG-PROVENANCE.md",
         }
         for relative, source_path in license_sources.items():
             (stage / relative).parent.mkdir(parents=True, exist_ok=True)
@@ -861,7 +861,7 @@ def build_qualification(
         tool = _tool_record(makeappx, sdk_version)
         stage = temporary / "stage"
         record = stage_release(release, artwork, stage, source_commit, inventory, evidence_root, source_root)
-        package = temporary / "BeatQuay.Qualification_1.0.0.0_x64.msix"
+        package = temporary / "BeatSprig.Qualification_1.0.1.0_x64.msix"
         unpacked = temporary / "unpacked"
         commands = [
             [str(makeappx), "pack", "/d", str(stage), "/p", str(package), "/v", "/h", "SHA256"],

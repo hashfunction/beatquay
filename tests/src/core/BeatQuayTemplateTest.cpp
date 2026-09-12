@@ -76,7 +76,7 @@ class BeatQuayTemplateTest : public QObject
 	void checkNativeModules()
 	{
 #ifdef Q_OS_WIN
-		QVERIFY(GetModuleHandleW(L"lmms.exe") == GetModuleHandleW(nullptr));
+		QVERIFY(GetModuleHandleW(L"beatsprig.exe") == GetModuleHandleW(nullptr));
 		const auto snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, GetCurrentProcessId());
 		QVERIFY(snapshot != INVALID_HANDLE_VALUE);
 		MODULEENTRY32W module{}; module.dwSize = static_cast<DWORD>(sizeof(module));
@@ -88,13 +88,13 @@ class BeatQuayTemplateTest : public QObject
 			{
 				const auto path = QString::fromWCharArray(module.szExePath);
 				const auto name = QFileInfo(path).fileName().toLower();
-				if (name == "lmms.exe") { ++hostCount; }
-				if (name == "lmms.exe" || name == "kicker.dll" || name == "tripleoscillator.dll") { observed.insert(name, path); }
+				if (name == "beatsprig.exe") { ++hostCount; }
+				if (name == "beatsprig.exe" || name == "kicker.dll" || name == "tripleoscillator.dll") { observed.insert(name, path); }
 			} while (Module32NextW(snapshot, &module));
 		}
 		CloseHandle(snapshot);
 		QCOMPARE(hostCount, 1);
-		QCOMPARE(QFileInfo(observed.value("lmms.exe")).canonicalFilePath().toCaseFolded(), QFileInfo(QCoreApplication::applicationFilePath()).canonicalFilePath().toCaseFolded());
+		QCOMPARE(QFileInfo(observed.value("beatsprig.exe")).canonicalFilePath().toCaseFolded(), QFileInfo(QCoreApplication::applicationFilePath()).canonicalFilePath().toCaseFolded());
 		QJsonArray evidence;
 		for (auto it = m_pluginHashes.cbegin(); it != m_pluginHashes.cend(); ++it)
 		{
@@ -144,8 +144,8 @@ private slots:
 	{
 		QTest::addColumn<QString>("name"); QTest::addColumn<int>("bars"); QTest::addColumn<int>("tempo");
 		QTest::addColumn<int>("tracks"); QTest::addColumn<int>("notes"); QTest::addColumn<QString>("synth");
-		QTest::newRow("four-bar-drum-grid") << QString("BeatQuay-Drum-Grid.mpt") << 4 << 112 << 3 << 55 << QString("kicker");
-		QTest::newRow("eight-bar-bassline") << QString("BeatQuay-Bassline-Sketch.mpt") << 8 << 108 << 1 << 40 << QString("tripleoscillator");
+		QTest::newRow("four-bar-drum-grid") << QString("BeatSprig-Drum-Grid.mpt") << 4 << 112 << 3 << 55 << QString("kicker");
+		QTest::newRow("eight-bar-bassline") << QString("BeatSprig-Bassline-Sketch.mpt") << 8 << 108 << 1 << 40 << QString("tripleoscillator");
 	}
 	void loadRoundTripAndRender()
 	{

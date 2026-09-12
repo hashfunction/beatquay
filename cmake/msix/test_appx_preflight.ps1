@@ -62,7 +62,7 @@ try {
     $record=[ordered]@{
         sourceCommit=$env:GITHUB_SHA;schemaVersion=1;qualificationIdentityOnly=$true;signed=$false;publicRelease=$false
         licenseClearanceClaimed=$false;installationQualificationPassed=$false
-        identity=[ordered]@{packageName='Trieflow.BeatQuay.Qualification';publisher='CN=BeatQuay-CI-Qualification';version='1.0.0.0';architecture='x64';applicationId='BeatQuay';executable='lmms.exe';deviceFamily='Windows.Desktop';minVersion='10.0.19041.0';maxVersionTested='10.0.26100.0';capability='runFullTrust'}
+        identity=[ordered]@{packageName='Trieflow.BeatQuay.Qualification';publisher='CN=BeatQuay-CI-Qualification';version='1.0.1.0';architecture='x64';applicationId='BeatQuay';executable='beatsprig.exe';deviceFamily='Windows.Desktop';minVersion='10.0.19041.0';maxVersionTested='10.0.26100.0';capability='runFullTrust'}
         containerVerification=@{package=@{sha256=$hash}}
         makeAppx=@{path=$makeappx;bytes=(Get-Item $makeappx).Length;sha256=$hash;sdkVersion='10.0.26100.0'}
     }

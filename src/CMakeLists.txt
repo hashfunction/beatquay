@@ -117,6 +117,7 @@ ADD_EXECUTABLE(lmms
 	core/main.cpp
 	"${WINRC}"
 )
+beatquay_apply_host_identity(lmms)
 TARGET_INCLUDE_DIRECTORIES(lmms
 	PUBLIC ${CMAKE_CURRENT_BINARY_DIR}
 )
