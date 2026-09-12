@@ -465,7 +465,10 @@ function Invoke-BeatQuayConsumerTempoEdit($State) {
  # read proves every event was consumed; there are exactly four detents, no retry.
  foreach($value in 113..116){
   Invoke-BeatQuayTempoPointer $State $main 'wheel'
-  $main=Wait-BeatQuayConsumerWindow $State 'Untitled* - BeatSprig 1.0.1'
+  # This source path updates tempo/model journalling without setting Song's
+  # modified flag. The captured native caption remains the same; the following
+  # exact menu value, not a guessed title change, proves each wheel was consumed.
+  $main=Wait-BeatQuayConsumerWindow $State 'BeatSprig 1.0.1'
   Confirm-BeatQuayTempoValue $State $main $value
  }
 }
@@ -529,7 +532,7 @@ function Invoke-BeatQuayConsumerWorkflow($State) {
   Invoke-BeatQuayConsumerMaximizeSongEditor $State
   $State.workflow.current_action='edit_tempo_116'
   Invoke-BeatQuayConsumerTempoEdit $State
-  $main=Wait-BeatQuayConsumerWindow $State 'Untitled* - BeatSprig 1.0.1'
+  $main=Wait-BeatQuayConsumerWindow $State 'BeatSprig 1.0.1'
   $State.workflow.current_action='save_original_project'
   Send-BeatQuayConsumerKeys $State $main @(0x11,0x53)
   $State.profile.projects+=@($first)

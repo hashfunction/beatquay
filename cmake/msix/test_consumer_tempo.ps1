@@ -1,6 +1,7 @@
 # Copyright 2026 Trieflow LLC. MIT. Production tempo guards and bounded input sequence.
 $ErrorActionPreference='Stop';Set-StrictMode -Version Latest
 . (Join-Path $PSScriptRoot 'consumer-workflow.ps1')
+$script:productionWait=${function:Wait-BeatQuayConsumerWindow}
 function Check($Value,$Message){if(-not $Value){throw $Message}}
 function Reject([scriptblock]$Action,$Message){$failed=$false;try{& $Action}catch{$failed=$true};Check $failed $Message}
 $captured=Get-Content (Join-Path $PSScriptRoot 'fixtures/tempo-34681627248.json') -Raw|ConvertFrom-Json -AsHashtable
@@ -87,4 +88,31 @@ foreach($failure in @('verify_112','verify_113','verify_114','verify_115','verif
  Reject {Invoke-BeatQuayConsumerTempoEdit $state} 'Unproved tempo route continued.'
  Check ($script:calls[-1] -ceq $failure) 'Input occurred after failed tempo proof.'
 }
-Write-Output 'PASS: exact captured tempo geometry, 12 refusals, native ownership guard, 24 menu refusals and observed popup dismissal and actual four-detent sequencing with six stop boundaries. Windows UI remains pending.'
+# Replay the actual complete post-wheel observation through the unchanged window
+# selector. Only native enumeration/input/value observations are test seams; this
+# fixture never claims that the failed Windows run observed tempo 113 or success.
+$caption=Get-Content (Join-Path $PSScriptRoot 'fixtures/tempo-caption-34687132408.json') -Raw|ConvertFrom-Json -AsHashtable
+Check ($caption.run_id -eq 34687132408 -and $caption.last_input.kind -ceq 'native_tempo_wheel' -and
+ $caption.last_input.wheel_delta -eq 120 -and $caption.process_id -eq 724 -and
+ $caption.source_artifact_sha256 -ceq 'f8b3fe3c7c9ced693139616510e4c0742ff4b731370947307941b6aabe41d58a') 'Captured post-wheel provenance changed.'
+$script:capturedWindows=@($caption.last_observation|ForEach-Object {@{snapshot=$_;items=@($_.controls|ForEach-Object {@{snapshot=$_}})}})
+function Get-BeatQuayConsumerWindows($State){return $script:capturedWindows}
+function Wait-BeatQuayConsumerWindow($State,$Title){$script:calls.Add('window:'+$Title);return (& $script:productionWait $State $Title 0)}
+$script:calls.Clear();$script:failAt='';$state=@{process=@{Id=724};workflow=@{song_editor_maximized=$true}}
+Invoke-BeatQuayConsumerTempoEdit $state
+$expected=@('window:BeatSprig 1.0.1','verify_112')
+foreach($value in 113..116){$expected+=@('wheel','window:BeatSprig 1.0.1',"verify_$value")}
+Check (($script:calls -join ',') -ceq ($expected -join ',')) 'Real unmodified post-wheel title did not reach every mandatory value proof.'
+foreach($mutation in @('title','dirty_title','hidden','disabled','truncated','duplicate')){
+ $script:capturedWindows=@($caption.last_observation|ConvertTo-Json -Depth 10|ConvertFrom-Json -AsHashtable|ForEach-Object {@{snapshot=$_}})
+ switch($mutation){
+  title{$script:capturedWindows[0].snapshot.title='Other project - BeatSprig 1.0.1 - [Song-Editor]'}
+  dirty_title{$script:capturedWindows[0].snapshot.title='Untitled* - BeatSprig 1.0.1 - [Song-Editor]'}
+  hidden{$script:capturedWindows[0].snapshot.root.visible=$false}
+  disabled{$script:capturedWindows[0].snapshot.root.enabled=$false}
+  truncated{$script:capturedWindows[0].snapshot.truncated=$true}
+  duplicate{$script:capturedWindows+=@($script:capturedWindows[0])}
+ }
+ Reject {& $script:productionWait $state 'BeatSprig 1.0.1' 0} "Unproved window accepted after tempo wheel: $mutation"
+}
+Write-Output 'PASS: exact captured tempo geometry, 12 refusals, native ownership guard, 24 menu refusals, observed popup dismissal, four-detent sequencing with six stop boundaries, and actual post-wheel caption replay with six refusals. Windows tempo/edit/save/export acceptance remains pending.'
