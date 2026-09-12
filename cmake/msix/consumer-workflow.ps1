@@ -83,7 +83,16 @@ function Get-BeatQuayConsumerWindows($State) {
  }
 }
 
+function Resolve-BeatQuayConsumerWindowTitle($State,[string]$Title) {
+ # Qt's native MDI title merge is enabled only after the actual Song-Editor filled
+ # the MDI area. Dialog titles and unmaximized main titles stay exact.
+ if($State.workflow.Contains('song_editor_maximized') -and $State.workflow.song_editor_maximized -and
+  ($Title -ceq 'BeatQuay 1.0.0' -or $Title.EndsWith(' - BeatQuay 1.0.0',[StringComparison]::Ordinal))){return $Title+' - [Song-Editor]'}
+ return $Title
+}
+
 function Wait-BeatQuayConsumerWindow($State,[string]$Title,[int]$Seconds=30) {
+ $Title=Resolve-BeatQuayConsumerWindowTitle $State $Title
  $deadline=[DateTime]::UtcNow.AddSeconds($Seconds)
  do {
   $windows=@(Get-BeatQuayConsumerWindows $State)
@@ -104,6 +113,100 @@ function Find-BeatQuayConsumerControl($Window,[int]$ProcessId,[string]$Type,[str
  return $matches[0]
 }
 
+function Get-BeatQuaySongTitlePoint($Main,$Song,$Content,$Area,[int]$ProcessId) {
+ $mainId='QApplication.lmms::gui::MainWindow'
+ $areaId=$mainId+'.QWidget.QWidget.QSplitter.QMdiArea'
+ $songId=$areaId+'.QWidget.lmms::gui::SubWindow'
+ foreach($pair in @(@($Main,'Window','lmms::gui::MainWindow',$mainId),@($Area,'Pane','QMdiArea',$areaId),
+   @($Song,'Window','lmms::gui::SubWindow',$songId),@($Content,'Window','lmms::gui::SongEditorWindow',($songId+'.lmms::gui::SongEditorWindow')))){
+  $s=$pair[0];Assert-BeatQuayConsumerControl $s $ProcessId $pair[1] ''
+  if($s.class_name -cne $pair[2] -or $s.automation_id -cne $pair[3]){throw 'Unexpected Song-Editor provider ancestry'}
+  foreach($key in @('x','y','width','height')){if(-not [double]::IsFinite($s[$key])){throw 'Nonfinite Song-Editor geometry'}}
+ }
+ if($Song.name -cne 'Song-Editor' -or $Main.name -cne 'BeatQuay 1.0.0'){throw 'Unexpected Song-Editor surface title'}
+ foreach($pair in @(@($Area,$Main),@($Song,$Area),@($Content,$Song))){
+  $child=$pair[0];$parent=$pair[1]
+  if($child.x -lt $parent.x -or $child.y -lt $parent.y -or $child.x+$child.width -gt $parent.x+$parent.width -or
+   $child.y+$child.height -gt $parent.y+$parent.height){throw 'Song-Editor surface lies outside its observed parent'}
+ }
+ $titleHeight=$Content.y-$Song.y
+ # Observed outer/content rectangles define the title strip. Source places the icon
+ # in the left 24px and at most three 17px custom buttons plus gaps at the right.
+ if($Song.width -lt 200 -or $titleHeight -lt 18 -or $titleHeight -gt 40 -or
+  $Content.x-$Song.x -gt 8 -or $Song.x+$Song.width-$Content.x-$Content.width -gt 8 -or
+  $Song.y+$Song.height-$Content.y-$Content.height -gt 8){throw 'Song-Editor title strip is not the source-defined layout'}
+ return @{x=[int][Math]::Round($Song.x+$Song.width/2);y=[int][Math]::Round($Song.y+$titleHeight/2)}
+}
+
+function Get-BeatQuaySongEditorSurface($State,$Main) {
+ $song=Find-BeatQuayConsumerControl $Main $State.process.Id 'Window' 'Song-Editor'
+ # QAccessibleMdiSubWindow exposes exactly its widget(), not custom title buttons.
+ $children=$song.element.FindAll([Windows.Automation.TreeScope]::Children,[Windows.Automation.Condition]::TrueCondition)
+ if($children.Count -ne 1){throw 'Song-Editor lacks its one direct accessible content window'}
+ $area=Find-BeatQuayConsumerControl $Main $State.process.Id 'Pane' '' 'QApplication.lmms::gui::MainWindow.QWidget.QWidget.QSplitter.QMdiArea'
+ $surface=@{main=(Get-BeatQuayConsumerControl $Main.element);song=(Get-BeatQuayConsumerControl $song.element);
+  content=(Get-BeatQuayConsumerControl $children.Item(0));area=(Get-BeatQuayConsumerControl $area.element);song_element=$song.element}
+ foreach($entry in @(@($surface.main,'Window','lmms::gui::MainWindow',$Main.snapshot.root.automation_id),
+   @($surface.song,'Window','lmms::gui::SubWindow',$song.snapshot.automation_id),
+   @($surface.content,'Window','lmms::gui::SongEditorWindow',($song.snapshot.automation_id+'.lmms::gui::SongEditorWindow')),
+   @($surface.area,'Pane','QMdiArea',$area.snapshot.automation_id))){
+  Assert-BeatQuayConsumerControl $entry[0] $State.process.Id $entry[1] ''
+  foreach($key in @('x','y','width','height')){if(-not [double]::IsFinite($entry[0][$key])){throw 'Nonfinite live Song-Editor geometry'}}
+  if($entry[0].class_name -cne $entry[2] -or $entry[0].automation_id -cne $entry[3]){throw 'Live Song-Editor provider identity changed'}
+ }
+ if($surface.song.name -cne 'Song-Editor'){throw 'Live MDI content title changed'}
+ return $surface
+}
+
+function Assert-BeatQuaySongTitleHit($Surface,$Point) {
+ $hit=[Windows.Automation.AutomationElement]::FromPoint([Windows.Point]::new($Point.x,$Point.y))
+ if($null -eq $hit -or -not [Windows.Automation.Automation]::Compare($hit,$Surface.song_element)){
+  throw 'Title-strip point is covered by a different accessible surface'
+ }
+}
+
+function Send-BeatQuayConsumerTitleClick($State,$Point) {
+ [BeatQuayConsumer.Native]::Click($State.process.Id,$Point.x,$Point.y)
+}
+
+function Invoke-BeatQuayConsumerMaximizeSongEditor($State) {
+ $main=Wait-BeatQuayConsumerWindow $State 'BeatQuay 1.0.0'
+ Set-BeatQuayConsumerForeground $State $main
+ $surface=Get-BeatQuaySongEditorSurface $State $main
+ $point=Get-BeatQuaySongTitlePoint $surface.main $surface.song $surface.content $surface.area $State.process.Id
+ # Normal Qt title-bar double-click, with no synthetic button or WindowPattern on
+ # the top-level QWindow. Recheck exact live geometry and accessible hit each time.
+ for($click=0;$click -lt 2;$click++){
+  Assert-BeatQuayConsumerOwner $State
+  $current=Get-BeatQuaySongEditorSurface $State $main
+  $now=Get-BeatQuaySongTitlePoint $current.main $current.song $current.content $current.area $State.process.Id
+  if($now.x -ne $point.x -or $now.y -ne $point.y -or
+   @('x','y','width','height'|Where-Object {$current.song[$_] -ne $surface.song[$_]}).Count){throw 'Song-Editor geometry changed between title clicks'}
+  Assert-BeatQuaySongTitleHit $current $now
+  Send-BeatQuayConsumerTitleClick $State $now
+  $State.workflow.inputs.Add(@{action=$State.workflow.current_action;kind='native_title_click';click_index=$click;control=$current.song;content=$current.content;x=$now.x;y=$now.y})
+  if($click -eq 0){Start-Sleep -Milliseconds 70}
+ }
+ $deadline=[DateTime]::UtcNow.AddSeconds(30)
+ do{
+  $windows=@(Get-BeatQuayConsumerWindows $State)
+  $State.workflow.last_observation=@($windows|ForEach-Object {$_.snapshot})
+  $matches=@($windows|Where-Object {$_.snapshot.title -ceq 'BeatQuay 1.0.0 - [Song-Editor]' -and
+   -not $_.snapshot.truncated -and $_.snapshot.root.visible -and $_.snapshot.root.enabled})
+  if($matches.Count -gt 1){throw 'Ambiguous maximized main window'}
+  if($matches.Count -eq 1){
+   $main=$matches[0];$current=Get-BeatQuaySongEditorSurface $State $main
+   if(@('x','y','width','height'|Where-Object {[Math]::Abs($current.song[$_]-$current.area[$_]) -gt 1}).Count -eq 0){
+    $State.workflow.song_editor_maximized=$true
+    Save-BeatQuayConsumerStage $State 'song_editor_maximized' $main
+    return
+   }
+  }
+  Start-Sleep -Milliseconds 200
+ }while([DateTime]::UtcNow -lt $deadline)
+ throw 'Song-Editor did not fill its actual owned MDI area after the title-bar double-click'
+}
+
 function Set-BeatQuayConsumerForeground($State,$Window) {
  Assert-BeatQuayConsumerOwner $State
  $handle=[IntPtr]$Window.element.Current.NativeWindowHandle
@@ -117,7 +220,7 @@ function Invoke-BeatQuayConsumerClick($State,$Window,$Control,[switch]$Double) {
  Set-BeatQuayConsumerForeground $State $Window
  $snapshot=Get-BeatQuayConsumerControl $Control.element
  Assert-BeatQuayConsumerControl $snapshot $State.process.Id $Control.snapshot.type $Control.snapshot.name
- if($snapshot.automation_id -cne $Control.snapshot.automation_id -or $snapshot.help -cne $Control.snapshot.help){throw 'Input selector changed before click'}
+ if($snapshot.automation_id -cne $Control.snapshot.automation_id -or $snapshot.class_name -cne $Control.snapshot.class_name -or $snapshot.help -cne $Control.snapshot.help){throw 'Input selector changed before click'}
  $x=[int]($snapshot.x+$snapshot.width/2);$y=[int]($snapshot.y+$snapshot.height/2)
  [BeatQuayConsumer.Native]::Click($State.process.Id,$x,$y)
  if($Double){Start-Sleep -Milliseconds 70;[BeatQuayConsumer.Native]::Click($State.process.Id,$x,$y)}
@@ -172,6 +275,7 @@ function Remove-BeatQuayOwnedProfile($Profile,[bool]$ProcessTerminated) {
  if(-not (Test-Path -LiteralPath $Profile.path)){if($Profile.ownership_established){throw 'Owned profile disappeared'};return}
  if(-not $ProcessTerminated -or -not $Profile.absent_before_activation -or -not $Profile.ownership_established -or $Profile.process_id -le 0 -or -not $Profile.package_full_name){throw 'Profile ownership/termination is unproven; preserving settings'}
  Assert-NoReparsePath $Profile.path
+ if((Get-Item -LiteralPath $Profile.path -Force).CreationTimeUtc.ToString('o') -cne $Profile.creation_utc){throw 'Owned profile file was replaced; preserving settings'}
  if((Get-FileHash -LiteralPath $Profile.path -Algorithm SHA256).Hash.ToLowerInvariant() -cne $Profile.sha256){throw 'Owned profile changed after its last attributed observation; preserving settings'}
  [IO.File]::Delete($Profile.path)
  if(Test-Path -LiteralPath $Profile.path){throw 'Owned profile remains'}
@@ -201,6 +305,7 @@ function Save-BeatQuayConsumerStage($State,[string]$Stage,$Window) {
 }
 
 function Save-BeatQuayConsumerScreen($State,[string]$Name,[string]$EditorTitle,[string[]]$AllowedDialogs=@()) {
+ $EditorTitle=Resolve-BeatQuayConsumerWindowTitle $State $EditorTitle
  Assert-BeatQuayConsumerOwner $State
  $windows=@(Get-BeatQuayConsumerWindows $State)
  $main=@($windows|Where-Object {$_.snapshot.title -ceq $EditorTitle -and -not $_.snapshot.truncated -and $_.snapshot.root.available -and $_.snapshot.root.visible})
@@ -247,6 +352,23 @@ function Confirm-BeatQuayConsumerProfile($State,[switch]$Initial,[switch]$AfterC
  $record.ownership_established=$true
  $record.observations.Add(@{action=if($Initial){'normal_first_run'}elseif($AfterClose){'normal_close'}else{$State.workflow.current_action};
   sha256=$afterHash;changed_fields=$checked.changed_fields;observed_utc=[DateTime]::UtcNow.ToString('o')})
+}
+
+function Confirm-BeatQuayConsumerFailureProfile($State) {
+ $State.workflow.profile_attribution_error=$null
+ try {
+  # Before mandatory process termination, retain the original handle/package gate
+  # and the same XML allowlist/creation-time/hash check used after successful actions.
+  if($State.profile -and $State.profile.ownership_established){Confirm-BeatQuayConsumerProfile $State}
+ }catch{$State.workflow.profile_attribution_error=$_.Exception.Message}
+}
+
+function Find-BeatQuayConsumerTempo($Main,[int]$ProcessId) {
+ # SongEditor creates the sole direct mainToolbar LcdSpinBox and binds m_tempoModel.
+ # UIA records its full QObject ancestry and Group role; QWidget tooltip is not HelpText.
+ $control=Find-BeatQuayConsumerControl $Main $ProcessId 'Group' '' 'QApplication.lmms::gui::MainWindow.QWidget.mainToolbar.lmms::gui::LcdSpinBox'
+ if($control.snapshot.class_name -cne 'lmms::gui::LcdSpinBox'){throw 'Unexpected native tempo widget class'}
+ return $control
 }
 
 function Select-BeatQuayConsumerCombo($State,$Window,[string]$Label,[string]$Value) {
@@ -302,20 +424,14 @@ function Invoke-BeatQuayConsumerWorkflow($State) {
   # Source implements this as a new unmodified untitled project, with no original template file selected for overwriting.
   $main=Wait-BeatQuayConsumerWindow $State 'BeatQuay 1.0.0'
   foreach($name in @('Low pulse','Backbeat','Short ticks')){$null=Find-BeatQuayConsumerControl $main $State.process.Id 'CheckBox' $name}
+  Confirm-BeatQuayConsumerProfile $State
   Save-BeatQuayConsumerStage $State 'original_template_opened' $main
   $State.workflow.current_action='maximize_song_editor'
-  $song=Find-BeatQuayConsumerControl $main $State.process.Id 'Window' 'Song-Editor'
-  $children=$song.element.FindAll([Windows.Automation.TreeScope]::Subtree,[Windows.Automation.Condition]::TrueCondition)
-  if($children.Count -gt 1000){throw 'Song editor capture layout exceeds bound'}
-  $scopedItems=@(for($i=0;$i -lt $children.Count;$i++){$element=$children.Item($i);@{element=$element;snapshot=(Get-BeatQuayConsumerControl $element)}})
-  $scoped=@{snapshot=@{truncated=(@($scopedItems|Where-Object {-not $_.snapshot.available}).Count -gt 0)};items=$scopedItems}
-  # Real SubWindow button tooltip from the product, scoped to the observed Song-Editor.
-  $maximize=Find-BeatQuayConsumerControl $scoped $State.process.Id 'Button' '' '' 'Maximize'
-  Invoke-BeatQuayConsumerClick $State $main $maximize
-  $main=Wait-BeatQuayConsumerWindow $State 'BeatQuay 1.0.0'
+  Invoke-BeatQuayConsumerMaximizeSongEditor $State
   $State.workflow.current_action='edit_tempo_116'
-  $tempo=Find-BeatQuayConsumerInput $State '' '' 'Tempo in BPM'
-  Invoke-BeatQuayConsumerClick $State $tempo.window $tempo.control -Double
+  $main=Wait-BeatQuayConsumerWindow $State 'BeatQuay 1.0.0'
+  $tempo=Find-BeatQuayConsumerTempo $main $State.process.Id
+  Invoke-BeatQuayConsumerClick $State $main $tempo -Double
   $dialog=Wait-BeatQuayConsumerWindow $State 'Set value'
   $value=Find-BeatQuayConsumerControl $dialog $State.process.Id 'Edit' ''
   if($value.snapshot.value -cne '112'){throw 'Tempo dialog did not expose the original 112 BPM'}
@@ -385,6 +501,10 @@ function Invoke-BeatQuayConsumerWorkflow($State) {
   foreach($path in @($first,$reopened)){[IO.File]::Copy($path,(Join-Path $output ([IO.Path]::GetFileName($path))),$false)}
   Save-BeatQuayConsumerStage $State 'stopped_project_unchanged' $main
   $State.workflow.acceptance=$true
- }catch{$State.workflow.primary_error=$_.Exception.Message;throw}
+ }catch{
+  $primary=$_;$State.workflow.primary_error=$primary.Exception.Message
+  Confirm-BeatQuayConsumerFailureProfile $State
+  throw $primary
+ }
  finally{Write-NewUtf8Json (Join-Path $output 'consumer-workflow.json') $State.workflow}
 }

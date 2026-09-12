@@ -76,15 +76,23 @@ The native screenshots record the owned PID, current source, exact package and
 executable hashes, actual desktop/window/DPI and unedited PNG hashes. The retained
 CutQuay MIT display helper enumerates supported modes, uses CDS_TEST and a dynamic
 nonpersistent mode change, then restores the original mode in mandatory cleanup.
-The app is resized through the native window manager and the real Song-Editor
-Maximize control. Screenshots currently require final product-branding review;
+The app is resized through the native window manager and a normal Song-Editor
+title-bar double-click. Exact live SubWindow/content ancestry, geometry and a UIA
+hit on that same retained element authorize each click; the editor must then fill
+its observed MDI area within 30 seconds. Only that completed proof enables Qt’s
+exact ` - [Song-Editor]` main-title suffix. The tempo editor uses the observed full
+main-toolbar LcdSpinBox identity; actual 112 BPM readback still precedes the edit. Screenshots currently require final product-branding review;
 no capture from this source candidate is yet Windows-qualified or public.
 
 The absent-before-activation profile can acquire cleanup ownership only after the
 normal first-run UI, exact working directory, creation interval and bounded XML
 have been verified. Later writes may only add the exact opened/saved projects or
 the seven source-traced editor preferences written on normal shutdown. Other
-changes retain the last owned hash and fail closed. Cleanup requires the original
+changes retain the last owned hash and fail closed. Attribution runs immediately
+after proven template opening and, on workflow failure, before mandatory process
+termination through the same live-owner/XML checks. Attribution failure is recorded
+separately without replacing the primary UI error. Cleanup checks the original
+creation time again and requires the original
 process’s observed termination and an unchanged last verified profile hash.
 Existing marker/working-directory, package, module, certificate and normal-close
 requirements remain mandatory. Physical speaker playback, WACK, Store identity,
