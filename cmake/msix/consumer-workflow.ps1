@@ -386,6 +386,8 @@ function Save-BeatQuayConsumerScreen($State,[string]$Name,[string]$EditorTitle,[
  $State.workflow.screenshots.Add(@{file=$Name+'.png';sha256=(Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToLowerInvariant();
   captured_utc=[DateTime]::UtcNow.ToString('o');method='native CopyFromScreen; no pixel editing, resizing, overlay or emulation';
   source_commit=$env:GITHUB_SHA;package_sha256=$State.unsignedPackageSha256;package_full_name=$State.ownedPackageFullName;
+  workflow_run_id=$State.runBinding.workflow_run_id;workflow_run_attempt=$State.runBinding.workflow_run_attempt;identity_mode=$State.identityMode;
+  main_window_handle=[int64]$root.NativeWindowHandle;
   process_id=$State.process.Id;executable_sha256=$State.executableSha256;project_title=$EditorTitle;
   x=$rectangle.X;y=$rectangle.Y;width=$rectangle.Width;height=$rectangle.Height;
   dpi=[BeatQuayConsumer.Native]::GetDpiForWindow([IntPtr]$root.NativeWindowHandle);display=$State.displayEvidence.after;
@@ -542,6 +544,8 @@ function Invoke-BeatQuayConsumerWorkflow($State) {
  Add-BeatQuayConsumerTypes
  $output=Join-Path $State.output 'consumer-workflow';New-Item -ItemType Directory -Path $output -ErrorAction Stop|Out-Null
  $State.workflow=[ordered]@{schema_version=1;source_commit=$env:GITHUB_SHA;package_full_name=$State.ownedPackageFullName;package_sha256=$State.unsignedPackageSha256;
+  workflow_run_id=$State.runBinding.workflow_run_id;workflow_run_attempt=$State.runBinding.workflow_run_attempt;identity_mode=$State.identityMode;
+  helper_bindings=$State.helperBindings;main_window_handle=$null;
   process_id=$State.process.Id;executable_sha256=$State.executableSha256;output=$output;acceptance=$false;current_action='preflight';primary_error=$null;
   file_verification=$null;wave_verification=$null;stages=[Collections.Generic.List[object]]::new();inputs=[Collections.Generic.List[object]]::new();
   screenshots=[Collections.Generic.List[object]]::new();last_observation=@();cli_render_used=$false;physical_audio_output_claimed=$false;marketing_branding_review_required=$true}
@@ -550,6 +554,7 @@ function Invoke-BeatQuayConsumerWorkflow($State) {
   Start-BeatQuayConsumerDisplay $State
   $main=Wait-BeatQuayConsumerWindow $State 'BeatSprig 1.0.1'
   $handle=[IntPtr]$main.element.Current.NativeWindowHandle
+  $State.workflow.main_window_handle=$handle.ToInt64()
   [BeatQuayConsumer.Native]::ShowWindow($handle,9)|Out-Null
   Set-BeatQuayConsumerForeground $State $main
   $area=[Windows.Forms.Screen]::FromHandle($handle).WorkingArea

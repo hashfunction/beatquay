@@ -86,7 +86,7 @@ class QualificationTests(unittest.TestCase):
                 imports=['KERNEL32.dll']+(['beatsprig.exe'] if name in msix.ALLOWED_PLUGIN_DLLS else [])
                 pe.append(dict(path=name,**row,imports=sorted(imports,key=str.casefold)))
         (self.evidence/'pe-imports.json').write_text(json.dumps(dict(schemaVersion=1,files=pe,unresolvedImports=[],ambiguousPackagedImports=[],apiSetResolutions=[],resolutionErrors=[],systemDirectory='C:\\Windows\\System32')))
-        result=dict(source_commit=self.commit,built=True,tests_passed=True,lifecycle_repeat_passed=True,installed_stage=True,native_render_smoke_passed=True,native_render_error_exit_passed=True,native_installed_starter_renders_passed=True,license_clearance=False)
+        result=dict(source_commit=self.commit,workflow_run_id='123456',workflow_run_attempt='2',built=True,tests_passed=True,lifecycle_repeat_passed=True,installed_stage=True,native_render_smoke_passed=True,native_render_error_exit_passed=True,native_installed_starter_renders_passed=True,license_clearance=False)
         (self.evidence/'result.json').write_text(json.dumps(result))
     def refresh_inventory(self): self.inventory.write_text(json.dumps(msix.create_input_inventory(self.release,self.source,self.commit,self.evidence,self.artwork)))
     def stage(self): return msix.stage_release(self.release,self.artwork,self.root/'stage',self.commit,self.inventory,self.evidence,self.source)
@@ -141,7 +141,9 @@ class QualificationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'internal host'): self.refresh_inventory()
     def test_consumer_helpers_are_bound_before_package_creation(self):
         names=('cmake/msix/consumer-workflow.ps1','cmake/msix/consumer-display.ps1','cmake/msix/consumer_files.py',
-               'cmake/msix/qualify-msix-install.ps1','cmake/msix/first-run.ps1','tests/scripted/starter_render.py')
+               'cmake/msix/qualify-msix-install.ps1','cmake/msix/first-run.ps1','tests/scripted/starter_render.py',
+               'cmake/msix/qualification-bindings.ps1','cmake/msix/verify_record.py','cmake/msix/msix_qualification.py',
+               'cmake/msix/prepare_inventory.py','cmake/msix/ms_runtime_origins.py')
         for name in names:
             path=self.source/name; path.parent.mkdir(parents=True,exist_ok=True)
             if not path.exists(): path.write_bytes(b'original consumer helper')
@@ -189,6 +191,84 @@ class QualificationTests(unittest.TestCase):
         with self.assertRaises(ValueError): self.refresh_inventory()
     def test_manifest_uses_disposable_identity_and_exact_display(self):
         data=msix.create_manifest(); self.assertEqual(msix.validate_manifest(data),msix.QUALIFICATION_IDENTITY); self.assertIn(b'BeatSprig 1.0.1',data); self.assertIn(b'beatsprig.exe',data)
+    def test_fixed_store_manifest_preserves_application_id_and_refuses_cross_mode(self):
+        data=msix.create_manifest('store')
+        identity=msix.validate_manifest(data,'store')
+        self.assertEqual(identity['packageName'],'1659hashfunction.BeatQuay')
+        self.assertEqual(identity['publisher'],'CN=B6A2631A-FD32-45CC-AE12-82466975F528')
+        self.assertEqual(identity['applicationId'],'BeatQuay')
+        self.assertEqual(identity['version'],'1.0.1.0')
+        self.assertIn(b'<PublisherDisplayName>hashfunction</PublisherDisplayName>',data)
+        for mode,wrong in [('qualification',data),('store',msix.create_manifest())]:
+            with self.assertRaises(ValueError):msix.validate_manifest(wrong,mode)
+        for mode in ('Store','','custom',None):
+            with self.assertRaises(ValueError):msix.create_manifest(mode)
+        for old,new in [(b'Id="BeatQuay"',b'Id="SomeMsaId"'),(b'1.0.1.0',b'1.0.2.0'),(b'hashfunction</PublisherDisplayName>',b'Trieflow LLC</PublisherDisplayName>')]:
+            with self.assertRaises(ValueError):msix.validate_manifest(data.replace(old,new),'store')
+    def test_store_mode_threads_through_package_and_installed_verifiers(self):
+        record=msix.stage_release(self.release,self.artwork,self.root/'stage',self.commit,self.inventory,self.evidence,self.source,'store')
+        self.assertEqual(record['identityMode'],'store');self.assertTrue(record['storeIdentityStaged'])
+        self.assertFalse(record['qualificationIdentityOnly']);self.assertFalse(record['installationQualificationPassed'])
+        self.assertFalse(record['signed']);self.assertFalse(record['publicRelease'])
+        package=self.root/'store.msix'
+        with zipfile.ZipFile(package,'w') as archive:
+            for name in record['payload']:archive.write(self.root/'stage'/name,name.replace('+','%2B'))
+            archive.writestr('[Content_Types].xml',b'types');archive.writestr('AppxBlockMap.xml',b'blocks')
+        record['containerVerification']=msix.verify_msix(package,record['payload'],'store')
+        record['unpackedVerification']=msix.verify_unpacked(self.root/'stage',record['payload'],'store')
+        msix.verify_installed(self.root/'stage',record['payload'],'store')
+        path=self.root/'record.json';path.write_text(json.dumps(record))
+        self.assertTrue(msix.verify_record_inputs(package,path,self.release,self.artwork,self.commit,self.inventory,self.evidence,self.source,'store'))
+        for action in (lambda:msix.verify_msix(package,record['payload']),lambda:msix.verify_installed(self.root/'stage',record['payload']),
+                       lambda:msix.verify_record_inputs(package,path,self.release,self.artwork,self.commit,self.inventory,self.evidence,self.source)):
+            with self.assertRaises(ValueError):action()
+        for field in ('qualificationIdentityOnly','storeIdentityStaged','installationQualificationPassed','signed','publicRelease','licenseClearanceClaimed','correspondingSourceComplete'):
+            original=record[field];record[field]=int(original);path.write_text(json.dumps(record))
+            with self.subTest(field=field),self.assertRaisesRegex(ValueError,'typed.*flags'):
+                msix.verify_record_inputs(package,path,self.release,self.artwork,self.commit,self.inventory,self.evidence,self.source,'store')
+            record[field]=original
+
+    def test_both_sdk_build_routes_keep_exact_payload_and_distinct_unsigned_outputs(self):
+        tool=self.root/'Windows Kits/10/bin/10.0.26100.0/x64/makeappx.exe'
+        tool.parent.mkdir(parents=True);tool.write_bytes(b'owned SDK command seam')
+        calls=[]
+        def sdk(command):
+            calls.append(command)
+            package=Path(command[command.index('/p')+1]);folder=Path(command[command.index('/d')+1])
+            if command[1]=='pack':
+                with zipfile.ZipFile(package,'w') as archive:
+                    for entry in sorted(folder.rglob('*')):
+                        if entry.is_file():archive.write(entry,entry.relative_to(folder).as_posix().replace('+','%2B'))
+                    archive.writestr('[Content_Types].xml',b'types');archive.writestr('AppxBlockMap.xml',b'blocks')
+            elif command[1]=='unpack':
+                from urllib.parse import unquote
+                with zipfile.ZipFile(package) as archive:
+                    for entry in archive.infolist():
+                        target=folder/unquote(entry.filename);target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(archive.read(entry))
+            else:self.fail('Unexpected SDK command')
+        for mode,filename in [('qualification','BeatSprig.Qualification_1.0.1.0_x64.msix'),('store','BeatSprig_1.0.1.0_x64.msix')]:
+            output=self.root/('sdk-'+mode)
+            msix.build_qualification(self.release,self.artwork,self.commit,tool,'10.0.26100.0',output,
+                self.inventory,self.evidence,self.source,runner=sdk,identity_mode=mode)
+            self.assertEqual({p.name for p in output.iterdir()},{filename,'package-record.json'})
+            package=output/filename;record=json.loads((output/'package-record.json').read_bytes())
+            self.assertEqual(record['identity'],msix.identity_for(mode));self.assertFalse(record['signed'])
+            self.assertEqual(record['containerVerification']['package'],msix.file_record(package))
+            with zipfile.ZipFile(package) as archive:
+                self.assertNotIn('AppxSignature.p7x',archive.namelist())
+                self.assertEqual(archive.read('beatsprig.exe'),(self.release/'beatsprig.exe').read_bytes())
+                msix.validate_manifest(archive.read('AppxManifest.xml'),mode)
+        self.assertEqual([command[1] for command in calls],['pack','unpack','pack','unpack'])
+    def test_native_run_binding_rejects_missing_typed_or_other_attempt(self):
+        path=self.evidence/'result.json';record=json.loads(path.read_bytes())
+        record.update(workflow_run_id='123456',workflow_run_attempt='2');path.write_text(json.dumps(record));self.refresh_inventory()
+        bound=json.loads(self.inventory.read_bytes());msix.validate_run_binding(bound,'123456','2')
+        self.assertEqual(bound['workflowRunId'],'123456');self.assertEqual(bound['workflowRunAttempt'],'2')
+        for run,attempt in [('123457','2'),('123456','1'),('','2'),('123456',2)]:
+            with self.assertRaises(ValueError):msix.validate_run_binding(bound,run,attempt)
+        for value in (None,False,1,'0','-1','1.0'):
+            record['workflow_run_attempt']=value;path.write_text(json.dumps(record))
+            with self.assertRaises(ValueError):self.refresh_inventory()
     def test_opc_decoding_and_exact_container_payload(self):
         record=self.stage(); package=self.root/'fixture.msix'
         with zipfile.ZipFile(package,'w') as archive:

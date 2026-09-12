@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build and independently verify a disposable BeatQuay qualification MSIX.
+"""Build and independently verify a fixed-identity BeatSprig qualification MSIX.
 
 Copyright 2026 Trieflow LLC. MIT licensed. Derived from PixelQuay qualification
 source b7672df853a9e182ed1b081c03ab800dc3dbc778 and ReticleQuay;
@@ -49,6 +49,27 @@ QUALIFICATION_IDENTITY = {
     "maxVersionTested": "10.0.26100.0",
     "capability": "runFullTrust",
 }
+STORE_IDENTITY = dict(QUALIFICATION_IDENTITY, packageName="1659hashfunction.BeatQuay",
+                      publisher="CN=B6A2631A-FD32-45CC-AE12-82466975F528")
+
+
+def identity_for(mode):
+    if mode not in ("qualification", "store"):
+        raise ValueError("Only the fixed qualification and store identity modes are supported")
+    return dict(STORE_IDENTITY if mode == "store" else QUALIFICATION_IDENTITY)
+
+
+def package_filename(mode):
+    identity_for(mode)
+    return "BeatSprig_1.0.1.0_x64.msix" if mode == "store" else "BeatSprig.Qualification_1.0.1.0_x64.msix"
+
+
+def validate_run_binding(record, run_id, run_attempt):
+    if (not isinstance(run_id, str) or not re.fullmatch(r"[1-9][0-9]*", run_id)
+            or not isinstance(run_attempt, str) or not re.fullmatch(r"[1-9][0-9]*", run_attempt)
+            or record.get("workflowRunId") != run_id or record.get("workflowRunAttempt") != run_attempt):
+        raise ValueError("Native/package evidence differs from the exact workflow run and attempt")
+
 REQUIRED_RELEASE_FILES = (
     "beatsprig.exe", "Qt6Core.dll", "Qt6Gui.dll", "Qt6Widgets.dll", "Qt6Svg.dll", "Qt6Xml.dll",
     "platforms/qwindows.dll", "iconengines/qsvgicon.dll", "imageformats/qsvg.dll",
@@ -82,6 +103,8 @@ SOURCE_FILES = (
     "cmake/msix/collect-pe-imports.ps1", "cmake/msix/api-set-resolution.ps1",
     "cmake/msix/api-set-resolver.cs",
     "cmake/msix/qualify-msix-install.ps1", "cmake/msix/first-run.ps1",
+    "cmake/msix/qualification-bindings.ps1", "cmake/msix/msix_qualification.py",
+    "cmake/msix/verify_record.py", "cmake/msix/prepare_inventory.py",
     "cmake/msix/consumer-workflow.ps1", "cmake/msix/consumer-display.ps1",
     "cmake/msix/consumer_files.py", "tests/scripted/starter_render.py",
     "cmake/msix/collect-ms-runtime-origins.ps1", "cmake/msix/ms_runtime_origins.py",
@@ -363,9 +386,12 @@ def create_input_inventory(release, source_root, source_commit, evidence_root, a
     required_true = ("built", "tests_passed", "lifecycle_repeat_passed", "installed_stage", "native_render_smoke_passed", "native_render_error_exit_passed", "native_installed_starter_renders_passed")
     if result.get("source_commit") != source_commit or any(result.get(name) is not True for name in required_true):
         raise ValueError("Native result does not bind successful same-run build/render evidence")
+    run = dict(workflowRunId=result.get("workflow_run_id"), workflowRunAttempt=result.get("workflow_run_attempt"))
+    validate_run_binding(run, run["workflowRunId"], run["workflowRunAttempt"])
     return dict(
         schemaVersion=1,
         sourceCommit=source_commit,
+        **run,
         files=files,
         sourceInputs=sources,
         evidenceInputs=evidence,
@@ -392,8 +418,8 @@ def validate_input_evidence(release, inventory, source_root, source_commit, evid
     return recorded
 
 
-def create_manifest():
-    identity = QUALIFICATION_IDENTITY
+def create_manifest(identity_mode="qualification"):
+    identity = identity_for(identity_mode)
     package = ET.Element(f"{{{APPX_NS}}}Package", {"IgnorableNamespaces": "uap rescap"})
     ET.SubElement(
         package,
@@ -408,8 +434,8 @@ def create_manifest():
     properties = ET.SubElement(package, f"{{{APPX_NS}}}Properties")
     for name, value in (
         ("DisplayName", "BeatSprig 1.0.1"),
-        ("PublisherDisplayName", "Trieflow LLC"),
-        ("Description", "BeatSprig qualification package"),
+        ("PublisherDisplayName", "hashfunction" if identity_mode == "store" else "Trieflow LLC"),
+        ("Description", "BeatSprig music creation" if identity_mode == "store" else "BeatSprig qualification package"),
         ("Logo", r"Assets\StoreLogo.png"),
     ):
         ET.SubElement(properties, f"{{{APPX_NS}}}{name}").text = value
@@ -459,7 +485,8 @@ def _one(parent, tag, label):
     return items[0]
 
 
-def validate_manifest(data):
+def validate_manifest(data, identity_mode="qualification"):
+    identity = identity_for(identity_mode)
     try:
         root = ET.fromstring(data)
     except ET.ParseError as error:
@@ -477,7 +504,6 @@ def validate_manifest(data):
     if [child.tag for child in root] != expected_children:
         raise ValueError("Unexpected manifest sections or extensions")
     identity_node = _one(root, f"{{{APPX_NS}}}Identity", "identity")
-    identity = QUALIFICATION_IDENTITY
     if identity_node.attrib != {
         "Name": identity["packageName"],
         "Publisher": identity["publisher"],
@@ -488,8 +514,8 @@ def validate_manifest(data):
     properties = _one(root, f"{{{APPX_NS}}}Properties", "properties")
     expected_properties = {
         "DisplayName": "BeatSprig 1.0.1",
-        "PublisherDisplayName": "Trieflow LLC",
-        "Description": "BeatSprig qualification package",
+        "PublisherDisplayName": "hashfunction" if identity_mode == "store" else "Trieflow LLC",
+        "Description": "BeatSprig music creation" if identity_mode == "store" else "BeatSprig qualification package",
         "Logo": r"Assets\StoreLogo.png",
     }
     if (
@@ -658,7 +684,8 @@ def _write_new(path, data):
         os.fsync(output.fileno())
 
 
-def stage_release(release, artwork, stage, source_commit, inventory, evidence_root, source_root):
+def stage_release(release, artwork, stage, source_commit, inventory, evidence_root, source_root, identity_mode="qualification"):
+    identity = identity_for(identity_mode)
     release, artwork, stage = Path(release), Path(artwork), Path(stage)
     if not re.fullmatch(r"[0-9a-f]{40}", source_commit or ""):
         raise ValueError("Exact 40-character source commit is required")
@@ -708,8 +735,8 @@ def stage_release(release, artwork, stage, source_commit, inventory, evidence_ro
             relative = f"Assets/{name}"
             _write_new(stage / relative, data)
             assets[relative] = {"bytes": len(data), "sha256": hashlib.sha256(data).hexdigest(), "pixels": [size, size]}
-        manifest = create_manifest()
-        validate_manifest(manifest)
+        manifest = create_manifest(identity_mode)
+        validate_manifest(manifest, identity_mode)
         _write_new(stage / "AppxManifest.xml", manifest)
         if inventory_tree(release) != input_inventory:
             raise ValueError("Release input changed while staging")
@@ -720,8 +747,12 @@ def stage_release(release, artwork, stage, source_commit, inventory, evidence_ro
         return {
             "schemaVersion": 1,
             "sourceCommit": source_commit,
-            "qualificationIdentityOnly": True,
-            "identity": dict(QUALIFICATION_IDENTITY),
+            "identityMode": identity_mode,
+            "qualificationIdentityOnly": identity_mode == "qualification",
+            "storeIdentityStaged": identity_mode == "store",
+            "identity": identity,
+            "workflowRunId": input_record["workflowRunId"],
+            "workflowRunAttempt": input_record["workflowRunAttempt"],
             "releaseInput": input_inventory,
             "payload": payload,
             "inputInventory": file_record(inventory),
@@ -752,7 +783,8 @@ def _decode_opc_path(value):
     return _checked_path(unquote(value, encoding="utf-8", errors="strict"))
 
 
-def verify_msix(path, expected):
+def verify_msix(path, expected, identity_mode="qualification"):
+    identity_for(identity_mode)
     if not isinstance(expected, dict) or "AppxManifest.xml" not in expected:
         raise ValueError("Invalid expected package payload")
     allowed_directories = {
@@ -800,43 +832,48 @@ def verify_msix(path, expected):
         raise ValueError("Package payload is missing expected files")
     if not {"[Content_Types].xml", "AppxBlockMap.xml"}.issubset(metadata):
         raise ValueError("Package metadata is incomplete")
-    validate_manifest(manifest_data)
+    validate_manifest(manifest_data, identity_mode)
     with _regular_stream(path) as stream:
         package = _digest(stream)
     return {"verifiedPayloadFiles": len(actual), "metadata": sorted(metadata), "package": package}
 
 
-def verify_unpacked(root, expected):
+def verify_unpacked(root, expected, identity_mode="qualification"):
     actual = inventory_tree(root)
     for metadata in PACKAGE_METADATA:
         actual.pop(metadata, None)
     if actual != expected:
         raise ValueError("SDK-unpacked payload differs from staged payload")
-    validate_manifest((Path(root) / "AppxManifest.xml").read_bytes())
+    validate_manifest((Path(root) / "AppxManifest.xml").read_bytes(), identity_mode)
     return {"verifiedPayloadFiles": len(actual)}
 
 
-def verify_installed(root, expected):
+def verify_installed(root, expected, identity_mode="qualification"):
     actual = inventory_tree(root)
     for metadata in PACKAGE_METADATA | {"AppxSignature.p7x"}:
         actual.pop(metadata, None)
     if actual != expected:
         raise ValueError("Installed package has missing, altered or extra payload files")
-    validate_manifest((Path(root) / "AppxManifest.xml").read_bytes())
+    validate_manifest((Path(root) / "AppxManifest.xml").read_bytes(), identity_mode)
     return {"verifiedPayloadFiles": len(actual)}
 
 
-def verify_record_inputs(package, record_path, release, artwork, source_commit, inventory, evidence_root, source_root):
+def verify_record_inputs(package, record_path, release, artwork, source_commit, inventory, evidence_root, source_root, identity_mode="qualification"):
     record = _load_json(record_path, "qualification record")
+    if any(type(record.get(name)) is not bool for name in (
+        "qualificationIdentityOnly", "storeIdentityStaged", "installationQualificationPassed",
+        "signed", "publicRelease", "licenseClearanceClaimed", "correspondingSourceComplete",
+    )):
+        raise ValueError("Package record requires typed boolean identity and acceptance flags")
     # Recreate the package boundary from current source/stage/receipt rather than
     # trusting a coherent replacement of the package and its own recorded hashes.
     with tempfile.TemporaryDirectory(prefix="beatquay-record-") as temporary:
         expected = stage_release(
-            release, artwork, Path(temporary).resolve() / "stage", source_commit, inventory, evidence_root, source_root
+            release, artwork, Path(temporary).resolve() / "stage", source_commit, inventory, evidence_root, source_root, identity_mode
         )
     if any(record.get(key) != value for key, value in expected.items()):
         raise ValueError("Package record no longer matches source-bound qualification inputs")
-    actual = verify_msix(package, expected["payload"])
+    actual = verify_msix(package, expected["payload"], identity_mode)
     if record.get("containerVerification") != actual:
         raise ValueError("Package record differs from independent container verification")
     unpacked = record.get("unpackedVerification")
@@ -871,8 +908,10 @@ def _run(command):
 
 
 def build_qualification(
-    release, artwork, source_commit, makeappx, sdk_version, output, inventory, evidence_root, source_root, runner=_run
+    release, artwork, source_commit, makeappx, sdk_version, output, inventory, evidence_root, source_root, runner=_run,
+    identity_mode="qualification"
 ):
+    identity_for(identity_mode)
     output = Path(output).absolute()
     if os.path.lexists(output):
         raise ValueError(f"Output already exists and will not be replaced: {output}")
@@ -881,8 +920,8 @@ def build_qualification(
     try:
         tool = _tool_record(makeappx, sdk_version)
         stage = temporary / "stage"
-        record = stage_release(release, artwork, stage, source_commit, inventory, evidence_root, source_root)
-        package = temporary / "BeatSprig.Qualification_1.0.1.0_x64.msix"
+        record = stage_release(release, artwork, stage, source_commit, inventory, evidence_root, source_root, identity_mode)
+        package = temporary / package_filename(identity_mode)
         unpacked = temporary / "unpacked"
         commands = [
             [str(makeappx), "pack", "/d", str(stage), "/p", str(package), "/v", "/h", "SHA256"],
@@ -894,8 +933,8 @@ def build_qualification(
             runner(command)
             if inventory_tree(stage) != record["payload"]:
                 raise ValueError("Package stage changed during SDK execution")
-        container = verify_msix(package, record["payload"])
-        unpacked_result = verify_unpacked(unpacked, record["payload"])
+        container = verify_msix(package, record["payload"], identity_mode)
+        unpacked_result = verify_unpacked(unpacked, record["payload"], identity_mode)
         if _tool_record(makeappx, sdk_version) != tool:
             raise ValueError("MakeAppx changed during qualification build")
         record.update(
@@ -931,6 +970,7 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--inventory", type=Path, required=True)
     parser.add_argument("--evidence-root", type=Path, required=True)
+    parser.add_argument("--identity-mode", choices=("qualification", "store"), default="qualification")
     args = parser.parse_args()
     if sys.platform != "win32" or os.environ.get("CI") != "true":
         parser.error("Qualification package builds require disposable Windows CI")
@@ -953,6 +993,7 @@ def main():
         ).stdout.strip()
         if dirty:
             raise ValueError("Source checkout must be clean so the recorded commit identifies every packaging input")
+        validate_run_binding(_load_json(args.inventory, "package input"), os.environ.get("GITHUB_RUN_ID"), os.environ.get("GITHUB_RUN_ATTEMPT"))
         print(
             build_qualification(
                 args.release,
@@ -964,6 +1005,7 @@ def main():
                 args.inventory,
                 args.evidence_root,
                 args.source_root,
+                identity_mode=args.identity_mode,
             )
         )
     except (OSError, ValueError, subprocess.SubprocessError) as error:

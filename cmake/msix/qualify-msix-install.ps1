@@ -9,6 +9,7 @@ param(
     [Parameter()][string]$SignTool,
     [Parameter()][string]$Output,
     [Parameter()][string]$Python,
+    [Parameter()][ValidateSet('qualification','store')][string]$IdentityMode='qualification',
     [Parameter()][switch]$LibraryOnly
 )
 
@@ -16,6 +17,7 @@ $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 . (Join-Path $PSScriptRoot 'first-run.ps1')
 . (Join-Path $PSScriptRoot 'consumer-workflow.ps1')
+. (Join-Path $PSScriptRoot 'qualification-bindings.ps1')
 
 function Invoke-BeatQuayQualificationCore([Collections.IDictionary]$Operations) {
     $required = @(
@@ -316,6 +318,7 @@ function Get-WindowQualification([Diagnostics.Process]$Process, [string]$OutputD
     }
     $snapshot = [ordered]@{
         title=$root.Current.Name; process_id=$Process.Id; visible=(-not $root.Current.IsOffscreen)
+        main_window_handle=[int64]$root.Current.NativeWindowHandle
         width=$rootBounds.Width; height=$rootBounds.Height; controls=@($items)
         screenshot_sha256=$screenshotHash; sampled_colors=$colors.Count
         accessible_elements = $items.Count
@@ -368,7 +371,39 @@ function Get-BeatQuayVerifiedModules($State) {
                 $origin = 'windows'
             } else {
                 $defenderRoot = Join-Path ([Environment]::GetFolderPath('CommonApplicationData')) 'Microsoft/Windows Defender/Platform'
-                $platformSignature = Get-VerifiedDefenderModuleEvidence -Path $path -PlatformRoot $defenderRoot
+                try {
+                    $platformSignature = Get-VerifiedDefenderModuleEvidence -Path $path -PlatformRoot $defenderRoot
+                } catch {
+                    $originalRejection=$_
+                    # A fallback rejection does not identify the module as
+                    # Defender. Preserve the actual enumerated path and roots;
+                    # no new runtime origin is accepted by this diagnostic.
+                    $state.moduleRejection=[ordered]@{
+                        schema_version=1;observed_at_utc=[DateTime]::UtcNow.ToString('o');source_commit=$env:GITHUB_SHA
+                        workflow_run_id=$env:GITHUB_RUN_ID;workflow_run_attempt=$env:GITHUB_RUN_ATTEMPT
+                        process_id=$state.process.Id;owned_package_full_name=$state.ownedPackageFullName
+                        activated_process_package_full_name=$state.processPackageFullName
+                        module_name=$module.ModuleName;module_path=$path;sha256=$null;bytes=$null
+                        install_root=$installRoot;windows_root=$windowsRoot;defender_root=(Get-CanonicalPath $defenderRoot)
+                        reason=$originalRejection.Exception.Message
+                        current_action=if($state.workflow){$state.workflow.current_action}else{'startup_module_verification'}
+                        consumer_workflow_completed_before_rejection=([bool]($state.workflow -and $state.workflow.acceptance))
+                        origin_accepted=$false;installation_qualification_passed=$false
+                        observation_errors=@();evidence_error=$null
+                    }
+                    try {
+                        Assert-NoReparsePath $path
+                        $before=Get-Item -LiteralPath $path -Force -ErrorAction Stop
+                        $hash=(Get-FileHash -LiteralPath $path -Algorithm SHA256 -ErrorAction Stop).Hash.ToLowerInvariant()
+                        $after=Get-Item -LiteralPath $path -Force -ErrorAction Stop
+                        if($before.Length -ne $after.Length -or $before.LastWriteTimeUtc -ne $after.LastWriteTimeUtc -or
+                           $before.CreationTimeUtc -ne $after.CreationTimeUtc){throw 'Rejected module file changed during metadata hashing.'}
+                        $state.moduleRejection.sha256=$hash;$state.moduleRejection.bytes=$after.Length
+                    } catch {$state.moduleRejection.observation_errors=@($_.Exception.Message)}
+                    try {Write-NewUtf8Json (Join-Path $state.output 'loaded-module-rejection.json') $state.moduleRejection}
+                    catch {$state.moduleRejection.evidence_error=$_.Exception.Message}
+                    throw $originalRejection
+                }
                 $relative = $null
                 $hash = $platformSignature.sha256
                 $origin = 'microsoft_defender_signed_platform'
@@ -379,24 +414,21 @@ function Get-BeatQuayVerifiedModules($State) {
         return @($modules)
 }
 
-function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$RecordPath, [string]$SignToolPath, [string]$OutputPath) {
+function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$RecordPath, [string]$SignToolPath, [string]$OutputPath, [string]$Mode='qualification') {
     $state = [ordered]@{
         package = $null; record = $null; output = $null; temporary = $null; signedCopy = $null
         publicCertificate = $null; certificate = $null; trustedCertificate = $null; trustAttempted = $false
         installed = $null; installedByUs = $false; process = $null; processOwned = $false; cleanupProcessExit = $null
         installAttempted = $false; brokerProcessId = 0; addCompleted = $false; ownedPackageFullName = $null; preflightPackageFullNames = @(); residualPackageFullNames = @(); processHandle = $null; processExit = $null
         unsignedPackageSha256 = $null; signedPackageSha256 = $null; signTool = $null
-        aumid = $null; processPackageFullName = $null; modules = @(); window = $null
+        aumid = $null; processPackageFullName = $null; modules = @(); window = $null; moduleRejection=$null
         python = $Python; firstRun = $null; firstRunObservations = [ordered]@{}; workingDirectory = $null
         executableSha256 = $null; workflow = $null; profile = $null; activationStartedUtc = $null
         displayOriginalMode=$null; displayDevice=$null; displayRestoreRequired=$false; displayEvidence=$null
         cleanClose = $false; uninstallVerified = $false
+        identityMode=$Mode;runBinding=$null;helperBindings=$null;installedIdentityVerified=$false
     }
-    $expectedIdentity = [ordered]@{
-        packageName='Trieflow.BeatQuay.Qualification'; publisher='CN=BeatQuay-CI-Qualification'; version='1.0.1.0'
-        architecture='x64'; applicationId='BeatQuay'; executable='beatsprig.exe'
-        deviceFamily='Windows.Desktop'; minVersion='10.0.19041.0'; maxVersionTested='10.0.26100.0'; capability='runFullTrust'
-    }
+    $expectedIdentity = Get-BeatQuayPackageIdentity $Mode
 
     $operations = [ordered]@{}
     $operations.Preflight = {
@@ -419,16 +451,13 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
         if (Test-Path -LiteralPath $outputCandidate) { throw 'Qualification output already exists and will not be replaced.' }
         New-Item -ItemType Directory -Path $outputCandidate -ErrorAction Stop | Out-Null
         $state.output = $outputCandidate
+        $state.runBinding=Get-BeatQuayRunBinding $env:GITHUB_SHA $env:GITHUB_RUN_ID $env:GITHUB_RUN_ATTEMPT
         $state.record = Get-Content -LiteralPath $recordFile -Raw -Encoding utf8 | ConvertFrom-Json
         if ($state.record.sourceCommit -cne $env:GITHUB_SHA) { throw 'Package source differs from this qualification run.' }
         Invoke-CheckedNative $state.python @(
-            (Join-Path $PSScriptRoot 'verify_record.py'),'--record',$recordFile,'--package',$state.package,'--source-commit',$env:GITHUB_SHA)
-        if ($state.record.schemaVersion -ne 1 -or -not $state.record.qualificationIdentityOnly -or $state.record.signed -or $state.record.publicRelease -or $state.record.licenseClearanceClaimed -or $state.record.installationQualificationPassed) {
-            throw 'Package record is not an unsigned qualification-only record.'
-        }
-        foreach ($field in $expectedIdentity.Keys) {
-            if ([string]$state.record.identity.$field -cne [string]$expectedIdentity[$field]) { throw "Qualification identity mismatch: $field" }
-        }
+            (Join-Path $PSScriptRoot 'verify_record.py'),'--record',$recordFile,'--package',$state.package,'--source-commit',$env:GITHUB_SHA,'--identity-mode',$state.identityMode)
+        Assert-BeatQuayIdentityRecord $state.record $state.identityMode $env:GITHUB_SHA $env:GITHUB_RUN_ID $env:GITHUB_RUN_ATTEMPT
+        $state.helperBindings=Get-BeatQuayQualificationHelperBindings (Join-Path $PSScriptRoot '../..') $state.record.sourceInputs
         $state.unsignedPackageSha256 = (Get-FileHash -LiteralPath $state.package -Algorithm SHA256).Hash.ToLowerInvariant()
         if ($state.unsignedPackageSha256 -ne ([string]$state.record.containerVerification.package.sha256).ToLowerInvariant()) { throw 'Unsigned package hash differs from verified package record.' }
         $sdkVersion = [regex]::Escape([string]$state.record.makeAppx.sdkVersion)
@@ -495,14 +524,7 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
         $matches = @(Get-AppxPackage -Name $expectedIdentity.packageName -ErrorAction Stop)
         if ($matches.Count -ne 1) { throw 'Expected exactly one installed qualification package.' }
         $candidate = $matches[0]
-        if ([string]$candidate.Name -cne $expectedIdentity.packageName -or
-            [string]$candidate.Publisher -cne $expectedIdentity.publisher -or
-            [string]$candidate.Version -cne $expectedIdentity.version -or
-            [string]$candidate.Architecture -cne 'X64' -or
-            -not ([string]$candidate.PackageFullName).StartsWith($expectedIdentity.packageName + '_' + $expectedIdentity.version + '_x64_', [StringComparison]::Ordinal) -or
-            -not [string]$candidate.PackageFamilyName) {
-            throw 'Installed publisher/version/architecture differs from qualification identity.'
-        }
+        Assert-BeatQuayRegistrationIdentity $candidate $state.identityMode
         # Ownership is established only after our Add succeeds and one exact
         # expected registration is observed. A failed/partial Add cannot confer it.
         $state.installed = $candidate
@@ -521,7 +543,8 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
     $operations.ActivateAndVerify = {
         Invoke-CheckedNative $state.python @(
             (Join-Path $PSScriptRoot 'verify_record.py'),'--record',$RecordPath,'--package',$state.package,
-            '--source-commit',$env:GITHUB_SHA,'--installed-root',$state.installed.InstallLocation)
+            '--source-commit',$env:GITHUB_SHA,'--installed-root',$state.installed.InstallLocation,'--identity-mode',$state.identityMode)
+        $state.installedIdentityVerified=$true
         Add-BeatQuayActivationTypes
         if(Test-Path -LiteralPath $state.profile.path){throw 'Profile appeared before owned activation; preserving it'}
         $state.profile.absent_before_activation=$true
@@ -559,6 +582,7 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
     }.GetNewClosure()
 
     $operations.ConsumerWorkflow = {
+        $null=Get-BeatQuayQualificationHelperBindings (Join-Path $PSScriptRoot '../..') $state.record.sourceInputs
         Invoke-BeatQuayConsumerWorkflow $state
         if(-not $state.workflow -or -not $state.workflow.acceptance){throw 'Actual installed musical project/export workflow did not pass'}
         $state.modules=@(Get-BeatQuayVerifiedModules $state)
@@ -566,6 +590,7 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
         $synth=@($state.modules|Where-Object {$_.origin -ceq 'package' -and $_.name -ieq 'kicker.dll'})
         if($synth.Count -ne 1){throw 'Actual UI project did not load exactly one verified packaged Kicker synth'}
         Write-NewUtf8Json (Join-Path $state.output 'loaded-modules-after-workflow.json') $state.modules
+        $null=Get-BeatQuayQualificationHelperBindings (Join-Path $PSScriptRoot '../..') $state.record.sourceInputs
     }.GetNewClosure()
 
     $operations.CloseCleanly = {
@@ -678,7 +703,12 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
         schema_version = 1
         generated_at_utc = [DateTime]::UtcNow.ToString('o')
         source_commit = if ($state.record) { [string]$state.record.sourceCommit } else { $null }
-        qualification_identity_only = $true
+        workflow_run_id = if ($state.runBinding) { $state.runBinding.workflow_run_id } else { $null }
+        workflow_run_attempt = if ($state.runBinding) { $state.runBinding.workflow_run_attempt } else { $null }
+        helper_bindings = $state.helperBindings
+        identity_mode = $state.identityMode
+        qualification_identity_only = $state.identityMode -ceq 'qualification'
+        installed_identity_verified = $state.installedIdentityVerified
         identity = $expectedIdentity
         aumid = $state.aumid
         package_full_name = if ($state.installed) { [string]$state.installed.PackageFullName } else { $null }
@@ -695,6 +725,7 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
         certificate_private_key_exported = $false
         executable_sha256 = $state.executableSha256
         loaded_module_count = @($state.modules).Count
+        loaded_module_rejection = $state.moduleRejection
         first_run = $state.firstRun
         first_run_observations = $state.firstRunObservations
         working_directory = $state.workingDirectory
@@ -713,7 +744,7 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
         duplicate_scanning_tested = $false
         upgrade_tested = $false
         wack_tested = $false
-        store_identity_used = $false
+        store_identity_used = $state.installedIdentityVerified -and $state.identityMode -ceq 'store'
         public_release = $false
         primary_error = $result.primary_error
         cleanup_errors = @($result.cleanup_errors)
@@ -732,7 +763,7 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
 
 if (-not $LibraryOnly) {
     try {
-        Invoke-BeatQuayInstallQualification -PackagePath $Package -RecordPath $PackageRecord -SignToolPath $SignTool -OutputPath $Output
+        Invoke-BeatQuayInstallQualification -PackagePath $Package -RecordPath $PackageRecord -SignToolPath $SignTool -OutputPath $Output -Mode $IdentityMode
     } catch {
         Write-Error $_
         exit 1

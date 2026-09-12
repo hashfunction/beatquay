@@ -3,7 +3,8 @@
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 . (Join-Path $PSScriptRoot 'qualify-msix-install.ps1') -LibraryOnly
-foreach ($scenario in @('missing','changed','changed-after-success','success','write-failure')) {
+foreach($identityMode in @('qualification','store')) {
+ foreach ($scenario in @('missing','changed','changed-after-success','success','write-failure')) {
     $probeRoot = Join-Path ([IO.Path]::GetTempPath()) ('beatquay-evidence-test-' + [guid]::NewGuid().ToString('N'))
     New-Item -ItemType Directory -Path $probeRoot | Out-Null
     try {
@@ -22,7 +23,7 @@ foreach ($scenario in @('missing','changed','changed-after-success','success','w
             return [pscustomobject]@{ installation_qualification_passed=$false; primary_error='original activation failure'; cleanup_errors=@('original uninstall failure') }
         }
         $failure = $null
-        try { Invoke-BeatQuayInstallQualification -PackagePath 'unused' -RecordPath 'unused' -SignToolPath 'unused' -OutputPath $probeRoot | Out-Null }
+        try { Invoke-BeatQuayInstallQualification -PackagePath 'unused' -RecordPath 'unused' -SignToolPath 'unused' -OutputPath $probeRoot -Mode $identityMode | Out-Null }
         catch { $failure = $_.Exception.Message }
         $evidencePath = Join-Path $probeRoot 'installation-qualification.json'
         if (-not (Test-Path -LiteralPath $evidencePath)) { throw "Missing final evidence in $scenario" }
@@ -31,6 +32,7 @@ foreach ($scenario in @('missing','changed','changed-after-success','success','w
             continue
         }
         $evidence = Get-Content -LiteralPath $evidencePath -Raw | ConvertFrom-Json
+        if($evidence.identity_mode -cne $identityMode -or $evidence.installed_identity_verified -or $evidence.store_identity_used -or $null -ne $evidence.workflow_run_id -or $null -ne $evidence.helper_bindings){throw 'Unexecuted preflight/installed verifier cannot confer run, helpers or Store-use evidence'}
         if ($scenario -eq 'success') {
             if ($failure -or -not $evidence.installation_qualification_passed -or -not $evidence.unsigned_package_unchanged -or $evidence.evidence_errors.Count) { throw 'Unchanged success control did not pass.' }
         } else {
@@ -38,5 +40,6 @@ foreach ($scenario in @('missing','changed','changed-after-success','success','w
             if ($scenario -ne 'changed-after-success' -and ($evidence.primary_error -ne 'original activation failure' -or $evidence.cleanup_errors[0] -ne 'original uninstall failure')) { throw 'Original primary/cleanup failures were lost.' }
         }
     } finally { Remove-Item -LiteralPath $probeRoot -Recurse -Force }
+ }
 }
-Write-Output 'PASS: five real final-hash and exclusive-evidence reporting scenarios.'
+Write-Output 'PASS: ten real final-hash and exclusive-evidence reporting scenarios across both fixed modes.'

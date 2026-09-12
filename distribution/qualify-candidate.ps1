@@ -9,6 +9,8 @@ function Invoke-Checked([string]$Program, [string[]]$Arguments) {
 }
 $sourceCommit=(git rev-parse HEAD).Trim()
 if ($LASTEXITCODE -ne 0 -or $sourceCommit -cne $env:GITHUB_SHA) { throw 'Source differs from this qualification run.' }
+. (Join-Path $PSScriptRoot '../cmake/msix/qualification-bindings.ps1')
+$runBinding=Get-BeatQuayRunBinding $sourceCommit $env:GITHUB_RUN_ID $env:GITHUB_RUN_ATTEMPT
 $sourceStatus=@(git status --porcelain --untracked-files=all)
 $sourceStatusExit=$LASTEXITCODE
 Set-Content -LiteralPath build-evidence/source-status-before-build.txt -Value $sourceStatus -Encoding utf8
@@ -52,7 +54,7 @@ try {
     Invoke-Checked python @('distribution/generate_starters.py','--check')
     Invoke-Checked python @('-m','unittest','discover','-s','tests/scripted','-p','test_starter*.py','-v')
     Invoke-Checked python @('tests/scripted/starter_render.py','--source',"$(Get-Location)",'--stage',"$(Get-Location)/stage",'--work',"$(Get-Location)/.cache/native-starter-smoke",'--evidence',"$(Get-Location)/build-evidence")
-    @{ source_commit=$env:GITHUB_SHA; candidate=$lock.candidate; built=$true; tests_passed=$true; lifecycle_repeat_passed=$true; lifecycle_repeat_count=10; installed_stage=$true; native_render_smoke_passed=$true; native_render_error_exit_passed=$true; native_installed_starter_renders_passed=$true; starter_template_suite_required=$true; modernization_accepted=$false; physical_audio_verified=$false; source_license_closure=$false; store_submitted=$false } | ConvertTo-Json | Set-Content build-evidence/result.json
+    @{ source_commit=$sourceCommit; workflow_run_id=$runBinding.workflow_run_id; workflow_run_attempt=$runBinding.workflow_run_attempt; candidate=$lock.candidate; built=$true; tests_passed=$true; lifecycle_repeat_passed=$true; lifecycle_repeat_count=10; installed_stage=$true; native_render_smoke_passed=$true; native_render_error_exit_passed=$true; native_installed_starter_renders_passed=$true; starter_template_suite_required=$true; modernization_accepted=$false; physical_audio_verified=$false; source_license_closure=$false; store_submitted=$false } | ConvertTo-Json | Set-Content build-evidence/result.json
 } finally {
     $qtReports = @(Get-ChildItem build/tests -File -Filter '*.qt-test.*' -ErrorAction SilentlyContinue)
     if ($qtReports.Count) {

@@ -9,8 +9,8 @@ $global:RegistrationFixture = $null
 Add-Type 'public enum BeatQuayRegistrationArchitecture { X64, Arm64 }'
 function global:Get-AppxPackage {
     [CmdletBinding()] param([string]$Name)
-    if ($Name -cne 'Trieflow.BeatQuay.Qualification') { throw 'Unscoped package query' }
     $fixture = $global:RegistrationFixture
+    if ($Name -cne $fixture.owned.Name) { throw 'Unscoped package query' }
     if ($fixture.observationFailure) { $fixture.observationFailure=$false; throw 'registration observation failed' }
     if ($fixture.serialized) {
         # Appx compatibility uses implicit remoting. Exercise the actual CLIXML
@@ -57,7 +57,7 @@ function Invoke-BeatQuayQualificationCore([Collections.IDictionary]$Operations) 
     $state.record=[pscustomobject]@{sourceCommit=('a'*40);payload=[pscustomobject]@{}}
     # Native preflight is unavailable locally. Capture the empty preflight view;
     # actual Add/Get/Remove production closures run through the controlled adapter.
-    $Operations.Preflight={ if (@(Get-AppxPackage -Name 'Trieflow.BeatQuay.Qualification').Count) { throw 'Fixture must start empty' } }
+    $Operations.Preflight={ if (@(Get-AppxPackage -Name $global:RegistrationFixture.owned.Name).Count) { throw 'Fixture must start empty' } }
     foreach ($name in @('PrepareSignedCopy','VerifyInstalledMedia','CaptureInstalledStderr','ActivateAndVerify','ConsumerWorkflow','UninstallAndVerify','StopOwnedProcess','RemoveTrustedCertificate','RemovePersonalCertificate','RemoveTemporaryFiles')) {
         if ($name -eq 'UninstallAndVerify' -and $fixture.scenario -in @('normal-owned','normal-with-foreign')) { continue }
         $Operations[$name]={}
@@ -67,13 +67,16 @@ function Invoke-BeatQuayQualificationCore([Collections.IDictionary]$Operations) 
     }
     return & $script:ActualCore $Operations
 }
-foreach ($serialized in @($false,$true)) {
+foreach($identityMode in @('qualification','store')) {
+  $fixed=Get-BeatQuayPackageIdentity $identityMode
+  $publisherId=if($identityMode -ceq 'store'){'r3hxytd7jt6c4'}else{'fixture'}
+  foreach ($serialized in @($false,$true)) {
     foreach ($scenario in @('failed-add-race','ambiguous-add','wrong-architecture','observation-failed','observation-empty','owned','owned-with-foreign','remove-failed','normal-owned','normal-with-foreign')) {
         $temporary=Join-Path ([IO.Path]::GetTempPath()) ('beatquay-registration-test-'+[guid]::NewGuid().ToString('N'))
         New-Item -ItemType Directory $temporary | Out-Null
         try {
-            $owned=[pscustomobject]@{Name='Trieflow.BeatQuay.Qualification';Publisher='CN=BeatQuay-CI-Qualification';Version=[version]'1.0.1.0';Architecture=[BeatQuayRegistrationArchitecture]::X64;PackageFullName='Trieflow.BeatQuay.Qualification_1.0.1.0_x64__fixture';PackageFamilyName='Trieflow.BeatQuay.Qualification_fixture';InstallLocation=$temporary}
-            $foreign=[pscustomobject]@{Name=$owned.Name;Publisher=$owned.Publisher;Version=$owned.Version;Architecture=[BeatQuayRegistrationArchitecture]::Arm64;PackageFullName='Trieflow.BeatQuay.Qualification_1.0.1.0_arm64__fixture';PackageFamilyName=$owned.PackageFamilyName;InstallLocation=$temporary}
+            $owned=[pscustomobject]@{Name=$fixed.packageName;Publisher=$fixed.publisher;Version=[version]'1.0.1.0';Architecture=[BeatQuayRegistrationArchitecture]::X64;PackageFullName=($fixed.packageName+'_1.0.1.0_x64__'+$publisherId);PackageFamilyName=($fixed.packageName+'_'+$publisherId);InstallLocation=$temporary}
+            $foreign=[pscustomobject]@{Name=$owned.Name;Publisher=$owned.Publisher;Version=$owned.Version;Architecture=[BeatQuayRegistrationArchitecture]::Arm64;PackageFullName=($fixed.packageName+'_1.0.1.0_arm64__'+$publisherId);PackageFamilyName=$owned.PackageFamilyName;InstallLocation=$temporary}
             # The racing registration has the exact expected x64 full name; a name/
             # architecture match still cannot establish ownership after our Add failed.
             $owned.PSObject.TypeNames.Insert(0,'Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage')
@@ -81,7 +84,7 @@ foreach ($serialized in @($false,$true)) {
             $raced=$owned.PSObject.Copy()
             $global:RegistrationFixture=[ordered]@{serialized=$serialized;scenario=$scenario;directory=$temporary;owned=$owned;foreign=$foreign;raced=$raced;registrations=@();removed=[Collections.Generic.List[string]]::new();observationFailure=$false}
             $failure=$null
-            try { Invoke-BeatQuayInstallQualification unused unused unused $temporary | Out-Null } catch { $failure=$_.Exception.Message }
+            try { Invoke-BeatQuayInstallQualification unused unused unused $temporary -Mode $identityMode | Out-Null } catch { $failure=$_.Exception.Message }
             $fixture=$global:RegistrationFixture
             $evidence=Get-Content (Join-Path $temporary 'installation-qualification.json') -Raw | ConvertFrom-Json
             if ($scenario -eq 'observation-empty') {
@@ -103,9 +106,11 @@ foreach ($serialized in @($false,$true)) {
                     if (-not $failure -or $evidence.installation_qualification_passed -or -not $fixture.registrations.Count -or $evidence.cleanup_errors.Count -ne 1) { throw "${scenario}: residual/removal failure must fail and retain evidence" }
                 }
             }
-            Write-Output "PASS actual registration ownership flow (serialized=$serialized): $scenario"
+            if($evidence.identity_mode -cne $identityMode -or $evidence.installed_identity_verified -or $evidence.store_identity_used){throw 'Registration alone cannot claim independent installed payload verification'}
+            Write-Output "PASS actual registration ownership flow ($identityMode / serialized=$serialized): $scenario"
         } finally { Remove-Item $temporary -Recurse -Force }
     }
+  }
 }
 Remove-Item Function:\Get-AppxPackage,Function:\Add-AppxPackage,Function:\Remove-AppxPackage
 Remove-Variable RegistrationFixture -Scope Global

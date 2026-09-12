@@ -3,16 +3,18 @@ Copyright 2026 Trieflow LLC. MIT.
 """
 
 import argparse
+import os
 from pathlib import Path
 import subprocess
 
-from msix_qualification import PACKAGE_INPUT_RECORD, verify_record_inputs, verify_installed, _load_json
+from msix_qualification import PACKAGE_INPUT_RECORD, validate_run_binding, verify_record_inputs, verify_installed, _load_json
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--record", type=Path, required=True)
 parser.add_argument("--package", type=Path, required=True)
 parser.add_argument("--source-commit", required=True)
 parser.add_argument("--installed-root", type=Path)
+parser.add_argument("--identity-mode", choices=("qualification", "store"), default="qualification")
 args = parser.parse_args()
 source = Path(__file__).resolve().parents[2]
 actual = subprocess.run(
@@ -28,6 +30,8 @@ dirty = subprocess.run(
 ).stdout.strip()
 if dirty:
     raise SystemExit("Dirty source checkout cannot identify qualification inputs")
+record = _load_json(args.record, "qualification record")
+validate_run_binding(record, os.environ.get("GITHUB_RUN_ID"), os.environ.get("GITHUB_RUN_ATTEMPT"))
 verify_record_inputs(
     args.package,
     args.record,
@@ -37,7 +41,10 @@ verify_record_inputs(
     source / PACKAGE_INPUT_RECORD,
     source / "build-evidence",
     source,
+    args.identity_mode,
 )
 if args.installed_root:
-    verify_installed(args.installed_root, _load_json(args.record, "qualification record")["payload"])
-print("PASS: exact source/stage/notices/startup/package binding reverified before installation")
+    verify_installed(args.installed_root, record["payload"], args.identity_mode)
+    print("PASS: exact source/run/stage/notices/package and installed payload reverified")
+else:
+    print("PASS: exact source/run/stage/notices/package binding reverified before installation")
