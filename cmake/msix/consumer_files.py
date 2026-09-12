@@ -9,6 +9,7 @@ from pathlib import Path
 import sys
 import wave
 import xml.etree.ElementTree as ET
+from xml.parsers import expat
 
 SOURCE = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(SOURCE / 'tests/scripted'))
@@ -16,13 +17,27 @@ from starter_render import inspect_starter_wave, regular, sha256
 
 TEMPO, BARS = 116, 4
 
-def xml_file(path, boundary=None):
+def xml_file(path, boundary=None, doctype='lmms-project'):
     path = Path(path)
     regular(path, boundary or path.parent)
     if not 0 < path.stat().st_size <= 2 * 1024 * 1024: raise ValueError('XML file exceeds bounds')
     data = path.read_bytes()
-    if b'<!ENTITY' in data.upper() or b'<!DOCTYPE' in data.upper() and b'[' in data:
+    # QDomDocument emits an empty native DOCTYPE; ProjectNotes stores QTextEdit
+    # HTML (including its inert HTML DOCTYPE) inside CDATA. Check parsed XML
+    # declarations before ElementTree, not byte substrings in notes or attributes.
+    def check_doctype(name, system_id, public_id, internal_subset):
+        if name != doctype or system_id is not None or public_id is not None or internal_subset:
+            raise ValueError('Only the native empty XML DOCTYPE is accepted')
+    def reject_entity(*args):
         raise ValueError('External/internal XML entities are not accepted')
+    parser = expat.ParserCreate()
+    parser.StartDoctypeDeclHandler = check_doctype
+    parser.EntityDeclHandler = reject_entity
+    parser.ExternalEntityRefHandler = reject_entity
+    try:
+        parser.Parse(data, True)
+    except expat.ExpatError as error:
+        raise ValueError('Malformed XML: ' + str(error)) from error
     root = ET.fromstring(data)
     if len(list(root.iter())) > 10000: raise ValueError('XML element count exceeds bounds')
     return root
@@ -111,7 +126,7 @@ UI_EXIT_FIELDS={'songeditorzoom','songeditorsnap','pianorollzoom','pianorollzoom
                 'pianorollquantization','pianorollnotelength','pianorollsnap'}
 
 def verify_profile(before,after,working,projects):
-    first=xml_file(before); second=xml_file(after)
+    first=xml_file(before, doctype='lmms-config-file'); second=xml_file(after, doctype='lmms-config-file')
     if first.tag != 'lmms' or second.tag != 'lmms' or first.attrib != second.attrib: raise ValueError('Profile root changed')
     def normalize(path): return str(path).replace('\\','/').rstrip('/').casefold()
     for root in (first,second):
