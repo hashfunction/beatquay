@@ -84,13 +84,81 @@ function Get-BeatQuayConsumerWindowInventory($Element,[int]$ProcessId) {
    for($i=0;$i -lt $all.Count;$i++){
     $child=$all.Item($i);$snapshot=Get-BeatQuayConsumerControl $child
     if(-not $snapshot.available){$truncated=$true}
-    elseif($snapshot.process_id -ne $ProcessId){throw 'Foreign control in owned consumer window'}
+    elseif($snapshot.process_id -ne $ProcessId){
+     # Preserve the exact refused provider read. Never finish or retry this tree.
+     try{throw 'Foreign control in owned consumer window'}catch{
+      $refusal=$_
+      $refusal.Exception.Data['BeatQuayInventoryRefusal']=@{root=$current;rejected=$snapshot;control_index=$i;control_count=$all.Count}
+      throw $refusal
+     }
+    }
     elseif($snapshot.name.Length -gt 4096 -or $snapshot.help.Length -gt 4096 -or ($snapshot.value -and $snapshot.value.Length -gt 16384)){throw 'Consumer control text exceeds bound'}
     $items.Add(@{element=$child;snapshot=$snapshot});$controls.Add($snapshot)
    }
   }
   $snapshot=@{title=if($current.available){$current.name}else{''};process_id=$ProcessId;truncated=$truncated;root=$current;controls=@($controls)}
   [pscustomobject]@{element=$Element;snapshot=$snapshot;items=@($items)}
+}
+
+function Limit-BeatQuayConsumerDiagnosticText($Value,[int]$Limit) {
+ $text=[string]$Value
+ return $text.Substring(0,[Math]::Min($text.Length,$Limit))
+}
+
+function Copy-BeatQuayConsumerDiagnosticSnapshot($Snapshot) {
+ $copy=[ordered]@{text_truncated=$false}
+ foreach($key in @('available','process_id','native_window_handle','visible','enabled','x','y','width','height')){$copy[$key]=$Snapshot[$key]}
+ foreach($key in @('type','name','help','automation_id','class_name','value')){
+  $limit=if($key -ceq 'value'){2048}else{1024}
+  $copy[$key]=Limit-BeatQuayConsumerDiagnosticText $Snapshot[$key] $limit
+  if(([string]$Snapshot[$key]).Length -gt $limit){$copy.text_truncated=$true}
+ }
+ return $copy
+}
+
+function Get-BeatQuayConsumerRefusalNativeObservation($State) {
+ # Read only the retained target and numeric HWND/PID facts. Do not inspect a
+ # foreign process, change foreground, or use this diagnostic to authorize input.
+ Assert-BeatQuayConsumerOwner $State
+ $main=[IntPtr]$State.workflow.main_window_handle
+ $foreground=[BeatQuayConsumer.Native]::GetForegroundWindow()
+ [uint32]$mainPid=0;[uint32]$foregroundPid=0
+ $mainThread=[BeatQuayConsumer.Native]::GetWindowThreadProcessId($main,[ref]$mainPid)
+ $foregroundThread=[BeatQuayConsumer.Native]::GetWindowThreadProcessId($foreground,[ref]$foregroundPid)
+ return @{observed_utc=[DateTime]::UtcNow.ToString('o');expected_process_id=$State.process.Id;
+  retained_main_window_handle=$main.ToInt64();current_process_main_window_handle=$State.process.MainWindowHandle.ToInt64();
+  main_process_id=$mainPid;main_thread_id=$mainThread;foreground_window_handle=$foreground.ToInt64();
+  foreground_process_id=$foregroundPid;foreground_thread_id=$foregroundThread}
+}
+
+function Save-BeatQuayConsumerInventoryRefusal($State,$Primary,[int]$RootIndex,[int]$RootCount) {
+ $boundary=$Primary.Exception.Data['BeatQuayInventoryRefusal']
+ $record=[ordered]@{observed_utc=[DateTime]::UtcNow.ToString('o');expected_process_id=$State.process.Id;
+  current_action=(Limit-BeatQuayConsumerDiagnosticText $State.workflow.current_action 256);
+  root_index=$RootIndex;root_count=$RootCount;root_index_scope='owned desktop enumeration';
+  control_index=$boundary.control_index;control_count=$boundary.control_count;
+  root=(Copy-BeatQuayConsumerDiagnosticSnapshot $boundary.root);rejected=(Copy-BeatQuayConsumerDiagnosticSnapshot $boundary.rejected);
+  primary_error=(Limit-BeatQuayConsumerDiagnosticText $Primary.Exception.Message 1024);
+  script_stack=(Limit-BeatQuayConsumerDiagnosticText $Primary.ScriptStackTrace 4096);
+  script_stack_truncated=($Primary.ScriptStackTrace.Length -gt 4096);native=$null;diagnostic_errors=@()}
+ $State.workflow.inventory_refusal=$record
+ try{$record.native=Get-BeatQuayConsumerRefusalNativeObservation $State}
+ catch{$record.diagnostic_errors=@((Limit-BeatQuayConsumerDiagnosticText $_.Exception.Message 2048))}
+}
+
+function Read-BeatQuayConsumerWindowInventory($State,$Element,[int]$RootIndex,[int]$RootCount) {
+ try{return Get-BeatQuayConsumerWindowInventory $Element $State.process.Id}
+ catch{
+  $primary=$_
+  if($primary.Exception.Data.Contains('BeatQuayInventoryRefusal')){
+   try{Save-BeatQuayConsumerInventoryRefusal $State $primary $RootIndex $RootCount}
+   catch{
+    # Even diagnostic serialization failures must leave the original refusal intact.
+    try{$State.workflow.inventory_refusal_diagnostic_error=Limit-BeatQuayConsumerDiagnosticText $_.Exception.Message 2048}catch{}
+   }
+  }
+  throw $primary
+ }
 }
 
 function Get-BeatQuayNestedConsumerWindows($Window,[int]$ProcessId) {
@@ -122,7 +190,7 @@ function Get-BeatQuayConsumerWindows($State,[switch]$IncludeNestedWindows) {
   $element=$windows[$index];$duplicate=$false
   foreach($prior in $seen){if(Test-BeatQuaySameConsumerElement $prior $element){$duplicate=$true;break}}
   if($duplicate){continue}
-  $window=Get-BeatQuayConsumerWindowInventory $element $State.process.Id
+  $window=Read-BeatQuayConsumerWindowInventory $State $element $index $windows.Count
   $seen.Add($window.element)
   $window
   if(-not $IncludeNestedWindows -or $window.snapshot.truncated){continue}
@@ -135,7 +203,7 @@ function Get-BeatQuayConsumerWindows($State,[switch]$IncludeNestedWindows) {
    if($seen.Count -ge 24){throw 'Nested consumer window count exceeds bound'}
    $seen.Add($child.element)
    Assert-BeatQuayConsumerOwner $State
-   Get-BeatQuayConsumerWindowInventory $child.element $State.process.Id
+   Read-BeatQuayConsumerWindowInventory $State $child.element $index $windows.Count
   }
  }
 }
