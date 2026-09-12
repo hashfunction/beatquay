@@ -6,6 +6,7 @@ CMake configure/generate/install are real. Only compiler redistributable discove
 is replaced: no Windows CRT or compiler is installed on the test host.
 """
 from pathlib import Path
+import hashlib
 import json
 import subprocess
 import tempfile
@@ -16,6 +17,25 @@ SOURCE = Path(__file__).resolve().parents[2]
 
 
 class ReleaseRuntimeTest(unittest.TestCase):
+    def assert_original_file(self, recorded, original):
+        self.assertIsInstance(recorded, str)
+        observed = Path(recorded)
+        self.assertTrue(observed.is_absolute())
+        self.assertEqual(observed.resolve(strict=True), original.resolve(strict=True))
+        self.assertTrue(observed.samefile(original))
+        return observed
+
+    def test_source_identity_refuses_another_file_with_identical_bytes(self):
+        with tempfile.TemporaryDirectory(prefix="beatquay-crt-identity-") as temporary:
+            root = Path(temporary).resolve(strict=True)
+            original = root / 'original.dll'; original.write_bytes(b'exact fixture bytes')
+            foreign = root / 'other.dll'; foreign.write_bytes(original.read_bytes())
+            alias = root / 'existing-alias'; alias.mkdir()
+            self.assert_original_file(str(alias / '..' / original.name), original)
+            for wrong in (str(foreign), original.name):
+                with self.subTest(wrong=wrong), self.assertRaises(AssertionError):
+                    self.assert_original_file(wrong, original)
+
     def test_actual_cmake_install_selects_debug_only_for_debug(self):
         original_open = Path.open
 
@@ -35,7 +55,12 @@ class ReleaseRuntimeTest(unittest.TestCase):
             source_text.index("SET(CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION") :
         ]
         with tempfile.TemporaryDirectory(prefix="beatquay-crt-") as temporary:
-            root = Path(temporary)
+            # Exercise a real noncanonical input on every host. Windows can
+            # additionally supply its actual RUNNER~1 short temporary path.
+            alias_parent = Path(temporary) / "existing-path-alias"
+            alias_parent.mkdir()
+            temporary = str(alias_parent / "..")
+            root = Path(temporary).resolve(strict=True)
             (root / "release.dll").write_bytes(b"release runtime fixture")
             (root / "debug.dll").write_bytes(b"debug runtime fixture")
             (root / "InstallRequiredSystemLibraries.cmake").write_text(
@@ -103,10 +128,20 @@ list(PREPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}")
                         self.assertEqual(
                             (stage / "bin/debug.dll").exists(), config == "Debug"
                         )
-                        selection = json.loads((build / 'ms-runtime-selection.json').read_text())
-                        self.assertEqual(selection['sourcePaths'], [(root / 'release.dll').as_posix()])
-                        self.assertNotIn((root / 'debug.dll').as_posix(), selection['sourcePaths'])
-                        self.assertEqual(selection['discoveryModule'], (root / 'InstallRequiredSystemLibraries.cmake').as_posix())
+                        receipt = build / 'ms-runtime-selection.json'
+                        original_receipt = receipt.read_bytes()
+                        selection = json.loads(original_receipt)
+                        self.assertIsInstance(selection['sourcePaths'], list)
+                        self.assertEqual(len(selection['sourcePaths']), 1)
+                        # CMake and Python choose different valid spellings for
+                        # Windows 8.3 paths and macOS /tmp. Prove the real file
+                        # identity without changing the recorded path strings.
+                        selected = self.assert_original_file(selection['sourcePaths'][0], root / 'release.dll')
+                        self.assertEqual(selected.read_bytes(), b'release runtime fixture')
+                        self.assertFalse(selected.samefile(root / 'debug.dll'))
+                        discovery = self.assert_original_file(selection['discoveryModule'], root / 'InstallRequiredSystemLibraries.cmake')
+                        self.assertEqual(selection['discoveryModuleSha256'], hashlib.sha256(discovery.read_bytes()).hexdigest())
+                        self.assertEqual(receipt.read_bytes(), original_receipt)
 
 
 if __name__ == "__main__":

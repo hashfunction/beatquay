@@ -1,0 +1,15 @@
+# Runtime fixture canonical path correction
+
+Windows run `34694705585`, public source `ca996c5811415ec4a1272114715a53e2dec85afd`, failed the single `BeatQuayReleaseRuntimeTest` during CTest after native compilation. The other 21 registered tests passed. All eight generator/configuration cases reached the new source-path assertion, where CMake recorded `C:/Users/runneradmin/.../release.dll` and the fixture expected `C:/Users/RUNNER~1/.../release.dll`. These are the canonical and short Windows spellings of the same temporary fixture location. The production selection was not the failure.
+
+Resolving the existing temporary root alone was insufficient. Independent review of that first correction with `TMPDIR=/private/tmp` reproduced all eight failures: CMake used `/tmp/...` while Python chose `/private/tmp/...`. Both are valid spellings of the same file; the two runtimes do not promise identical path strings.
+
+The fixture now requires absolute recorded paths, strict resolution to the expected original path, and `samefile` filesystem identity for the selected runtime and discovery module. It still requires exactly one release source, rejects the debug source by file identity, rereads the selected source for exact fixture bytes, and matches the recorded discovery-module SHA256 to the identified original. The original receipt bytes are checked again and remain unchanged. The existing release installation and Debug-only debug-runtime requirements remain intact.
+
+To exercise path aliases on every test host, the fixture supplies an existing child/parent path (`existing-path-alias/..`) before resolution. The unresolved original failed all eight real CMake configure/generate/install cases locally; the initial root-only correction still failed all eight with `/private/tmp`. The final file-identity comparison passes both locations. A separate negative test rejects a different file with identical bytes and rejects a relative spelling, while accepting an existing alias to the original file. Windows will additionally exercise its actual short temporary path.
+
+Validation: both `TMPDIR=/private/tmp python3 tests/scripted/test_release_runtime.py -v` and `python3 tests/scripted/test_release_runtime.py -v` passed both tests, including the complete two-generator/four-configuration matrix. `git diff --check` passed. Production CMake, runtime origins, original source assets and notice manifests have no changes. This repair does not claim a new Windows run or installed qualification result.
+
+Retained evidence: `/private/tmp/beatsprig-34694705585-failed.log`, SHA256 `101f33a1a8047c7413198f2d3d49891df6a94525e7c40380346cdb069b638093`; local red reproduction `/private/tmp/beatsprig-runtime-path-red.txt`, SHA256 `9c90b61b715410c7e7290b7e904567c91b4edcd24dbc453e8fc68b0f3e5af433`. Original logs are retained privately and are not copied into this source change.
+
+The independent-review failure was reproduced and retained at `/private/tmp/beatsprig-runtime-path-private-tmp-red.txt`. The Store identity work remains stashed separately; it is not included in this correction.
