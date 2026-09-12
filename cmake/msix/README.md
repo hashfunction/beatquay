@@ -14,6 +14,15 @@ so they need not have same-named files in System32. Contract naming alone never
 qualifies an import. Ordinary DLLs still require a packaged or physical system
 file; ambiguous packaged names still fail.
 
+Imported module names use ordinally sorted lowercase ASCII keys in both
+PowerShell collection and Python validation, retaining the first original
+spelling and deduplicating by key. This keeps suffixed MSVC runtime names and
+punctuation independent of the runner's culture. `OrdinalIgnoreCase` alone is
+insufficient: it places `libA.dll` before `lib_.dll`, unlike lowercase ASCII
+ordering. Before collection, `test_pe_import_collection.py` passes actual PowerShell-produced
+fixture evidence into the Python validator under two cultures, covering the
+runtime names observed in run `34656962792` and duplicate/missing/ambiguous cases.
+
 `pe-imports.json` includes `systemDirectory`, exact `apiSetResolutions` coverage
 and retained `resolutionErrors`. The package validator rejects missing,
 duplicate, extraneous or invalid contract/host records and any unresolved import.

@@ -253,11 +253,16 @@ def _validate_pe_imports(release, path, files):
             raise ValueError("PE evidence does not bind the exact stage binary")
         seen.add(relative)
         imports = row["imports"]
-        if not isinstance(imports, list) or imports != sorted(set(imports), key=str.casefold):
+        if not isinstance(imports, list):
             raise ValueError("PE imports must be a sorted unique list")
         for name in imports:
-            if not isinstance(name, str) or not re.fullmatch(r"[A-Za-z0-9_.+\-]+\.(?:dll|exe)", name, re.I):
+            if not isinstance(name, str) or not re.fullmatch(r"[A-Za-z0-9_.+\-]+\.(?:dll|exe)", name, re.I | re.ASCII):
                 raise ValueError("Invalid imported module name")
+        # ASCII casefold produces the collector's lowercase ASCII keys, which
+        # it sorts ordinally. Reject repeated names, including case aliases.
+        import_keys = [name.casefold() for name in imports]
+        if import_keys != sorted(set(import_keys)):
+            raise ValueError("PE imports must be a sorted unique list")
     if seen != pe_paths:
         raise ValueError("PE import evidence must cover every staged executable and DLL")
     by_path = {row["path"].replace("\\", "/"): row for row in record["files"]}

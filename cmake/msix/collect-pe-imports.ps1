@@ -10,7 +10,15 @@ $apiSets=@{}; $resolutionErrors=[Collections.Generic.List[object]]::new()
 foreach($file in $all | Sort-Object FullName){
   $outputText=& $dumpbin /nologo /dependents $file.FullName 2>&1 | Out-String
   if($LASTEXITCODE -ne 0){ throw "dumpbin failed for $($file.FullName)" }
-  $imports=@([regex]::Matches($outputText,'(?im)^\s+([A-Za-z0-9_.+\-]+\.(?:dll|exe))\s*$') | ForEach-Object{$_.Groups[1].Value} | Sort-Object -Unique)
+  # Sort lowercase ASCII keys ordinally, as Python's casefold ordering does.
+  # OrdinalIgnoreCase instead puts libA.dll before lib_.dll. Keep the spelling
+  # from the first dumpbin reference while deduplicating by its lowercase key.
+  $importNames=[Collections.Generic.SortedDictionary[string,string]]::new([StringComparer]::Ordinal)
+  foreach($match in [regex]::Matches($outputText,'(?m)^\s+([A-Za-z0-9_.+\-]+\.(?i:dll|exe))\s*$')) {
+    $name=$match.Groups[1].Value; $key=$name.ToLowerInvariant()
+    if(-not $importNames.ContainsKey($key)) { $importNames.Add($key,$name) }
+  }
+  $imports=@($importNames.Values)
   foreach($import in $imports){
     $key=$import.ToLowerInvariant()
     if($byName.ContainsKey($key)){ if(@($byName[$key]).Count -ne 1){$ambiguous.Add("$($file.Name):$import")} }
