@@ -10,6 +10,7 @@ import unittest
 from unittest.mock import patch
 import zipfile
 import zlib
+import xml.etree.ElementTree as ET
 import msix_qualification as msix
 REPOSITORY = Path(__file__).resolve().parents[2]
 
@@ -17,6 +18,37 @@ def png(size=16):
     raw=b''.join(b'\0'+bytes((20,80,100,255))*size for _ in range(size))
     def chunk(kind,data): return struct.pack('>I',len(data))+kind+data+struct.pack('>I',zlib.crc32(kind+data)&0xffffffff)
     return b'\x89PNG\r\n\x1a\n'+chunk(b'IHDR',struct.pack('>IIBBBBB',size,size,8,6,0,0,0))+chunk(b'IDAT',zlib.compress(raw))+chunk(b'IEND',b'')
+
+class ManifestDisplayTests(unittest.TestCase):
+    def test_reserved_display_name_and_truthful_description_in_both_identities(self):
+        for mode in ('qualification', 'store'):
+            with self.subTest(mode=mode):
+                data = msix.create_manifest(mode)
+                root = ET.fromstring(data)
+                properties = root.find(f'{{{msix.APPX_NS}}}Properties')
+                visual = root.find(f'.//{{{msix.UAP_NS}}}VisualElements')
+                self.assertEqual(properties.find(f'{{{msix.APPX_NS}}}DisplayName').text, 'BeatSprig')
+                self.assertEqual(properties.find(f'{{{msix.APPX_NS}}}Description').text, 'BeatSprig music creation')
+                self.assertEqual(visual.get('DisplayName'), 'BeatSprig')
+                self.assertEqual(visual.get('Description'), 'BeatSprig music creation')
+                self.assertEqual(msix.validate_manifest(data, mode), msix.identity_for(mode))
+                self.assertEqual(root.find(f'{{{msix.APPX_NS}}}Identity').get('Version'), '1.0.1.0')
+
+    def test_old_display_name_and_qualification_description_are_rejected_independently(self):
+        for mode in ('qualification', 'store'):
+            for field in ('property-name', 'property-description', 'visual-name', 'visual-description'):
+                with self.subTest(mode=mode, field=field):
+                    root = ET.fromstring(msix.create_manifest(mode))
+                    if field.startswith('property-'):
+                        name = 'DisplayName' if field.endswith('name') else 'Description'
+                        root.find(f'{{{msix.APPX_NS}}}Properties/{{{msix.APPX_NS}}}{name}').text = (
+                            'BeatSprig 1.0.1' if name == 'DisplayName' else 'BeatSprig qualification package')
+                    else:
+                        name = 'DisplayName' if field.endswith('name') else 'Description'
+                        root.find(f'.//{{{msix.UAP_NS}}}VisualElements').set(name,
+                            'BeatSprig 1.0.1' if name == 'DisplayName' else 'BeatSprig qualification package')
+                    with self.assertRaises(ValueError):
+                        msix.validate_manifest(ET.tostring(root), mode)
 
 class QualificationTests(unittest.TestCase):
     def setUp(self):
@@ -198,7 +230,7 @@ class QualificationTests(unittest.TestCase):
         (self.root/'stage').rmdir(); target=self.release/'manual.pdf'; target.unlink(); target.symlink_to(self.source/'LICENSE.txt')
         with self.assertRaises(ValueError): self.refresh_inventory()
     def test_manifest_uses_disposable_identity_and_exact_display(self):
-        data=msix.create_manifest(); self.assertEqual(msix.validate_manifest(data),msix.QUALIFICATION_IDENTITY); self.assertIn(b'BeatSprig 1.0.1',data); self.assertIn(b'beatsprig.exe',data)
+        data=msix.create_manifest(); self.assertEqual(msix.validate_manifest(data),msix.QUALIFICATION_IDENTITY); self.assertIn(b'<DisplayName>BeatSprig</DisplayName>',data); self.assertIn(b'beatsprig.exe',data)
     def test_fixed_store_manifest_preserves_application_id_and_refuses_cross_mode(self):
         data=msix.create_manifest('store')
         identity=msix.validate_manifest(data,'store')

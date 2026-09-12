@@ -436,9 +436,9 @@ def create_manifest(identity_mode="qualification"):
     )
     properties = ET.SubElement(package, f"{{{APPX_NS}}}Properties")
     for name, value in (
-        ("DisplayName", "BeatSprig 1.0.1"),
+        ("DisplayName", "BeatSprig"),
         ("PublisherDisplayName", "hashfunction" if identity_mode == "store" else "Trieflow LLC"),
-        ("Description", "BeatSprig music creation" if identity_mode == "store" else "BeatSprig qualification package"),
+        ("Description", "BeatSprig music creation"),
         ("Logo", r"Assets\StoreLogo.png"),
     ):
         ET.SubElement(properties, f"{{{APPX_NS}}}{name}").text = value
@@ -468,8 +468,8 @@ def create_manifest(identity_mode="qualification"):
         application,
         f"{{{UAP_NS}}}VisualElements",
         {
-            "DisplayName": "BeatSprig 1.0.1",
-            "Description": "BeatSprig qualification package",
+            "DisplayName": "BeatSprig",
+            "Description": "BeatSprig music creation",
             "BackgroundColor": "#142e38",
             "Square150x150Logo": r"Assets\Square150x150Logo.png",
             "Square44x44Logo": r"Assets\Square44x44Logo.png",
@@ -516,9 +516,9 @@ def validate_manifest(data, identity_mode="qualification"):
         raise ValueError("Unexpected qualification identity")
     properties = _one(root, f"{{{APPX_NS}}}Properties", "properties")
     expected_properties = {
-        "DisplayName": "BeatSprig 1.0.1",
+        "DisplayName": "BeatSprig",
         "PublisherDisplayName": "hashfunction" if identity_mode == "store" else "Trieflow LLC",
-        "Description": "BeatSprig music creation" if identity_mode == "store" else "BeatSprig qualification package",
+        "Description": "BeatSprig music creation",
         "Logo": r"Assets\StoreLogo.png",
     }
     if (
@@ -557,8 +557,8 @@ def validate_manifest(data, identity_mode="qualification"):
         len(application) != 1
         or visual.attrib
         != {
-            "DisplayName": "BeatSprig 1.0.1",
-            "Description": "BeatSprig qualification package",
+            "DisplayName": "BeatSprig",
+            "Description": "BeatSprig music creation",
             "BackgroundColor": "#142e38",
             "Square150x150Logo": r"Assets\Square150x150Logo.png",
             "Square44x44Logo": r"Assets\Square44x44Logo.png",

@@ -36,6 +36,46 @@ class OriginalPackageTests(unittest.TestCase):
             with self.subTest(path=str(path)),self.assertRaises(ValueError):self.verify()
             path.write_bytes(data)
 
+    def remove_notices_omitted_by_original_artifact(self):
+        # The real metadata artifact uploads these suffixes, not all notice
+        # originals. The generated package fixture contains the real source
+        # notice tree and puts every original into the actual ZIP payload.
+        retained = {'.json', '.txt', '.xml', '.log', '.png'}
+        removed = []
+        for relative in self.original['records']['store']['evidenceInputs']:
+            path = self.root / relative
+            if relative.startswith('notices/') and path.suffix not in retained:
+                path.unlink(); removed.append(relative)
+        self.assertIn('notices/native/COMBINED-LICENSE.md', removed)
+        self.assertGreater(len(removed), 1)
+        return removed
+
+    def test_original_artifact_omissions_use_exact_packaged_notice_bytes(self):
+        removed = self.remove_notices_omitted_by_original_artifact()
+        self.assertEqual(self.verify(), self.original['records'])
+        self.assertTrue(all(not (self.root / name).exists() for name in removed))
+
+    def test_present_notice_tamper_and_missing_non_notice_still_refused(self):
+        notice = self.root / 'notices/native/COMBINED-LICENSE.md'
+        original = notice.read_bytes(); notice.write_bytes(original + b'changed')
+        with self.assertRaises(ValueError): self.verify()
+        notice.write_bytes(original)
+        self.remove_notices_omitted_by_original_artifact()
+        (self.root / 'candidate-inputs.json').unlink()
+        with self.assertRaises((ValueError, FileNotFoundError)): self.verify()
+
+    def test_omitted_notice_requires_unchanged_actual_store_payload(self):
+        self.remove_notices_omitted_by_original_artifact()
+        package = self.fixture.packages['store']; changed = package.with_suffix('.changed')
+        target = 'licenses/dependencies/native/COMBINED-LICENSE.md'
+        with zipfile.ZipFile(package) as original, zipfile.ZipFile(changed, 'w') as output:
+            self.assertIn(target, original.namelist())
+            for entry in original.infolist():
+                data = original.read(entry)
+                output.writestr(entry, data + b'changed' if entry.filename == target else data)
+        changed.replace(package)
+        with self.assertRaises(ValueError): self.verify()
+
     def test_partial_or_stale_records_and_signed_container_refused(self):
         self.verify()
         for field,value in [('originalPackageInputs',{}),('originalSdkTools',{}),('packageRecord',{})]:

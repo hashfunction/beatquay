@@ -40,3 +40,17 @@ Native Windows capture, fixed-image/SDK availability and final visual review are
 pending a reviewed successful Store export. No image editing, native run,
 publication or Store change was performed here. Parent independent review is
 required before pushing and binding the workflow.
+
+## Original notice retention repair (run 34711210269)
+
+The capture failed during preparation, before installation or screenshots. Its first error was `FileNotFoundError` for `metadata/build-evidence/notices/native/COMBINED-LICENSE.md`. Original run 34709154092 uploaded metadata through JSON/TXT/XML/log/PNG patterns; those patterns omitted 75 notice files (47 native and 28 Qt), including Markdown, source headers and extensionless licenses. The original package builder copies the entire notice tree to `licenses/dependencies/`, so all 75 remain in the retained unsigned Store package.
+
+The capture verifier now joins a missing notice's exact byte/hash record to both its original package payload and the original exported Store payload. The existing full `verify_msix` traversal must still read and hash the complete unchanged Store container before verification can succeed. Existing metadata copies are read normally and may not fall back after a mismatch. Missing non-notice evidence still fails. No files are reconstructed or written by this verification; the original whole-record, source, SDK, unsigned-package and installed lifecycle gates remain unchanged.
+
+Independent original-file verification matched the 21,177,783-byte Store MSIX SHA256 `d3bb0672b37266baa26c2bc3f791a05a3e31fe82c4786ea7421ac247298ba643`, then read each of the 75 omitted notice members and matched its bytes/SHA256 against both original package records. The source-backed package fixture reproduced the same missing COMBINED-LICENSE error before the repair. Afterward all five focused tests passed, including omitted-notice success, present-notice tampering, missing non-notice evidence, changed actual Store notice payload, stale records and signed-container refusal:
+
+```sh
+python3 -m unittest discover -s distribution/marketing -p test_original_packages.py
+```
+
+This is a capture-only repair. Microsoft subsequently rejected the old manifest display name; a separate manifest correction and fresh normal qualification/export must establish a new package binding before another capture run. This commit does not change that binding or claim native screenshots succeeded.

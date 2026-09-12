@@ -35,7 +35,16 @@ def verify_original_packages(source,root,store_path,ready,bound,package,evidence
         evidence.same(record['releaseInput'],package._inventory_rows(root/'stage-inventory.json'),'retained stage byte inventory')
         for relative,value in record['evidenceInputs'].items():
             package._checked_path(relative)
-            evidence.same(package.file_record(root/relative),value,'retained native evidence '+relative)
+            if relative.startswith('notices/') and not os.path.lexists(root/relative):
+                # The original metadata upload omits some notice extensions.
+                # Every notice was also copied into the qualified package.
+                # Join BOTH records here; verify_msix below reads and hashes
+                # the complete original Store payload before this can succeed.
+                payload='licenses/dependencies/'+relative[len('notices/'):]
+                evidence.same(record['payload'].get(payload),value,'original packaged notice '+relative)
+                evidence.same(ready['packageRecord']['payload'].get(payload),value,'original Store notice '+relative)
+            else:
+                evidence.same(package.file_record(root/relative),value,'retained native evidence '+relative)
         for relative,value in record['releaseInput'].items():
             evidence.same(record['payload'].get(relative),value,'unchanged qualified release payload '+relative)
         manifest=package.create_manifest(mode)
