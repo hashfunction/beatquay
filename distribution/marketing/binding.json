@@ -2,18 +2,18 @@
   "schema_version": 1,
   "product": "BeatSprig",
   "qualified": {
-    "source_commit": "74e0e44c041bfe4e1a316b48ffbf1db6c83baee2",
-    "workflow_run_id": "34709154092",
+    "source_commit": "5efd8278abc7c29a1e1a774d7fa2cd5e2a14c883",
+    "workflow_run_id": "34711911972",
     "workflow_run_attempt": "1",
-    "store_artifact_id": 10303206744,
-    "metadata_artifact_id": 10303321355,
+    "store_artifact_id": 10303693950,
+    "metadata_artifact_id": 10304680117,
     "package": {
-      "bytes": 21177783,
-      "sha256": "d3bb0672b37266baa26c2bc3f791a05a3e31fe82c4786ea7421ac247298ba643"
+      "bytes": 21177780,
+      "sha256": "a8ecf7c0c360962615ff98a8f10401817859ea4494f8764f40abc3d9ff348be7"
     },
     "export_receipt": {
-      "bytes": 426242,
-      "sha256": "098c632231e09e7373649f52a345183a26bedf82dcc004bc9f02bcb7b55a6b05"
+      "bytes": 426245,
+      "sha256": "135721bbc63c374fb588ede31ec931d9d1763320d6b725bcced0f4a811d25df2"
     }
   }
 }
