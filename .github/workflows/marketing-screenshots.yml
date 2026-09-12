@@ -1,0 +1,67 @@
+name: BeatSprig original Windows marketing captures
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  capture:
+    runs-on: windows-2022
+    timeout-minutes: 30
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          submodules: recursive
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version: '3.12.10'
+      - name: Require the reviewed successful export binding
+        id: binding
+        shell: pwsh
+        run: python distribution/marketing/capture_checks.py --binding-output $env:GITHUB_OUTPUT
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ steps.binding.outputs.qualified_source }}
+          path: build-evidence/marketing-qualified-source
+          submodules: recursive
+      - name: Verify the existing unsigned package and both original installed lifecycles
+        shell: pwsh
+        run: |
+          python distribution/marketing/prepare_capture.py --qualified-source "$pwd/build-evidence/marketing-qualified-source" --output "$pwd/build-evidence/marketing-inputs"
+      - name: Prepare only the exact disposable runner shell inputs
+        shell: pwsh
+        run: |
+          . ./build-evidence/marketing-qualified-source/cmake/msix/qualification-bindings.ps1
+          . ./build-evidence/marketing-qualified-source/cmake/msix/runner-shell.ps1
+          Start-BeatSprigShellPreparation "$pwd/build-evidence/runner-shell-preparation.json"
+      - name: Capture the unchanged musical workflow and clean up owned state
+        shell: pwsh
+        run: |
+          & (Join-Path $PSHOME pwsh.exe) -NoLogo -NoProfile -File ./distribution/marketing/capture.ps1 -Inputs "$pwd/build-evidence/marketing-inputs" -QualifiedSource "$pwd/build-evidence/marketing-qualified-source" -Output "$pwd/build-evidence/marketing-capture" -Python (Get-Command python).Source -ShellReceipt "$pwd/build-evidence/runner-shell-preparation.json"
+          if ($LASTEXITCODE -ne 0) { throw "Native capture process failed with exit $LASTEXITCODE" }
+      - name: Preserve original capture observations only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: BeatSprig-marketing-capture-observations
+          path: |
+            build-evidence/marketing-inputs/capture-inputs.json
+            build-evidence/runner-shell-preparation.json
+            build-evidence/marketing-capture/*.json
+            build-evidence/marketing-capture/consumer-workflow/*.json
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Preserve the three verified unedited native PNGs
+        if: success()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: BeatSprig-marketing-original-pixels
+          path: |
+            build-evidence/marketing-capture/published/01-arrangement.png
+            build-evidence/marketing-capture/published/02-export-settings.png
+            build-evidence/marketing-capture/published/03-export-completed.png
+            build-evidence/marketing-capture/published/capture-provenance.json
+          if-no-files-found: error
+          retention-days: 30

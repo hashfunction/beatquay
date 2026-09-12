@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "product": "BeatSprig",
+  "qualified": {
+    "source_commit": "74e0e44c041bfe4e1a316b48ffbf1db6c83baee2",
+    "workflow_run_id": "34709154092",
+    "workflow_run_attempt": "1",
+    "store_artifact_id": 10303206744,
+    "metadata_artifact_id": 10303321355,
+    "package": {
+      "bytes": 21177783,
+      "sha256": "d3bb0672b37266baa26c2bc3f791a05a3e31fe82c4786ea7421ac247298ba643"
+    },
+    "export_receipt": {
+      "bytes": 426242,
+      "sha256": "098c632231e09e7373649f52a345183a26bedf82dcc004bc9f02bcb7b55a6b05"
+    }
+  }
+}
