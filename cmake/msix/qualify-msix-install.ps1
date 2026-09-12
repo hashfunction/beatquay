@@ -368,6 +368,10 @@ function Write-NewUtf8Json([string]$Path, [object]$Value) {
     }
 }
 
+function Assert-BeatQuayWindowsCi {
+    if ([Environment]::OSVersion.Platform -ne [PlatformID]::Win32NT -or $env:CI -ne 'true') { throw 'Requires an isolated disposable Windows CI runner.' }
+}
+
 function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$RecordPath, [string]$SignToolPath, [string]$OutputPath) {
     $state = [ordered]@{
         package = $null; record = $null; output = $null; temporary = $null; signedCopy = $null
@@ -388,7 +392,7 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
 
     $operations = [ordered]@{}
     $operations.Preflight = {
-        if ([Environment]::OSVersion.Platform -ne [PlatformID]::Win32NT -or $env:CI -ne 'true') { throw 'Requires an isolated disposable Windows CI runner.' }
+        Assert-BeatQuayWindowsCi
         foreach ($argument in @($PackagePath,$RecordPath,$SignToolPath,$OutputPath)) {
             if (-not $argument) { throw 'Package, package record, SignTool, and output are required.' }
         }
@@ -426,6 +430,10 @@ function Invoke-BeatQuayInstallQualification([string]$PackagePath, [string]$Reco
             sha256 = (Get-FileHash -LiteralPath $state.signTool -Algorithm SHA256).Hash.ToLowerInvariant()
             sdk_version = [string]$state.record.makeAppx.sdkVersion
         }
+        # Server 2022's Appx module needs Windows PowerShell compatibility.
+        # Each operation is a separate closure module, so retain the proxies
+        # globally for Install and ownership-aware cleanup after Preflight.
+        Import-Module -Name Appx -UseWindowsPowerShell -Global -ErrorAction Stop
         $existing = @(Get-AppxPackage -Name $expectedIdentity.packageName -ErrorAction Stop)
         $state.preflightPackageFullNames = @($existing | ForEach-Object { [string]$_.PackageFullName })
         if ($existing.Count -gt 0) { throw 'A matching BeatQuay qualification package is already installed; refusing to replace or remove it.' }

@@ -6,7 +6,7 @@ Set-Location (Resolve-Path (Join-Path $PSScriptRoot '../..'))
 function Invoke-Checked([string]$Program,[string[]]$Arguments){& $Program @Arguments|Out-Host;if($LASTEXITCODE -ne 0){throw "$Program failed with exit $LASTEXITCODE"}}
 $pythonPath=(Resolve-Path -LiteralPath $Python).Path; $powerShell=(Get-Process -Id $PID).Path
 Invoke-Checked $pythonPath @('cmake/msix/test_msix_qualification.py','-v')
-foreach($fixture in @('test_qualify_msix_install.ps1','test_msix_evidence.ps1','test_registration_ownership.ps1','test_process_observation.ps1','test_window_evidence.ps1','test_defender_module.ps1','test_temporary_ownership.ps1')){Invoke-Checked $powerShell @('-NoLogo','-NoProfile','-File',(Join-Path $PSScriptRoot $fixture))}
+foreach($fixture in @('test_qualify_msix_install.ps1','test_appx_preflight.ps1','test_msix_evidence.ps1','test_registration_ownership.ps1','test_process_observation.ps1','test_window_evidence.ps1','test_defender_module.ps1','test_temporary_ownership.ps1')){Invoke-Checked $powerShell @('-NoLogo','-NoProfile','-File',(Join-Path $PSScriptRoot $fixture))}
 $sourceCommit=(git rev-parse HEAD).Trim(); if($LASTEXITCODE -ne 0 -or $sourceCommit -cne $env:GITHUB_SHA){throw 'Source differs from this qualification run.'}
 $sdkVersion='10.0.26100.0'; $sdkDirectory=Join-Path ${env:ProgramFiles(x86)} "Windows Kits/10/bin/$sdkVersion/x64"
 $packageOutput=Join-Path $env:RUNNER_TEMP ('beatquay-msix-'+[guid]::NewGuid().ToString('N'))
