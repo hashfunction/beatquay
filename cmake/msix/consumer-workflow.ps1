@@ -419,17 +419,31 @@ function Invoke-BeatQuayTempoPointer($State,$Main,[ValidateSet('context','wheel'
 }
 
 function Assert-BeatQuayTempoMenu($Menu,[int]$ProcessId,[int]$Value) {
- if($Menu.snapshot.truncated -or $Menu.snapshot.title -cne 'Tempo' -or $Menu.snapshot.root.class_name -cne 'lmms::gui::CaptionMenu'){throw 'Unexpected tempo context menu'}
- Assert-BeatQuayConsumerControl $Menu.snapshot.root $ProcessId 'Menu' 'Tempo'
+ if($Menu.snapshot.truncated -or $Menu.snapshot.title -cne 'BeatSprig' -or $Menu.snapshot.root.class_name -cne 'lmms::gui::CaptionMenu' -or
+  $Menu.snapshot.root.automation_id -cne 'QApplication.lmms::gui::CaptionMenu'){throw 'Unexpected tempo context menu'}
+ Assert-BeatQuayConsumerControl $Menu.snapshot.root $ProcessId 'Window' 'BeatSprig'
  $caption=@($Menu.items|Where-Object {$s=$_.snapshot;$s.available -and $s.process_id -eq $ProcessId -and $s.visible -and -not $s.enabled -and $s.type -ceq 'MenuItem' -and $s.name -ceq 'Tempo'})
  if($caption.Count -ne 1){throw 'Context menu lacks exact disabled Tempo caption'}
- $null=Find-BeatQuayConsumerControl $Menu $ProcessId 'MenuItem' "Copy value ($Value)"
+ $valueItem=Find-BeatQuayConsumerControl $Menu $ProcessId 'MenuItem' "Copy value ($Value)"
+ foreach($item in @($caption[0],$valueItem)){
+  if($item.snapshot.class_name -cne 'QAction' -or $item.snapshot.automation_id -cne 'QApplication.lmms::gui::CaptionMenu.QAction'){throw 'Unexpected tempo menu action ancestry'}
+ }
+}
+
+function Wait-BeatQuayTempoMenu($State,[int]$Value) {
+ $menu=Wait-BeatQuayConsumerWindow $State 'BeatSprig'
+ Assert-BeatQuayTempoMenu $menu $State.process.Id $Value
+ return $menu
+}
+
+function Test-BeatQuayTempoMenuDismissed($Windows) {
+ if(@($Windows|Where-Object {$_.snapshot.truncated -or -not $_.snapshot.root.available}).Count){throw 'Incomplete inventory after tempo menu Escape'}
+ return @($Windows|Where-Object {$_.snapshot.root.visible -and $_.snapshot.root.class_name -ceq 'lmms::gui::CaptionMenu'}).Count -eq 0
 }
 
 function Confirm-BeatQuayTempoValue($State,$Main,[int]$Value) {
  Invoke-BeatQuayTempoPointer $State $Main 'context'
- $menu=Wait-BeatQuayConsumerWindow $State 'Tempo'
- Assert-BeatQuayTempoMenu $menu $State.process.Id $Value
+ $menu=Wait-BeatQuayTempoMenu $State $Value
  Save-BeatQuayConsumerStage $State "tempo_value_$Value" $menu
  Assert-BeatQuayConsumerOwner $State
  # Read the actual source-defined menu without copying any clipboard value.
@@ -438,8 +452,7 @@ function Confirm-BeatQuayTempoValue($State,$Main,[int]$Value) {
  $deadline=[DateTime]::UtcNow.AddSeconds(15)
  do{
   $windows=@(Get-BeatQuayConsumerWindows $State);$State.workflow.last_observation=@($windows|ForEach-Object {$_.snapshot})
-  if(@($windows|Where-Object {$_.snapshot.truncated}).Count){throw 'Incomplete inventory after tempo menu Escape'}
-  if(@($windows|Where-Object {$_.snapshot.title -ceq 'Tempo' -and $_.snapshot.root.visible}).Count -eq 0){return}
+  if(Test-BeatQuayTempoMenuDismissed $windows){return}
   Start-Sleep -Milliseconds 200
  }while([DateTime]::UtcNow -lt $deadline)
  throw 'Actual tempo context menu did not dismiss'

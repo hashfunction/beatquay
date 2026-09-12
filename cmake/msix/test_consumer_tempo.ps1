@@ -17,15 +17,44 @@ Add-BeatQuayConsumerTypes
 foreach($values in @(@(0,100,100,3772,100),@(3772,0,0,3772,0),@(3772,100,101,3772,100),@(3772,100,100,2,100),@(3772,100,100,3772,101))){
  Reject {[BeatQuayConsumer.Native]::RequireTempoPointer($values[0],$values[1],$values[2],$values[3],$values[4])} 'Unsafe native pointer ownership accepted.'
 }
-# Source-defined menu fixtures are hypothetical provider records, not Windows evidence.
-$menu=@{snapshot=@{title='Tempo';truncated=$false;root=@{available=$true;process_id=3772;visible=$true;enabled=$true;width=220;height=160;type='Menu';name='Tempo';class_name='lmms::gui::CaptionMenu'}};items=@(
- @{snapshot=@{available=$true;process_id=3772;visible=$true;enabled=$false;type='MenuItem';name='Tempo'}},
- @{snapshot=@{available=$true;process_id=3772;visible=$true;enabled=$true;type='MenuItem';name='Copy value (112)';width=220;height=25}})}
-Assert-BeatQuayTempoMenu $menu 3772 112
-foreach($mutation in @('pid','class','title','truncated','missing_caption','wrong_value','duplicate')){
+# Exact captured Windows provider shape, bound to the original failed receipt.
+$menuCapture=Get-Content (Join-Path $PSScriptRoot 'fixtures/tempo-menu-34684975836.json') -Raw|ConvertFrom-Json -AsHashtable
+Check ($menuCapture.run_id -eq 34684975836 -and $menuCapture.source_artifact_sha256 -ceq '51a0861cbea41f6635978b7a6549e80b9ffffe061dabbb4d53e4cda111a7b358') 'Captured menu provenance changed.'
+$menu=@{snapshot=$menuCapture.menu;items=@($menuCapture.menu.controls|ForEach-Object {@{snapshot=$_}})}
+Assert-BeatQuayTempoMenu $menu 4796 112
+foreach($mutation in @('pid','class','id','title','root_name','type','truncated','unavailable','hidden','disabled','empty',
+ 'missing_caption','duplicate_caption','enabled_caption','caption_pid','caption_class','caption_id','wrong_value','duplicate','value_disabled','value_hidden','value_pid','value_class','value_id')){
  $bad=$menu|ConvertTo-Json -Depth 8|ConvertFrom-Json -AsHashtable
- switch($mutation){pid{$bad.snapshot.root.process_id=1} class{$bad.snapshot.root.class_name='QMenu'} title{$bad.snapshot.title='Volume'} truncated{$bad.snapshot.truncated=$true} missing_caption{$bad.items=$bad.items[1..1]} wrong_value{$bad.items[1].snapshot.name='Copy value (113)'} duplicate{$bad.items+=@($bad.items[1])}}
- Reject {Assert-BeatQuayTempoMenu $bad 3772 112} "Unsafe tempo menu accepted: $mutation"
+ switch($mutation){
+  pid{$bad.snapshot.root.process_id=1} class{$bad.snapshot.root.class_name='QMenu'} id{$bad.snapshot.root.automation_id='foreign'}
+  title{$bad.snapshot.title='Tempo'} root_name{$bad.snapshot.root.name='Tempo'} type{$bad.snapshot.root.type='Menu'}
+  truncated{$bad.snapshot.truncated=$true} unavailable{$bad.snapshot.root.available=$false} hidden{$bad.snapshot.root.visible=$false}
+  disabled{$bad.snapshot.root.enabled=$false} empty{$bad.snapshot.root.width=0}
+  missing_caption{$bad.items=@($bad.items|Where-Object {$_.snapshot.name -cne 'Tempo'})}
+  duplicate_caption{$bad.items+=@($bad.items[1])} enabled_caption{$bad.items[1].snapshot.enabled=$true}
+  caption_pid{$bad.items[1].snapshot.process_id=1} caption_class{$bad.items[1].snapshot.class_name='QWidget'} caption_id{$bad.items[1].snapshot.automation_id='foreign'}
+  wrong_value{$bad.items[4].snapshot.name='Copy value (113)'} duplicate{$bad.items+=@($bad.items[4])}
+  value_disabled{$bad.items[4].snapshot.enabled=$false} value_hidden{$bad.items[4].snapshot.visible=$false} value_pid{$bad.items[4].snapshot.process_id=1}
+  value_class{$bad.items[4].snapshot.class_name='QWidget'} value_id{$bad.items[4].snapshot.automation_id='foreign'}
+ }
+ Reject {Assert-BeatQuayTempoMenu $bad 4796 112} "Unsafe tempo menu accepted: $mutation"
+}
+$script:menuWindow=$menu;$script:menuTitle=''
+function Wait-BeatQuayConsumerWindow($State,$Title){$script:menuTitle=$Title;return $script:menuWindow}
+$selected=Wait-BeatQuayTempoMenu @{process=@{Id=4796}} 112
+Check ($script:menuTitle -ceq 'BeatSprig' -and [object]::ReferenceEquals($selected,$menu)) 'Production wait did not discover the actual native popup title.'
+$script:menuWindow=$menu|ConvertTo-Json -Depth 8|ConvertFrom-Json -AsHashtable;$script:menuWindow.snapshot.root.class_name='Other'
+Reject {Wait-BeatQuayTempoMenu @{process=@{Id=4796}} 112} 'Title-only popup authorized the tempo route.'
+$onlyMain=@{snapshot=@{truncated=$false;root=@{available=$true;process_id=4796;visible=$true;class_name='lmms::gui::MainWindow'}}}
+Check (-not (Test-BeatQuayTempoMenuDismissed @($onlyMain,$menu))) 'Still-visible actual BeatSprig CaptionMenu counted as dismissed.'
+Check (Test-BeatQuayTempoMenuDismissed @($onlyMain)) 'Complete main-only inventory did not establish dismissal.'
+$renamed=$menu|ConvertTo-Json -Depth 8|ConvertFrom-Json -AsHashtable;$renamed.snapshot.title='Unexpected'
+Check (-not (Test-BeatQuayTempoMenuDismissed @($onlyMain,$renamed))) 'Changed popup title concealed a visible CaptionMenu.'
+$hidden=$menu|ConvertTo-Json -Depth 8|ConvertFrom-Json -AsHashtable;$hidden.snapshot.root.visible=$false
+Check (Test-BeatQuayTempoMenuDismissed @($onlyMain,$hidden)) 'Actually hidden menu was not recognized.'
+foreach($target in @($onlyMain,$menu)){
+ $bad=$target|ConvertTo-Json -Depth 8|ConvertFrom-Json -AsHashtable;$bad.snapshot.truncated=$true
+ Reject {Test-BeatQuayTempoMenuDismissed @($bad)} 'Incomplete inventory granted dismissal.'
 }
 # Execute the production sequencer; only platform observation/input endpoints are seams.
 $script:calls=[Collections.Generic.List[string]]::new();$script:failAt=''
@@ -58,4 +87,4 @@ foreach($failure in @('verify_112','verify_113','verify_114','verify_115','verif
  Reject {Invoke-BeatQuayConsumerTempoEdit $state} 'Unproved tempo route continued.'
  Check ($script:calls[-1] -ceq $failure) 'Input occurred after failed tempo proof.'
 }
-Write-Output 'PASS: exact captured tempo geometry, 12 refusals, native ownership guard, seven menu refusals and actual four-detent sequencing with six stop boundaries. Windows UI remains pending.'
+Write-Output 'PASS: exact captured tempo geometry, 12 refusals, native ownership guard, 24 menu refusals and observed popup dismissal and actual four-detent sequencing with six stop boundaries. Windows UI remains pending.'
