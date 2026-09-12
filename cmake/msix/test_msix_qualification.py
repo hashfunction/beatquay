@@ -97,6 +97,14 @@ class QualificationTests(unittest.TestCase):
         for name in ('ms-runtime-origins.json','ms-runtime-selection.json'):
             self.assertEqual((self.root/'stage/licenses/Microsoft'/name).read_bytes(),(self.evidence/name).read_bytes())
 
+    def test_stage_contains_every_published_original_notice(self):
+        record = self.stage()
+        published = json.loads((REPOSITORY / 'cmake/msix/fixtures/public-source-20260912/source-delivery-inputs.json').read_text())
+        for name, original in published['originalNoticeMembers'].items():
+            with self.subTest(notice=name):
+                self.assertEqual(record['payload'].get(name),
+                                 {key: original[key] for key in ('bytes', 'sha256')})
+
     def test_detailed_original_notices_and_origin_receipts_cannot_be_omitted(self):
         for name in ('notices/native/notices/app-submodules/ringbuffer/LICENSE.txt',
                      'notices/qt/qtsvg/src/svg/LICENSE.XSVG.txt',

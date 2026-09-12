@@ -715,6 +715,7 @@ def stage_release(release, artwork, stage, source_commit, inventory, evidence_ro
         license_sources = {
             "licenses/BeatSprig/LICENSE.txt": Path(source_root) / "LICENSE.txt",
             "licenses/BeatSprig/AUTHORS.txt": Path(source_root) / "doc/AUTHORS",
+            "licenses/BeatSprig/UPSTREAM_README.md": Path(source_root) / "doc/UPSTREAM_README.md",
             "licenses/BeatSprig/COMBINED-LICENSE.md": Path(source_root) / "distribution/native-source/COMBINED-LICENSE.md",
             "licenses/BeatSprig/GPL-3.0.txt": Path(source_root) / "distribution/native-source/GPL-3.0.txt",
             "licenses/Microsoft/ms-runtime-origins.json": Path(evidence_root) / "ms-runtime-origins.json",
